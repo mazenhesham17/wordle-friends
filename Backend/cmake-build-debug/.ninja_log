@@ -1,0 +1,5 @@
+# ninja log v5
+0	35	1706650762266345492	Backend	26caa4ab40132492
+0	154	1706649432332001062	CMakeFiles/Backend.dir/main.cpp.o	ebeb6b2ad7fff02
+0	160	1706656889850731676	CMakeFiles/Initialize_Database.dir/Database/ddl.cpp.o	2a34aa1ac6ccbe78
+160	197	1706656889886733341	Initialize_Database	86bae1e700d8e9b6

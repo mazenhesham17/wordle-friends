@@ -9,13 +9,14 @@
 					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
 					"minimumCMakeVersion" : 
 					{
-						"string" : "3.27"
+						"string" : "3.22"
 					},
 					"projectIndex" : 0,
 					"source" : ".",
 					"targetIndexes" : 
 					[
-						0
+						0,
+						1
 					]
 				}
 			],
@@ -30,7 +31,8 @@
 					"name" : "Backend",
 					"targetIndexes" : 
 					[
-						0
+						0,
+						1
 					]
 				}
 			],
@@ -39,8 +41,15 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "Backend::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-Backend-Debug-3159c7001b3b3ba2209d.json",
+					"jsonFile" : "target-Backend-Debug-f29279e29cb3d525ad8e.json",
 					"name" : "Backend",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Initialize_Database::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Initialize_Database-Debug-e2b9a19d846b9dab3f8b.json",
+					"name" : "Initialize_Database",
 					"projectIndex" : 0
 				}
 			]

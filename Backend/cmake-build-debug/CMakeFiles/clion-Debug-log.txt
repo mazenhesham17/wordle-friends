@@ -11,6 +11,7 @@
 -- Check for working CXX compiler: /usr/bin/c++ - skipped
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
--- Configuring done (0.3s)
+-- Found SQLite3: /usr/include (found version "3.37.2") 
+-- Configuring done (0.2s)
 -- Generating done (0.0s)
 -- Build files have been written to: /home/mazen/CLionProjects/wordle-friends/Backend/cmake-build-debug
