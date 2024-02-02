@@ -149,6 +149,32 @@ bool addPlayerToTournament(int playerID, int tournamentID) {
     return true;
 }
 
+bool addGameToTournament(int tournamentID, int gameID, int stage) {
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( INSERT INTO TournamentGames VALUES (%d,%d,%d); )", tournamentID, gameID, stage);
+
+    // execute query
+    char *sqlError;
+    int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
+    if (resultCode != SQLITE_OK) {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage),
+                 "There was an error adding game #%d to tournament #%d.\nError: %s", gameID, tournamentID,
+                 sqlError);
+
+        // free memory
+        sqlite3_free(sqlError);
+        throw std::runtime_error(errorMessage);
+    }
+
+    // free memory
+    sqlite3_free(sqlError);
+    return true;
+}
+
+
 int addChat() {
     // prepare query
     char query[] = "INSERT INTO Chat (chatID) VALUES (NULL);";
@@ -271,7 +297,6 @@ bool winGame(int playerID, int gameID) {
     return true;
 }
 
-
 bool closeConnection() {
     int resultCode = sqlite3_close(db);
     if (resultCode != SQLITE_OK) {
@@ -283,3 +308,5 @@ bool closeConnection() {
     }
     return true;
 }
+
+

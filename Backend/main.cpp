@@ -12,13 +12,14 @@ int main() {
         openConnection();
         int a = addPlayer("mazen", "m", "h", "m@lgh.com", "123");
         int b = addPlayer("hazem", "h", "a", "h@siemens.com", "123");
-        int g = addGame("wordle");
-        addPlayerToGame(a, g);
-        addPlayerToGame(b, g);
-        winGame(a, g);
         int t = addTournament(1);
         addPlayerToTournament(a, t);
         addPlayerToTournament(b, t);
+        int g = addGame("wordle");
+        addPlayerToGame(a, g);
+        addPlayerToGame(b, g);
+        addGameToTournament(t, g, 1);
+        winGame(b, g);
         winTournament(b, t);
         int c = addChat();
         addPlayerToChat(a, c);

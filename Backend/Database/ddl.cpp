@@ -147,6 +147,27 @@ int main() {
         return resultCode;
     }
 
+    // create tournament games table
+
+    // query
+    const char *tournamentGamesTableCreation = R"(
+        CREATE TABLE IF NOT EXISTS TournamentGames(
+            tournamentID INTEGER,
+            gameID INTEGER,
+            stage INTEGER,
+            PRIMARY KEY (tournamentID,gameID),
+            FOREIGN KEY (tournamentID) REFERENCES Tournament(tournamentID),
+            FOREIGN KEY (gameID) REFERENCES Game(gameID)
+        );
+    )";
+
+    // execution
+    resultCode = executeQuery(tournamentGamesTableCreation,
+                              "There was an error creating tournament games table.");
+    if (resultCode != SQLITE_OK) {
+        return resultCode;
+    }
+
     // create player chats table
 
     // query

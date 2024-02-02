@@ -20,6 +20,9 @@ int addTournament(int adminID);
 // add player to tournament
 bool addPlayerToTournament(int playerID, int tournamentID);
 
+// add game to tournament
+bool addGameToTournament(int tournamentID, int gameID, int stage);
+
 // add new chat
 int addChat();
 
