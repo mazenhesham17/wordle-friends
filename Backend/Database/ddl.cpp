@@ -1,26 +1,32 @@
 # include <iostream>
 # include <sqlite3.h>
+# include "constants.h"
+
+const char *DATABASE_FILE_NAME = "wordle_data.db";
+sqlite3 *db;
 
 int main() {
     int resultCode;
-    sqlite3 *db;
+
     auto executeQuery = [&](const char *query, const char *customError) {
         char *sqlError;
         resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
         if (resultCode != SQLITE_OK) {
             std::cerr << "There was an error creating user table." << std::endl;
             std::cerr << "Error Message : " << sqlError << std::endl;
+            sqlite3_free(sqlError);
             return resultCode;
         }
+        sqlite3_free(sqlError);
         return SQLITE_OK;
     };
 
-    const char *databaseFileName = "wordle_data.db";
+
 
     // opening the database connection
-    resultCode = sqlite3_open(databaseFileName, &db);
+    resultCode = sqlite3_open(DATABASE_FILE_NAME, &db);
     if (resultCode != SQLITE_OK) {
-        std::cerr << "There was an error opening " << databaseFileName << "." << std::endl;
+        std::cerr << "There was an error opening " << DATABASE_FILE_NAME << "." << std::endl;
         return resultCode;
     }
 
@@ -186,7 +192,7 @@ int main() {
     // insert admin
 
     // query
-    const char* insertAdminUser = R"(
+    const char *insertAdminUser = R"(
         INSERT INTO User (username, email, password, userType)
         VALUES ('admin', 'admin@wordle.com', 'admin', 0);
     )";
@@ -201,7 +207,7 @@ int main() {
     // closing the database connection
     resultCode = sqlite3_close(db);
     if (resultCode != SQLITE_OK) {
-        std::cerr << "There was an error closing " << databaseFileName << "." << std::endl;
+        std::cerr << "There was an error closing " << DATABASE_FILE_NAME << "." << std::endl;
         return resultCode;
     }
     return 0;

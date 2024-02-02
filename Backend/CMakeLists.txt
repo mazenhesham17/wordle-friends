@@ -8,8 +8,17 @@ find_package(SQLite3 REQUIRED)
 include_directories(${SQLite3_INCLUDE_DIRS})
 
 
-add_executable(Backend main.cpp)
+add_executable(
+        Backend Database/constants.h
+        Database/dml.cpp
+        Database/dml.h
+        main.cpp
+)
 
-add_executable(Initialize_Database Database/ddl.cpp)
+add_executable(
+        Initialize_Database Database/constants.h
+        Database/ddl.cpp
+)
 
 target_link_libraries(Initialize_Database ${SQLite3_LIBRARIES})
+target_link_libraries(Backend ${SQLite3_LIBRARIES})

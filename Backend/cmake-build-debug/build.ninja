@@ -49,6 +49,14 @@ cmake_ninja_workdir = /home/mazen/CLionProjects/wordle-friends/Backend/cmake-bui
 
 build cmake_object_order_depends_target_Backend: phony || CMakeFiles/Backend.dir
 
+build CMakeFiles/Backend.dir/Database/dml.cpp.o: CXX_COMPILER__Backend_unscanned_Debug /home/mazen/CLionProjects/wordle-friends/Backend/Database/dml.cpp || cmake_object_order_depends_target_Backend
+  DEP_FILE = CMakeFiles/Backend.dir/Database/dml.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles/Backend.dir
+  OBJECT_FILE_DIR = CMakeFiles/Backend.dir/Database
+  TARGET_COMPILE_PDB = CMakeFiles/Backend.dir/
+  TARGET_PDB = Backend.pdb
+
 build CMakeFiles/Backend.dir/main.cpp.o: CXX_COMPILER__Backend_unscanned_Debug /home/mazen/CLionProjects/wordle-friends/Backend/main.cpp || cmake_object_order_depends_target_Backend
   DEP_FILE = CMakeFiles/Backend.dir/main.cpp.o.d
   FLAGS = -g -fdiagnostics-color=always
@@ -65,8 +73,9 @@ build CMakeFiles/Backend.dir/main.cpp.o: CXX_COMPILER__Backend_unscanned_Debug /
 #############################################
 # Link the executable Backend
 
-build Backend: CXX_EXECUTABLE_LINKER__Backend_Debug CMakeFiles/Backend.dir/main.cpp.o
+build Backend: CXX_EXECUTABLE_LINKER__Backend_Debug CMakeFiles/Backend.dir/Database/dml.cpp.o CMakeFiles/Backend.dir/main.cpp.o | /usr/lib/x86_64-linux-gnu/libsqlite3.so
   FLAGS = -g
+  LINK_LIBRARIES = /usr/lib/x86_64-linux-gnu/libsqlite3.so
   OBJECT_DIR = CMakeFiles/Backend.dir
   POST_BUILD = :
   PRE_LINK = :
