@@ -38,6 +38,24 @@ bool winGame(int playerID, int gameID);
 // win tournament
 bool winTournament(int playerID, int tournamentID);
 
+// update the first name
+bool changeFirstName(int userID, const char *firstName);
+
+// update the last name
+bool changeLastName(int userID, const char *lastName);
+
+// update the email
+bool changeEmail(int userID, const char *email);
+
+// update the password
+bool changePassword(int userID, const char *password);
+
+// remove tournament
+bool deleteTournament(int tournamentID);
+
+// remove game
+bool deleteGame(int gameID);
+
 // close database connection
 bool closeConnection();
 

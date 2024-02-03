@@ -30,6 +30,18 @@ int main() {
         return resultCode;
     }
 
+    // enable foreign key constrain
+
+    // query
+    const char *foreignKey = "PRAGMA foreign_keys = ON;" ;
+
+    // execution
+    resultCode = executeQuery(foreignKey,
+                              "There was an error enabling foreign key constrain.");
+    if (resultCode != SQLITE_OK) {
+        return resultCode;
+    }
+
     // create user table
 
     // query
@@ -135,7 +147,7 @@ int main() {
             tournamentID INTEGER,
             playerID INTEGER,
             PRIMARY KEY (tournamentID,playerID),
-            FOREIGN KEY (tournamentID) REFERENCES Tournament(tournamentID),
+            FOREIGN KEY (tournamentID) REFERENCES Tournament(tournamentID) ON DELETE CASCADE,
             FOREIGN KEY (playerID) REFERENCES User(userID)
         );
     )";
@@ -156,7 +168,7 @@ int main() {
             gameID INTEGER,
             stage INTEGER,
             PRIMARY KEY (tournamentID,gameID),
-            FOREIGN KEY (tournamentID) REFERENCES Tournament(tournamentID),
+            FOREIGN KEY (tournamentID) REFERENCES Tournament(tournamentID) ON DELETE CASCADE,
             FOREIGN KEY (gameID) REFERENCES Game(gameID)
         );
     )";

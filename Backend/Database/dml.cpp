@@ -297,6 +297,150 @@ bool winGame(int playerID, int gameID) {
     return true;
 }
 
+bool changeFirstName(int userID, const char *firstName) {
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( UPDATE User SET firstName = '%s' WHERE userID = %d ; )", firstName, userID);
+
+    // execute query
+    char *sqlError;
+    int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
+    if (resultCode != SQLITE_OK) {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage),
+                 "There was an error changing first name for user #%d.\nError: %s", userID, sqlError);
+
+        // free memory
+        sqlite3_free(sqlError);
+        throw std::runtime_error(errorMessage);
+    }
+
+    // free memory
+    sqlite3_free(sqlError);
+    return true;
+}
+
+bool changeLastName(int userID, const char *lastName) {
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( UPDATE User SET lastName = '%s' WHERE userID = %d ; )", lastName, userID);
+
+    // execute query
+    char *sqlError;
+    int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
+    if (resultCode != SQLITE_OK) {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage),
+                 "There was an error changing last name for user #%d.\nError: %s", userID, sqlError);
+
+        // free memory
+        sqlite3_free(sqlError);
+        throw std::runtime_error(errorMessage);
+    }
+
+    // free memory
+    sqlite3_free(sqlError);
+    return true;
+}
+
+bool changeEmail(int userID, const char *email) {
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( UPDATE User SET email = '%s' WHERE userID = %d ; )", email, userID);
+
+    // execute query
+    char *sqlError;
+    int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
+    if (resultCode != SQLITE_OK) {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage),
+                 "There was an error changing email for user #%d.\nError: %s", userID, sqlError);
+
+        // free memory
+        sqlite3_free(sqlError);
+        throw std::runtime_error(errorMessage);
+    }
+
+    // free memory
+    sqlite3_free(sqlError);
+    return true;
+}
+
+bool changePassword(int userID, const char *password) {
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( UPDATE User SET password = '%s' WHERE userID = %d ; )", password, userID);
+
+    // execute query
+    char *sqlError;
+    int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
+    if (resultCode != SQLITE_OK) {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage),
+                 "There was an error changing password for user #%d.\nError: %s", userID, sqlError);
+
+        // free memory
+        sqlite3_free(sqlError);
+        throw std::runtime_error(errorMessage);
+    }
+
+    // free memory
+    sqlite3_free(sqlError);
+    return true;
+}
+
+bool deleteTournament(int tournamentID) {
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( DELETE FROM Tournament WHERE tournamentID = %d ; )", tournamentID);
+
+    // execute query
+    char *sqlError;
+    int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
+    if (resultCode != SQLITE_OK) {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage),
+                 "There was an error removing tournament #%d.\nError: %s", tournamentID, sqlError);
+
+        // free memory
+        sqlite3_free(sqlError);
+        throw std::runtime_error(errorMessage);
+    }
+
+    // free memory
+    sqlite3_free(sqlError);
+    return true;
+}
+
+bool deleteGame(int gameID) {
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( DELETE FROM Game WHERE gameID = %d ; )", gameID);
+
+    // execute query
+    char *sqlError;
+    int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
+    if (resultCode != SQLITE_OK) {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage),
+                 "There was an error removing game #%d.\nError: %s", gameID, sqlError);
+
+        // free memory
+        sqlite3_free(sqlError);
+        throw std::runtime_error(errorMessage);
+    }
+
+    // free memory
+    sqlite3_free(sqlError);
+    return true;
+}
+
 bool closeConnection() {
     int resultCode = sqlite3_close(db);
     if (resultCode != SQLITE_OK) {

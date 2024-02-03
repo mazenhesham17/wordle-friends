@@ -26,6 +26,12 @@ int main() {
         addPlayerToChat(b, c);
         addMessageToChat(a, c, "Hello Hazem");
         addMessageToChat(b, c, "Hello Mazen");
+//        changeFirstName(2,"mazen") ;
+//        changeLastName(3,"adel") ;
+//        changeEmail(1,"admin@lgh.com") ;
+//        changePassword(2,"hello") ;
+//        deleteTournament(1) ;
+//        deleteGame(1) ;
         closeConnection();
     } catch (std::exception &error) {
         std::cerr << error.what() << std::endl;
