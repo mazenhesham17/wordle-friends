@@ -127,7 +127,7 @@ int main() {
 	        gameID INTEGER,
   	        playerID INTEGER,
             PRIMARY KEY (gameID,playerID),
-            FOREIGN KEY (gameID) REFERENCES Game(gameID),
+            FOREIGN KEY (gameID) REFERENCES Game(gameID) ON DELETE CASCADE,
             FOREIGN KEY (playerID) REFERENCES User(userID)
         );
     )";

@@ -1,6 +1,10 @@
 # ninja log v5
-0	168	1707001065290764089	CMakeFiles/Initialize_Database.dir/Database/ddl.cpp.o	2a34aa1ac6ccbe78
-168	206	1707001065330763915	Initialize_Database	86bae1e700d8e9b6
-0	168	1707001103190702258	CMakeFiles/Backend.dir/main.cpp.o	ebeb6b2ad7fff02
-0	208	1707001103230702244	CMakeFiles/Backend.dir/Database/dml.cpp.o	862f6c2f74cf7f04
-208	246	1707001103270702230	Backend	d6d2624774fe917f
+0	156	1707002380462635299	CMakeFiles/Initialize_Database.dir/Database/ddl.cpp.o	2a34aa1ac6ccbe78
+156	192	1707002380498635122	Initialize_Database	86bae1e700d8e9b6
+0	160	1707002387774601097	CMakeFiles/Backend.dir/main.cpp.o	ebeb6b2ad7fff02
+0	192	1707002387806600954	CMakeFiles/Backend.dir/Database/dml.cpp.o	862f6c2f74cf7f04
+192	229	1707002387842600793	Backend	d6d2624774fe917f
+1	168	1707002446502448790	CMakeFiles/Backend.dir/main.cpp.o	ebeb6b2ad7fff02
+168	206	1707002446538448758	Backend	d6d2624774fe917f
+0	152	1707002457854442044	CMakeFiles/Backend.dir/main.cpp.o	ebeb6b2ad7fff02
+152	190	1707002457890442032	Backend	d6d2624774fe917f

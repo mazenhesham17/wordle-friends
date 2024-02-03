@@ -13,6 +13,11 @@ bool openConnection() {
                  DATABASE_FILE_NAME, sqlite3_errmsg(db));
         throw std::runtime_error(errorMessage);
     }
+    // enable foreign key
+    const char *foreignKey = "PRAGMA foreign_keys = ON;" ;
+
+    // execute query
+    sqlite3_exec(db, foreignKey, nullptr, nullptr, nullptr);
     return true;
 }
 
