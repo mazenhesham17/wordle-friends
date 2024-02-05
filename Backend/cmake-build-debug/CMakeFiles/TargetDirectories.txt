@@ -1,4 +1,0 @@
-/home/mazen/CLionProjects/wordle-friends/Backend/cmake-build-debug/CMakeFiles/Backend.dir
-/home/mazen/CLionProjects/wordle-friends/Backend/cmake-build-debug/CMakeFiles/Initialize_Database.dir
-/home/mazen/CLionProjects/wordle-friends/Backend/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/mazen/CLionProjects/wordle-friends/Backend/cmake-build-debug/CMakeFiles/rebuild_cache.dir
