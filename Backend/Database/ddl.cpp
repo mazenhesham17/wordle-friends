@@ -1,17 +1,20 @@
-# include <iostream>
-# include <sqlite3.h>
-# include "constants.h"
+#include <iostream>
+#include <sqlite3.h>
+#include "constants.h"
 
 const char *DATABASE_FILE_NAME = "wordle_data.db";
 sqlite3 *db;
 
-int main() {
+int main()
+{
     int resultCode;
 
-    auto executeQuery = [&](const char *query, const char *customError) {
+    auto executeQuery = [&](const char *query, const char *customError)
+    {
         char *sqlError;
         resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-        if (resultCode != SQLITE_OK) {
+        if (resultCode != SQLITE_OK)
+        {
             std::cerr << "There was an error creating user table." << std::endl;
             std::cerr << "Error Message : " << sqlError << std::endl;
             sqlite3_free(sqlError);
@@ -21,11 +24,10 @@ int main() {
         return SQLITE_OK;
     };
 
-
-
     // opening the database connection
     resultCode = sqlite3_open(DATABASE_FILE_NAME, &db);
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         std::cerr << "There was an error opening " << DATABASE_FILE_NAME << "." << std::endl;
         return resultCode;
     }
@@ -33,12 +35,13 @@ int main() {
     // enable foreign key constrain
 
     // query
-    const char *foreignKey = "PRAGMA foreign_keys = ON;" ;
+    const char *foreignKey = "PRAGMA foreign_keys = ON;";
 
     // execution
     resultCode = executeQuery(foreignKey,
                               "There was an error enabling foreign key constrain.");
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         return resultCode;
     }
 
@@ -60,7 +63,8 @@ int main() {
     // execution
     resultCode = executeQuery(userTableCreation,
                               "There was an error creating user table.");
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         return resultCode;
     }
 
@@ -79,7 +83,8 @@ int main() {
     // execution
     resultCode = executeQuery(gameTableCreation,
                               "There was an error creating game table.");
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         return resultCode;
     }
 
@@ -99,7 +104,8 @@ int main() {
     // execution
     resultCode = executeQuery(tournamentTableCreation,
                               "There was an error creating tournament table.");
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         return resultCode;
     }
 
@@ -115,7 +121,8 @@ int main() {
     // execution
     resultCode = executeQuery(chatTableCreation,
                               "There was an error creating chat table.");
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         return resultCode;
     }
 
@@ -135,7 +142,8 @@ int main() {
     // execution
     resultCode = executeQuery(gamePlayersTableCreation,
                               "There was an error creating game players table.");
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         return resultCode;
     }
 
@@ -155,7 +163,8 @@ int main() {
     // execution
     resultCode = executeQuery(tournamentPlayersTableCreation,
                               "There was an error creating tournament players table.");
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         return resultCode;
     }
 
@@ -176,7 +185,8 @@ int main() {
     // execution
     resultCode = executeQuery(tournamentGamesTableCreation,
                               "There was an error creating tournament games table.");
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         return resultCode;
     }
 
@@ -196,7 +206,8 @@ int main() {
     // execution
     resultCode = executeQuery(playerChatsTableCreation,
                               "There was an error creating player chats table.");
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         return resultCode;
     }
 
@@ -218,7 +229,8 @@ int main() {
     // execution
     resultCode = executeQuery(messageTableCreation,
                               "There was an error creating message table.");
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         return resultCode;
     }
 
@@ -227,19 +239,21 @@ int main() {
     // query
     const char *insertAdminUser = R"(
         INSERT INTO User (username, email, password, userType)
-        VALUES ('admin', 'admin@wordle.com', 'admin', 0);
+        VALUES ('admin', 'admin@wordle.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 0);
     )";
 
     // execution
     resultCode = executeQuery(insertAdminUser,
                               "There was an error inserting admin account.");
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         return resultCode;
     }
 
     // closing the database connection
     resultCode = sqlite3_close(db);
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         std::cerr << "There was an error closing " << DATABASE_FILE_NAME << "." << std::endl;
         return resultCode;
     }

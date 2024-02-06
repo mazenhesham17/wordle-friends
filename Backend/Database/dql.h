@@ -1,8 +1,12 @@
-//
-// Created by mazen on 2/6/24.
-//
-
 #ifndef BACKEND_DQL_H
 #define BACKEND_DQL_H
 
-#endif //BACKEND_DQL_H
+int checkPasswordByUsername(const std::string &username, const std::string &password);
+
+int checkPasswordByEmailAddress(const std::string &email, const std::string &password);
+
+int getUserTypeByUserID(int userID);
+
+std::string getUsernameByUserID(int userID);
+
+#endif // BACKEND_DQL_H
