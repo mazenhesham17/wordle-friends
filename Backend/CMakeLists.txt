@@ -13,9 +13,37 @@ add_executable(
         Backend Database/constants.h
         Database/dml.cpp
         Database/dml.h
-        main.cpp
         Database/dql.cpp
         Database/dql.h
+        Model/User.cpp
+        Model/User.h
+        Model/Player.cpp
+        Model/Player.h
+        Model/Admin.cpp
+        Model/Admin.h
+        Model/Response.cpp
+        Model/Response.h
+        Controller/PlayerController.cpp
+        Controller/PlayerController.h
+        Controller/UserController.cpp
+        Controller/UserController.h
+        Controller/AdminController.cpp
+        Controller/AdminController.h
+        Controller/ResponseController.cpp
+        Controller/ResponseController.h
+        API/UserAPI.cpp
+        API/UserAPI.h
+        API/PlayerAPI.cpp
+        API/PlayerAPI.h
+        API/AdminAPI.cpp
+        API/AdminAPI.h
+        WebView/TokenWebView.cpp
+        WebView/TokenWebView.h
+        WebView/AdminWebView.cpp
+        WebView/AdminWebView.h
+        WebView/PlayerWebView.cpp
+        WebView/PlayerWebView.h
+        main.cpp
 )
 
 add_executable(

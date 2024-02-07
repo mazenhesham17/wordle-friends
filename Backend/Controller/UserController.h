@@ -1,0 +1,8 @@
+#ifndef BACKEND_USERCONTROLLER_H
+#define BACKEND_USERCONTROLLER_H
+
+class UserController
+{
+};
+
+#endif // BACKEND_USERCONTROLLER_H

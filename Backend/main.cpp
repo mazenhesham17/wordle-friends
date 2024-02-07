@@ -5,6 +5,7 @@
 #include "Database/dml.h"
 #include "Database/dql.h"
 #include "Database/constants.h"
+#include "API/UserAPI.h"
 
 const int QUERY_SIZE = 1024;
 const int ERROR_SIZE = 1024;
@@ -21,56 +22,38 @@ int main()
         openConnection();
 
         httplib::Server server;
+        UserAPI *userApi = UserAPI::getInstance();
 
         // allow cross-origin requests
         server.set_default_headers({{"Access-Control-Allow-Origin", "*"}});
 
         // handle preflight requests
-        server.Options(R"(/.*)", [](const httplib::Request &req, httplib::Response &res)
+        server.Options(R"(/.*)", [&](const httplib::Request &req, httplib::Response &res)
                        {
             res.set_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
             res.set_header("Access-Control-Allow-Headers", "Content-Type , Authorization");
             res.status = 204; });
 
-        server.Post("/login", [](const httplib::Request &req, httplib::Response &res)
+        server.Post("/login", [&](const httplib::Request &req, httplib::Response &res)
                     {
             jsoncons::json body = jsoncons::json::parse(req.body);
             std::string identifier = body["identifier"].as<std::string>();
             std::string password = body["password"].as<std::string>() ;
-            int response = checkPasswordByUsername(identifier, password);
-            int userID = -1 ;
-            if ( response == -1) {
-                response = checkPasswordByEmailAddress(identifier, password);
-                if (response == -1) {
-                    std::string jResponse = R"( {"error": "user not found"})";
-                    res.set_content(jResponse, "application/json");
-                } else if (response == 0){
-                    std::string jResponse = R"( {"error": "wrong password"})";
-                    res.set_content(jResponse, "application/json");
-                }else{
-                    userID = response ;
-                }
-            } else if ( response == 0){
-                std::string jResponse = R"( {"error": "wrong password"})";
-                res.set_content(jResponse, "application/json");
-            }else{
-                userID = response ;
-            }
+            Response response = userApi->login(identifier,password) ;
+            res.set_content(response.getJson(), "application/json"); });
 
-            if ( userID != -1){
-                int userType = getUserTypeByUserID(userID) ;
-                // create token
-                auto token = jwt::create()
-                .set_type("JWS")
-                .set_issuer("server")
-                .set_payload_claim("userID", jwt::claim(std::to_string(userID)))
-                .set_payload_claim("userType", jwt::claim(std::string(userType == 0 ? "admin" : "player")))
-                .sign(jwt::algorithm::hs256{SECRET_KEY});
-                std::string jResponse = R"( {"token": ")" + token + R"("})";
+        server.Post("/register", [&](const httplib::Request &req, httplib::Response &res)
+                    {
+            jsoncons::json body = jsoncons::json::parse(req.body);
+            std::string username = body["username"].as<std::string>();
+            std::string firstName = body["firstName"].as<std::string>();
+            std::string lastName = body["lastName"].as<std::string>();
+            std::string email = body["email"].as<std::string>();
+            std::string password = body["password"].as<std::string>();
+            Response response = userApi->registerUser(username,firstName,lastName,email,password) ;
+            res.set_content(response.getJson(), "application/json"); });
 
-                res.set_content(jResponse, "application/json");
-            } });
-        server.Get("/profile", [](const httplib::Request &req, httplib::Response &res)
+        server.Get("/profile", [&](const httplib::Request &req, httplib::Response &res)
                    {
             std::string token = req.get_header_value("Authorization");
             if (token.empty())
@@ -78,15 +61,9 @@ int main()
                 res.status = 401;
                 return;
             }
-            auto decoded = jwt::decode(token);
-            int userID = std::stoi(decoded.get_payload_claim("userID").as_string());
-            std::string username = getUsernameByUserID(userID);
-            std::string jResponse = R"( {"userID": )" + std::to_string(userID) + R"(, "username": ")" + username + R"("})";
-            res.set_content(jResponse, "application/json"); });
+            Response response = userApi->profile(token);
+            res.set_content(response.getJson(), "application/json"); });
         server.listen("localhost", 4000);
-
-        //        int a = addPlayer("mazen", "m", "h", "m@lgh.com", "123");
-        //        int b = addPlayer("hazem", "h", "a", "h@siemens.com", "123");
         //        int t = addTournament(1);
         //        addPlayerToTournament(a, t);
         //        addPlayerToTournament(b, t);

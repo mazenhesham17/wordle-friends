@@ -1,0 +1,10 @@
+#ifndef BACKEND_ADMINCONTROLLER_H
+#define BACKEND_ADMINCONTROLLER_H
+
+
+class AdminController {
+
+};
+
+
+#endif //BACKEND_ADMINCONTROLLER_H

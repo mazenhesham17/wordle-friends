@@ -1,0 +1,16 @@
+#ifndef BACKEND_PLAYERWEBVIEW_H
+#define BACKEND_PLAYERWEBVIEW_H
+
+#include <string>
+
+class PlayerWebView
+{
+    static PlayerWebView *instance;
+    PlayerWebView(){};
+
+public:
+    static PlayerWebView *getInstance();
+    std::string profile(const std::string &username, const std::string &firstName, const std::string &lastName, const std::string &email);
+};
+
+#endif // BACKEND_PLAYERWEBVIEW_H
