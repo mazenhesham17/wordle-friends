@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
 
 export const Profile = () => {
     const [data, setData] = useState({});
@@ -29,6 +30,7 @@ export const Profile = () => {
                 }
                 <li>Email: {data.email}</li>
             </ul>
+            <Link to="/game">New Game</Link>
         </div>
     )
 }

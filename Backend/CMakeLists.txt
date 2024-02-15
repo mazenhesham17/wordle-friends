@@ -44,6 +44,8 @@ add_executable(
         WebView/PlayerWebView.cpp
         WebView/PlayerWebView.h
         main.cpp
+        WebView/GameWebView.cpp
+        WebView/GameWebView.h
 )
 
 add_executable(

@@ -6,6 +6,7 @@
 #include "../WebView/TokenWebView.h"
 #include "../WebView/AdminWebView.h"
 #include "../WebView/PlayerWebView.h"
+#include "../WebView/GameWebView.h"
 #include "UserAPI.h"
 
 UserAPI *UserAPI::instance = nullptr;
@@ -103,6 +104,33 @@ Response UserAPI::profile(const std::string &token)
             std::string lastName = getLastNameByUserID(userID);
             std::string email = getEmailByUserID(userID);
             responseController->setSuccess(response, PlayerWebView::getInstance()->profile(username, firstName, lastName, email));
+        }
+    }
+    catch (const std::exception &e)
+    {
+        responseController->setFailure(response, "invalid token");
+    }
+    return response;
+}
+
+Response UserAPI::newSingleGame(const std::string &token, const std::string &word)
+{
+    ResponseController *responseController = ResponseController::getInstance();
+    Response response;
+    try
+    {
+        auto decoded = jwt::decode(token);
+        int userID = std::stoi(decoded.get_payload_claim("userID").as_string());
+        int userType = decoded.get_payload_claim("userType").as_string() == "admin" ? 0 : 1;
+        if (userType == 0)
+        {
+            responseController->setFailure(response, "admin cannot play game");
+        }
+        else
+        {
+            int gameID = addGame(word.c_str());
+            addPlayerToGame(userID, gameID);
+            responseController->setSuccess(response, GameWebView::getInstance()->newSingleGame(gameID));
         }
     }
     catch (const std::exception &e)

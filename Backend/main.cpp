@@ -22,6 +22,7 @@ int main()
         openConnection();
 
         httplib::Server server;
+        httplib::Client client("localhost", 5000);
         UserAPI *userApi = UserAPI::getInstance();
 
         // allow cross-origin requests
@@ -33,6 +34,19 @@ int main()
             res.set_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
             res.set_header("Access-Control-Allow-Headers", "Content-Type , Authorization");
             res.status = 204; });
+
+        server.Post("/new-game", [&](const httplib::Request &req, httplib::Response &res)
+                    {
+            std::string token = req.get_header_value("Authorization");
+            if (token.empty())
+            {
+                res.status = 401;
+                return;
+            }
+            auto clientResponse = client.Get("/wordle");
+            jsoncons::json body = jsoncons::json::parse(clientResponse->body);
+            Response response = userApi->newSingleGame(token, body["word"].as<std::string>());
+            res.set_content(response.getJson(), "application/json"); });
 
         server.Post("/login", [&](const httplib::Request &req, httplib::Response &res)
                     {
