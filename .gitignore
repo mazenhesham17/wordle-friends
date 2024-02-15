@@ -21,3 +21,7 @@ package-lock.json
 
 # Ignore .DS_Store files (for macOS)
 .DS_Store
+
+# Ignore virtual environment files
+env/
+.env/
