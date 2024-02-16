@@ -75,6 +75,7 @@ int main()
         CREATE TABLE IF NOT EXISTS Game(
   	        gameID INTEGER UNIQUE PRIMARY KEY,
   	        word TEXT,
+            state INTEGER,
   	        winnerID INTEGER,
   	        FOREIGN KEY (winnerID) REFERENCES User(userid)
         );
@@ -238,8 +239,8 @@ int main()
 
     // query
     const char *insertAdminUser = R"(
-        INSERT INTO User (username, email, password, userType)
-        VALUES ('admin', 'admin@wordle.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 0);
+        INSERT INTO User (username, firstName, lastName, email, password, userType)
+        VALUES ('admin','','', 'admin@wordle.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 0);
     )";
 
     // execution
