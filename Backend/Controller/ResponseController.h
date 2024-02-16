@@ -1,10 +1,12 @@
 #ifndef BACKEND_RESPONSECONTROLLER_H
 #define BACKEND_RESPONSECONTROLLER_H
+
 #include "../Model/Response.h"
 
 class ResponseController
 {
     static ResponseController *instance;
+
     ResponseController() {}
 
 public:

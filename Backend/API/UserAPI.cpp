@@ -7,6 +7,8 @@
 #include "../WebView/AdminWebView.h"
 #include "../WebView/PlayerWebView.h"
 #include "../WebView/GameWebView.h"
+#include "../Controller/TokenController.h"
+#include "../Controller/UserController.h"
 #include "UserAPI.h"
 
 UserAPI *UserAPI::instance = nullptr;
@@ -43,72 +45,29 @@ Response UserAPI::login(const std::string &identifier, const std::string &passwo
     {
         int userID = resCode;
         int userType = getUserTypeByUserID(userID);
-        TokenWebView *tokenWebView = TokenWebView::getInstance();
-        auto token = jwt::create()
-                         .set_type("JWS")
-                         .set_issuer("server")
-                         .set_payload_claim("userID", jwt::claim(std::to_string(userID)))
-                         .set_payload_claim("userType", jwt::claim(std::string(userType == 0 ? "admin" : "player")))
-                         .sign(jwt::algorithm::hs256{SECRET_KEY});
-        responseController->setSuccess(response, tokenWebView->token(token));
+        TokenController *tokenController = TokenController::getInstance();
+        responseController->setSuccess(response, tokenController->createToken(userID, userType));
     }
     return response;
 }
 
-Response UserAPI::registerUser(const std::string &username, const std::string &firstName, const std::string &lastName, const std::string &email, const std::string &password)
+Response UserAPI::registerUser(const User &user)
 {
     ResponseController *responseController = ResponseController::getInstance();
     Response response;
-    if (isUsernameExist(username))
+    if (isUsernameExist(user.getUsername()))
     {
         responseController->setFailure(response, "username already exist");
     }
-    else if (isEmailExist(email))
+    else if (isEmailExist(user.getEmail()))
     {
         responseController->setFailure(response, "email already exist");
     }
     else
     {
-        int userID = addPlayer(username.c_str(), firstName.c_str(), lastName.c_str(), email.c_str(), password.c_str());
-        TokenWebView *tokenWebView = TokenWebView::getInstance();
-        auto token = jwt::create()
-                         .set_type("JWS")
-                         .set_issuer("server")
-                         .set_payload_claim("userID", jwt::claim(std::to_string(userID)))
-                         .set_payload_claim("userType", jwt::claim(std::string("player")))
-                         .sign(jwt::algorithm::hs256{SECRET_KEY});
-        responseController->setSuccess(response, tokenWebView->token(token));
-    }
-    return response;
-}
-
-Response UserAPI::profile(const std::string &token)
-{
-    ResponseController *responseController = ResponseController::getInstance();
-    Response response;
-    try
-    {
-        auto decoded = jwt::decode(token);
-        int userID = std::stoi(decoded.get_payload_claim("userID").as_string());
-        int userType = decoded.get_payload_claim("userType").as_string() == "admin" ? 0 : 1;
-        if (userType == 0)
-        {
-            std::string username = getUsernameByUserID(userID);
-            std::string email = getEmailByUserID(userID);
-            responseController->setSuccess(response, AdminWebView::getInstance()->profile(username, email));
-        }
-        else
-        {
-            std::string username = getUsernameByUserID(userID);
-            std::string firstName = getFirstNameByUserID(userID);
-            std::string lastName = getLastNameByUserID(userID);
-            std::string email = getEmailByUserID(userID);
-            responseController->setSuccess(response, PlayerWebView::getInstance()->profile(username, firstName, lastName, email));
-        }
-    }
-    catch (const std::exception &e)
-    {
-        responseController->setFailure(response, "invalid token");
+        UserController *userController = UserController::getInstance();
+        int userID = userController->addUser(user);
+        responseController->setSuccess(response, userController->successfulAddition(userID));
     }
     return response;
 }

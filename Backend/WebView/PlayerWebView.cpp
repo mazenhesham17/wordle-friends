@@ -10,10 +10,13 @@ PlayerWebView *PlayerWebView::getInstance()
     return instance;
 }
 
-std::string PlayerWebView::profile(const std::string &username, const std::string &firstName, const std::string &lastName, const std::string &email)
+std::string
+PlayerWebView::profile(const std::string &username, const std::string &firstName, const std::string &lastName,
+                       const std::string &email)
 {
     std::string profile = R"({
         "username": ")" + username +
-                          R"(","firstName": ")" + firstName + R"(","lastName": ")" + lastName + R"(","email": ")" + email + R"(", "userType" : "player"})";
+                          R"(","firstName": ")" + firstName + R"(","lastName": ")" + lastName + R"(","email": ")" +
+                          email + R"(", "userType" : "player"})";
     return profile;
 }

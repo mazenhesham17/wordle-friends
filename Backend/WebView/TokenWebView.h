@@ -6,6 +6,7 @@
 class TokenWebView
 {
     static TokenWebView *instance;
+
     TokenWebView(){};
 
 public:
