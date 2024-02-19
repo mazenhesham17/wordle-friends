@@ -12,8 +12,8 @@ PlayerController *PlayerController::getInstance()
     return instance;
 }
 
-std::string PlayerController::profile(const Player &player)
+std::string PlayerController::profile(const User *user)
 {
-    return PlayerWebView::getInstance()->profile(player.getUsername(), player.getFirstName(), player.getLastName(),
-                                                 player.getEmail());
+     return PlayerWebView::getInstance()->profile(user->getUsername(), user->getFirstName(), user->getLastName(),
+                                                 user->getEmail());
 }

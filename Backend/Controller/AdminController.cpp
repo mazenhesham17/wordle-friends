@@ -13,8 +13,7 @@ AdminController *AdminController::getInstance()
     return instance;
 }
 
-std::string AdminController::profile(const Admin &admin)
+std::string AdminController::profile(const User *user)
 {
-    std::cout << "Inside Web View" << std::endl;
-    return AdminWebView::getInstance()->profile(admin.getUsername(), admin.getEmail());
+    return AdminWebView::getInstance()->profile(user->getUsername(),user->getEmail());
 }

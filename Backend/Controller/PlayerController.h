@@ -3,8 +3,9 @@
 
 #include <string>
 #include "../Model/Player.h"
+#include "BaseController.h"
 
-class PlayerController
+class PlayerController : public BaseController
 {
 
     static PlayerController *instance;
@@ -14,7 +15,7 @@ class PlayerController
 public:
     static PlayerController *getInstance();
 
-    std::string profile(const Player &player);
+    std::string profile(const User *user) override;
 };
 
 #endif // BACKEND_PLAYERCONTROLLER_H

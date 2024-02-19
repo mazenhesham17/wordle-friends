@@ -1,7 +1,7 @@
 #ifndef BACKEND_ADMINAPI_H
 #define BACKEND_ADMINAPI_H
 
-#include "../Model/Admin.h"
+#include "../Model/User.h"
 #include "../Model/Response.h"
 
 class AdminAPI
@@ -13,7 +13,7 @@ class AdminAPI
 public:
     static AdminAPI *getInstance();
 
-    Response profile(const Admin &admin);
+    Response profile(const User *admin);
 };
 
 #endif // BACKEND_ADMINAPI_H

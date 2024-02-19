@@ -13,7 +13,7 @@ PlayerAPI *PlayerAPI::getInstance()
     return instance;
 }
 
-Response PlayerAPI::profile(const Player &player)
+Response PlayerAPI::profile(const User *player)
 {
     Response response;
     ResponseController *responseController = ResponseController::getInstance();

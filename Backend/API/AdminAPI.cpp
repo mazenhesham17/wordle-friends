@@ -15,7 +15,7 @@ AdminAPI *AdminAPI::getInstance()
     return instance;
 }
 
-Response AdminAPI::profile(const Admin &admin)
+Response AdminAPI::profile(const User *admin)
 {
     Response response;
     ResponseController *responseController = ResponseController::getInstance();

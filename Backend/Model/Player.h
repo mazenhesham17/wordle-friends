@@ -5,6 +5,10 @@
 
 class Player : public User
 {
+public:
+    Player() = default;
+
+    Player(const User &user);
 };
 
 #endif // BACKEND_PLAYER_H

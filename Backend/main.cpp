@@ -5,7 +5,10 @@
 #include "Database/constants.h"
 #include "Controller/TokenController.h"
 #include "Controller/UserController.h"
+#include "Controller/ServerController.h"
 #include "Model/User.h"
+#include "Model/Admin.h"
+#include "Model/Player.h"
 #include "API/UserAPI.h"
 #include "API/AdminAPI.h"
 #include "API/PlayerAPI.h"
@@ -21,74 +24,10 @@ int main()
     try
     {
         openConnection();
-        httplib::Server server;
-        httplib::Client client("localhost", 5000);
-        UserAPI *userApi = UserAPI::getInstance();
-        AdminAPI *adminApi = AdminAPI::getInstance();
-        PlayerAPI *playerApi = PlayerAPI::getInstance();
-        TokenController *tokenController = TokenController::getInstance();
-        UserController *userController = UserController::getInstance();
-        Admin *admin = nullptr;
-        Player *player = nullptr;
+        ServerController *serverController = ServerController::getInstance();
+        serverController->requests();
+        serverController->start(4000);
 
-        // allow cross-origin requests
-        server.set_default_headers({{"Access-Control-Allow-Origin", "*"}});
-
-        // handle preflight requests
-        server.Options(R"(/.*)", [&](const httplib::Request &req, httplib::Response &res)
-                       {
-            res.set_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-            res.set_header("Access-Control-Allow-Headers", "Content-Type , Authorization");
-            res.status = 204; });
-
-        server.Post("/register", [&](const httplib::Request &req, httplib::Response &res)
-                    {
-            jsoncons::json body = jsoncons::json::parse(req.body);
-            User user = userController->createUser(body);
-            Response response = userApi->registerUser(user);
-            res.set_content(response.getJson(), "application/json"); });
-
-        server.Post("/login", [&](const httplib::Request &req, httplib::Response &res)
-                    {
-            jsoncons::json body = jsoncons::json::parse(req.body);
-            std::string identifier = body["identifier"].as<std::string>();
-            std::string password = body["password"].as<std::string>();
-            Response response = userApi->login(identifier, password);
-            res.set_content(response.getJson(), "application/json"); });
-
-        server.Post("/new-game", [&](const httplib::Request &req, httplib::Response &res)
-                    {
-            std::string token = req.get_header_value("Authorization");
-            if (token.empty() || !tokenController->verifyToken(token) || !tokenController->isUserPlayer(token)) {
-                res.status = 401;
-                return;
-            }
-            auto clientResponse = client.Get("/wordle");
-            jsoncons::json body = jsoncons::json::parse(clientResponse->body);
-            Response response = userApi->newSingleGame(token, body["word"].as<std::string>());
-            res.set_content(response.getJson(), "application/json"); });
-
-        server.Get("/profile", [&](const httplib::Request &req, httplib::Response &res)
-                   {
-            std::string token = req.get_header_value("Authorization");
-            std::cout << "Before token verification" << std::endl;
-            if (token.empty() || !tokenController->verifyToken(token)) {
-                res.status = 401;
-                return;
-            }
-            int userID = tokenController->getUserID(token);
-            int userType = tokenController->getUserType(token);
-            User user = userController->retriveUserFromDB(userID);
-            Response response;
-            if (userType == 0) {
-                admin = reinterpret_cast<Admin *>(&user);
-                response = adminApi->profile(*admin);
-            } else {
-                player = reinterpret_cast<Player *>(&user);
-                response = playerApi->profile(*player);
-            }
-            res.set_content(response.getJson(), "application/json"); });
-        server.listen("localhost", 4000);
         //        int t = addTournament(1);
         //        addPlayerToTournament(a, t);
         //        addPlayerToTournament(b, t);

@@ -13,7 +13,7 @@ class PlayerAPI
 public:
     static PlayerAPI *getInstance();
 
-    Response profile(const Player &player);
+    Response profile(const User *player);
 };
 
 #endif // BACKEND_PLAYERAPI_H

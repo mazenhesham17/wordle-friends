@@ -1,0 +1,10 @@
+#ifndef BACKEND_SOCKETCONTROLLER_H
+#define BACKEND_SOCKETCONTROLLER_H
+
+
+class SocketController {
+
+};
+
+
+#endif //BACKEND_SOCKETCONTROLLER_H

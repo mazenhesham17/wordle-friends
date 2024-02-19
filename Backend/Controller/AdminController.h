@@ -3,8 +3,9 @@
 
 #include <string>
 #include "../Model/Admin.h"
+#include "BaseController.h"
 
-class AdminController
+class AdminController : public BaseController
 {
     static AdminController *instance;
 
@@ -13,7 +14,7 @@ class AdminController
 public:
     static AdminController *getInstance();
 
-    std::string profile(const Admin &admin);
+    std::string profile(const User *user) override;
 };
 
 #endif // BACKEND_ADMINCONTROLLER_H

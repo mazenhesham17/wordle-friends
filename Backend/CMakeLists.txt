@@ -48,6 +48,12 @@ add_executable(
         WebView/GameWebView.h
         Controller/TokenController.cpp
         Controller/TokenController.h
+        Controller/BaseController.cpp
+        Controller/BaseController.h
+        Controller/ServerController.cpp
+        Controller/ServerController.h
+        Controller/SocketController.cpp
+        Controller/SocketController.h
 )
 
 add_executable(
