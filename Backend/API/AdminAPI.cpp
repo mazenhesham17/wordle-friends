@@ -1,8 +1,4 @@
 #include "AdminAPI.h"
-#include "../WebView/AdminWebView.h"
-#include "../Controller/AdminController.h"
-#include "../Controller/ResponseController.h"
-#include <iostream>
 
 AdminAPI *AdminAPI::instance = nullptr;
 

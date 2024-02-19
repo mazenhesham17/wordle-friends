@@ -1,6 +1,7 @@
 #ifndef BACKEND_PLAYERWEBVIEW_H
 #define BACKEND_PLAYERWEBVIEW_H
 
+#include <iostream>
 #include <string>
 
 class PlayerWebView

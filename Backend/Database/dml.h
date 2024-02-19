@@ -1,6 +1,10 @@
 #ifndef BACKEND_DML_H
 #define BACKEND_DML_H
 
+#include <iostream>
+#include <sqlite3.h>
+#include "constants.h"
+
 // open database connection
 bool openConnection();
 

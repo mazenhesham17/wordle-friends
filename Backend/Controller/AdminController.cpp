@@ -1,6 +1,4 @@
 #include "AdminController.h"
-#include "../WebView/AdminWebView.h"
-#include <iostream>
 
 AdminController *AdminController::instance = nullptr;
 
@@ -15,5 +13,5 @@ AdminController *AdminController::getInstance()
 
 std::string AdminController::profile(const User *user)
 {
-    return AdminWebView::getInstance()->profile(user->getUsername(),user->getEmail());
+    return AdminWebView::getInstance()->profile(user->getUsername(), user->getEmail());
 }

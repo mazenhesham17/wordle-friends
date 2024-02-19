@@ -1,6 +1,11 @@
 #ifndef BACKEND_DQL_H
 #define BACKEND_DQL_H
 
+#include <iostream>
+#include <cstring>
+#include <sqlite3.h>
+#include "constants.h"
+
 int checkPasswordByUsername(const std::string &username, const std::string &password);
 
 int checkPasswordByEmailAddress(const std::string &email, const std::string &password);

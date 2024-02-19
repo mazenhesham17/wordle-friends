@@ -1,8 +1,12 @@
 #ifndef BACKEND_ADMINAPI_H
 #define BACKEND_ADMINAPI_H
 
-#include "../Model/User.h"
+#include <iostream>
+#include "../Controller/AdminController.h"
+#include "../Controller/ResponseController.h"
 #include "../Model/Response.h"
+#include "../Model/User.h"
+#include "../WebView/AdminWebView.h"
 
 class AdminAPI
 {

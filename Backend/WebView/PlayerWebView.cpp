@@ -1,5 +1,4 @@
 #include "PlayerWebView.h"
-#include <iostream>
 
 PlayerWebView *PlayerWebView::instance = nullptr;
 

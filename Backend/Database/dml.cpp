@@ -1,7 +1,4 @@
-#include <iostream>
-#include <sqlite3.h>
 #include "dml.h"
-#include "constants.h"
 
 
 bool openConnection() {

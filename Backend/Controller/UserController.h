@@ -1,8 +1,10 @@
 #ifndef BACKEND_USERCONTROLLER_H
 #define BACKEND_USERCONTROLLER_H
 
-#include "../Model/User.h"
 #include <jsoncons/json.hpp>
+#include "../Database/dml.h"
+#include "../Database/dql.h"
+#include "../Model/User.h"
 
 class UserController
 {

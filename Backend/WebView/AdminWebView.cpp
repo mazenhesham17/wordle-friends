@@ -1,5 +1,4 @@
 #include "AdminWebView.h"
-#include <iostream>
 
 AdminWebView *AdminWebView::instance = nullptr;
 

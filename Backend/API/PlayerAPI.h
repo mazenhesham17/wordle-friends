@@ -1,6 +1,8 @@
 #ifndef BACKEND_PLAYERAPI_H
 #define BACKEND_PLAYERAPI_H
 
+#include "../Controller/PlayerController.h"
+#include "../Controller/ResponseController.h"
 #include "../Model/Player.h"
 #include "../Model/Response.h"
 

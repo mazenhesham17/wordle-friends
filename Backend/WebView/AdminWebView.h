@@ -1,6 +1,7 @@
 #ifndef BACKEND_ADMINWEBVIEW_H
 #define BACKEND_ADMINWEBVIEW_H
 
+#include <iostream>
 #include <string>
 
 class AdminWebView

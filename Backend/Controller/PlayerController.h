@@ -2,8 +2,9 @@
 #define BACKEND_PLAYERCONTROLLER_H
 
 #include <string>
-#include "../Model/Player.h"
 #include "BaseController.h"
+#include "../Model/Player.h"
+#include "../WebView/PlayerWebView.h"
 
 class PlayerController : public BaseController
 {

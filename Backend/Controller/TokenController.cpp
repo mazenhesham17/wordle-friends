@@ -1,7 +1,4 @@
 #include "TokenController.h"
-#include <jwt-cpp/jwt.h>
-#include "../WebView/TokenWebView.h"
-#include "../Database/constants.h"
 
 using namespace jwt;
 

@@ -1,17 +1,7 @@
 #include <iostream>
-#include <httplib.h>
-#include <jsoncons/json.hpp>
+#include "Controller/ServerController.h"
 #include "Database/dml.h"
 #include "Database/constants.h"
-#include "Controller/TokenController.h"
-#include "Controller/UserController.h"
-#include "Controller/ServerController.h"
-#include "Model/User.h"
-#include "Model/Admin.h"
-#include "Model/Player.h"
-#include "API/UserAPI.h"
-#include "API/AdminAPI.h"
-#include "API/PlayerAPI.h"
 
 const int QUERY_SIZE = 1024;
 const int ERROR_SIZE = 1024;

@@ -1,6 +1,4 @@
 #include "PlayerAPI.h"
-#include "../Controller/ResponseController.h"
-#include "../Controller/PlayerController.h"
 
 PlayerAPI *PlayerAPI::instance = nullptr;
 

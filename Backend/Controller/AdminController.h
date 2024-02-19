@@ -2,8 +2,9 @@
 #define BACKEND_ADMINCONTROLLER_H
 
 #include <string>
-#include "../Model/Admin.h"
 #include "BaseController.h"
+#include "../Model/Admin.h"
+#include "../WebView/AdminWebView.h"
 
 class AdminController : public BaseController
 {

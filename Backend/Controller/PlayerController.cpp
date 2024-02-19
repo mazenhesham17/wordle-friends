@@ -1,5 +1,4 @@
 #include "PlayerController.h"
-#include "../WebView/PlayerWebView.h"
 
 PlayerController *PlayerController::instance = nullptr;
 
@@ -14,6 +13,6 @@ PlayerController *PlayerController::getInstance()
 
 std::string PlayerController::profile(const User *user)
 {
-     return PlayerWebView::getInstance()->profile(user->getUsername(), user->getFirstName(), user->getLastName(),
+    return PlayerWebView::getInstance()->profile(user->getUsername(), user->getFirstName(), user->getLastName(),
                                                  user->getEmail());
 }

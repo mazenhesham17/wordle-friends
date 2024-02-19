@@ -1,7 +1,10 @@
 #ifndef BACKEND_TOKENCONTROLLER_H
 #define BACKEND_TOKENCONTROLLER_H
 
+#include <jwt-cpp/jwt.h>
 #include <string>
+#include "../Database/constants.h"
+#include "../WebView/TokenWebView.h"
 
 class TokenController
 {

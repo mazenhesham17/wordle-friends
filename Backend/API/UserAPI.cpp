@@ -1,14 +1,3 @@
-#include <jsoncons/json.hpp>
-#include <jwt-cpp/jwt.h>
-#include "../Database/constants.h"
-#include "../Database/dml.h"
-#include "../Database/dql.h"
-#include "../WebView/TokenWebView.h"
-#include "../WebView/AdminWebView.h"
-#include "../WebView/PlayerWebView.h"
-#include "../WebView/GameWebView.h"
-#include "../Controller/TokenController.h"
-#include "../Controller/UserController.h"
 #include "UserAPI.h"
 
 UserAPI *UserAPI::instance = nullptr;

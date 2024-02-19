@@ -1,8 +1,5 @@
-#include <iostream>
-#include <cstring>
-#include <sqlite3.h>
 #include "dql.h"
-#include "constants.h"
+
 
 int checkPasswordByUsername(const std::string &username, const std::string &password)
 {
