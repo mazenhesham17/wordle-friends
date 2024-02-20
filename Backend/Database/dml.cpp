@@ -52,7 +52,7 @@ int addGame(const char *word) {
     // prepare query
     char query[QUERY_SIZE];
     snprintf(query, sizeof(query),
-             R"( INSERT INTO Game (word) VALUES ('%s'); )", word);
+             R"( INSERT INTO Game (word,state) VALUES ('%s',0); )", word);
 
     // execute query
     char *sqlError;
@@ -88,6 +88,30 @@ bool addPlayerToGame(int playerID, int gameID) {
         char errorMessage[ERROR_SIZE];
         snprintf(errorMessage, sizeof(errorMessage),
                  "There was an error adding player #%d to game #%d.\nError: %s", playerID, gameID, sqlError);
+
+        // free memory
+        sqlite3_free(sqlError);
+        throw std::runtime_error(errorMessage);
+    }
+
+    // free memory
+    sqlite3_free(sqlError);
+    return true;
+}
+
+bool startNewGame(int gameID) {
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( UPDATE Game SET state = 1 WHERE gameID = %d ; )", gameID);
+
+    // execute query
+    char *sqlError;
+    int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
+    if (resultCode != SQLITE_OK) {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage),
+                 "There was an error starting game #%d.\nError: %s", gameID, sqlError);
 
         // free memory
         sqlite3_free(sqlError);
@@ -279,7 +303,7 @@ bool winGame(int playerID, int gameID) {
     // prepare query
     char query[QUERY_SIZE];
     snprintf(query, sizeof(query),
-             R"( UPDATE Game SET winnerID = %d WHERE gameID = %d ; )", playerID, gameID);
+             R"( UPDATE Game SET winnerID = %d , state = 2 WHERE gameID = %d ; )", playerID, gameID);
 
     // execute query
     char *sqlError;

@@ -12,7 +12,7 @@ class GameWebView
 public:
     static GameWebView *getInstance();
 
-    std::string newSingleGame(const int &gameID);
+    std::string newGame(const int &gameID);
 };
 
 #endif // BACKEND_GAMEWEBVIEW_H

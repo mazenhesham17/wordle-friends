@@ -24,6 +24,8 @@ std::string getLastNameByUserID(int userID);
 
 std::string getUsernameByUserID(int userID);
 
+std::string getWordByGameID(int gameID);
+
 bool isUsernameExist(const std::string &username);
 
 bool isEmailExist(const std::string &email);

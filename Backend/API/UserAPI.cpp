@@ -60,30 +60,3 @@ Response UserAPI::registerUser(const User &user)
     }
     return response;
 }
-
-Response UserAPI::newSingleGame(const std::string &token, const std::string &word)
-{
-    ResponseController *responseController = ResponseController::getInstance();
-    Response response;
-    try
-    {
-        auto decoded = jwt::decode(token);
-        int userID = std::stoi(decoded.get_payload_claim("userID").as_string());
-        int userType = decoded.get_payload_claim("userType").as_string() == "admin" ? 0 : 1;
-        if (userType == 0)
-        {
-            responseController->setFailure(response, "admin cannot play game");
-        }
-        else
-        {
-            int gameID = addGame(word.c_str());
-            addPlayerToGame(userID, gameID);
-            responseController->setSuccess(response, GameWebView::getInstance()->newSingleGame(gameID));
-        }
-    }
-    catch (const std::exception &e)
-    {
-        responseController->setFailure(response, "invalid token");
-    }
-    return response;
-}

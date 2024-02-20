@@ -9,7 +9,7 @@ GameWebView *GameWebView::getInstance()
     return instance;
 }
 
-std::string GameWebView::newSingleGame(const int &gameID)
+std::string GameWebView::newGame(const int &gameID)
 {
     return R"( {"gameID": )" + std::to_string(gameID) + R"( } )";
 }

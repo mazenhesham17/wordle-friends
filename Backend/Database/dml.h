@@ -18,6 +18,9 @@ int addGame(const char *word);
 // add player to game
 bool addPlayerToGame(int playerID, int gameID);
 
+// start game
+bool startNewGame(int gameID);
+
 // add new tournament
 int addTournament(int adminID);
 

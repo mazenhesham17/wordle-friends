@@ -15,8 +15,17 @@ int main()
     {
         openConnection();
         ServerController *serverController = ServerController::getInstance();
-        serverController->requests();
-        serverController->start(4000);
+        int threadCount = std::thread::hardware_concurrency();
+        std::vector<std::thread> threads;
+        std::cout << "Welcome" << std::endl;
+        for (int i = 0; i < threadCount; i++)
+        {
+            threads.push_back(std::thread(&ServerController::start, serverController));
+        }
+        for (int i = 0; i < threadCount; i++)
+        {
+            threads[i].join();
+        }
 
         //        int t = addTournament(1);
         //        addPlayerToTournament(a, t);

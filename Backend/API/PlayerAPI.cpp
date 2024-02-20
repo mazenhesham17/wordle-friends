@@ -18,3 +18,11 @@ Response PlayerAPI::profile(const User *player)
     responseController->setSuccess(response, PlayerController::getInstance()->profile(player));
     return response;
 }
+
+Response PlayerAPI::newSingleGame(const std::string &word, const int &playerID)
+{
+    Response response;
+    ResponseController *responseController = ResponseController::getInstance();
+    responseController->setSuccess(response, GameController::getInstance()->newSinglePlayerGame(word, playerID));
+    return response;
+}

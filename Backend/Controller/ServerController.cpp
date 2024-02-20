@@ -9,6 +9,7 @@ ServerController::ServerController()
     playerApi = PlayerAPI::getInstance();
     tokenController = TokenController::getInstance();
     userController = UserController::getInstance();
+    socketController = SocketController::getInstance();
 }
 
 ServerController *ServerController::getInstance()
@@ -20,7 +21,7 @@ ServerController *ServerController::getInstance()
     return instance;
 }
 
-void ServerController::requests()
+void ServerController::requests( httplib::Server &server)
 {
     // allow cross-origin requests
     server.set_default_headers({{"Access-Control-Allow-Origin", "*"}});
@@ -34,6 +35,7 @@ void ServerController::requests()
 
     server.Post("/register", [&](const httplib::Request &req, httplib::Response &res)
                 {
+            std::cout << "Request received on thread : " << std::this_thread::get_id() << std::endl;
             jsoncons::json body = jsoncons::json::parse(req.body);
             User user = userController->createUser(body);
             Response response = userApi->registerUser(user);
@@ -41,6 +43,7 @@ void ServerController::requests()
 
     server.Post("/login", [&](const httplib::Request &req, httplib::Response &res)
                 {
+            std::cout << "Request received on thread : " << std::this_thread::get_id() << std::endl;
             jsoncons::json body = jsoncons::json::parse(req.body);
             std::string identifier = body["identifier"].as<std::string>();
             std::string password = body["password"].as<std::string>();
@@ -49,19 +52,34 @@ void ServerController::requests()
 
     server.Post("/new-game", [&](const httplib::Request &req, httplib::Response &res)
                 {
+            std::cout << "Request received on thread : " << std::this_thread::get_id() << std::endl;
             std::string token = req.get_header_value("Authorization");
             if (token.empty() || !tokenController->verifyToken(token) || !tokenController->isUserPlayer(token)) {
                 res.status = 401;
                 return;
             }
+            int playerID = tokenController->getUserID(token);
             httplib::Client client("localhost", 5000);
             auto clientResponse = client.Get("/wordle");
-            jsoncons::json body = jsoncons::json::parse(clientResponse->body);
-            Response response = userApi->newSingleGame(token, body["word"].as<std::string>());
+            std::string word = jsoncons::json::parse(clientResponse->body)["word"].as<std::string>();
+            Response response = playerApi->newSingleGame(word, playerID);
             res.set_content(response.getJson(), "application/json"); });
+    
+    server.Post("/start-game", [&](const httplib::Request &req, httplib::Response &res)
+                {
+            std::cout << "Request received on thread : " << std::this_thread::get_id() << std::endl;
+            std::string token = req.get_header_value("Authorization");
+            if (token.empty() || !tokenController->verifyToken(token) || !tokenController->isUserPlayer(token)) {
+                res.status = 401;
+                return;
+            }
+            std::thread(&SocketController::start, socketController).detach();
+            res.set_content(R"({"message": "success"})", "application/json");
+            res.status = 200; });
 
     server.Get("/profile", [&](const httplib::Request &req, httplib::Response &res)
                {
+            std::cout << "Request received on thread : " << std::this_thread::get_id() << std::endl;
             std::string token = req.get_header_value("Authorization");
             if (token.empty() || !tokenController->verifyToken(token)) {
                 res.status = 401;
@@ -81,7 +99,10 @@ void ServerController::requests()
             res.set_content(response.getJson(), "application/json"); });
 }
 
-void ServerController::start(int port)
+void ServerController::start()
 {
-    server.listen("localhost", port);
+    httplib::Server server;
+    requests(server);
+    std::cout << "Server is running on port 4000 on thread : " << std::this_thread::get_id() << std::endl;
+    server.listen("localhost", 4000);
 }

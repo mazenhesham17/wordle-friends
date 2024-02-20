@@ -54,6 +54,8 @@ add_executable(
         Controller/ServerController.h
         Controller/SocketController.cpp
         Controller/SocketController.h
+        Controller/GameController.cpp
+        Controller/GameController.h
 )
 
 add_executable(

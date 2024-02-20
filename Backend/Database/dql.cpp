@@ -327,6 +327,41 @@ std::string getLastNameByUserID(int userID)
     return lastName;
 }
 
+std::string getWordByGameID(int gameID)
+{
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( SELECT word FROM Game WHERE gameID = %d)", gameID);
+
+    // prepare statement
+    sqlite3_stmt *stmt;
+    int resultCode = sqlite3_prepare_v2(db, query, -1, &stmt, nullptr);
+    if (resultCode != SQLITE_OK)
+    {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage),
+                 R"(There was an error getting for word.\n
+                    Error: %s )",
+                 sqlite3_errmsg(db));
+        throw std::runtime_error(errorMessage);
+    }
+
+    std::string word;
+    if (sqlite3_step(stmt) == SQLITE_ROW)
+    {
+        const char *temp = const_cast<char *>(reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0)));
+        word = temp;
+    }
+    else if (sqlite3_step(stmt) == SQLITE_DONE)
+    {
+        return "not found"; // Game not found
+    }
+    sqlite3_finalize(stmt);
+
+    return word;
+}
+
 bool isUsernameExist(const std::string &username)
 {
     // prepare query
