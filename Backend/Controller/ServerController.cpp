@@ -21,7 +21,7 @@ ServerController *ServerController::getInstance()
     return instance;
 }
 
-void ServerController::requests( httplib::Server &server)
+void ServerController::requests(httplib::Server &server)
 {
     // allow cross-origin requests
     server.set_default_headers({{"Access-Control-Allow-Origin", "*"}});
@@ -64,7 +64,7 @@ void ServerController::requests( httplib::Server &server)
             std::string word = jsoncons::json::parse(clientResponse->body)["word"].as<std::string>();
             Response response = playerApi->newSingleGame(word, playerID);
             res.set_content(response.getJson(), "application/json"); });
-    
+
     server.Post("/start-game", [&](const httplib::Request &req, httplib::Response &res)
                 {
             std::cout << "Request received on thread : " << std::this_thread::get_id() << std::endl;
@@ -73,7 +73,8 @@ void ServerController::requests( httplib::Server &server)
                 res.status = 401;
                 return;
             }
-            std::thread(&SocketController::start, socketController).detach();
+            int playerID = tokenController->getUserID(token);
+            std::thread(&SocketController::start, socketController,playerID).detach();
             res.set_content(R"({"message": "success"})", "application/json");
             res.status = 200; });
 

@@ -19,7 +19,10 @@ int addGame(const char *word);
 bool addPlayerToGame(int playerID, int gameID);
 
 // start game
-bool startNewGame(int gameID);
+bool dbStartGame(int gameID);
+
+// end game
+bool dbEndGame(int gameID);
 
 // add new tournament
 int addTournament(int adminID);
@@ -40,7 +43,7 @@ bool addPlayerToChat(int playerID, int chatID);
 bool addMessageToChat(int senderID, int chatID, const char *content);
 
 // win game
-bool winGame(int playerID, int gameID);
+bool dbWinGame(int playerID, int gameID);
 
 // win tournament
 bool winTournament(int playerID, int tournamentID);
@@ -66,5 +69,4 @@ bool deleteGame(int gameID);
 // close database connection
 bool closeConnection();
 
-
-#endif //BACKEND_DML_H
+#endif // BACKEND_DML_H

@@ -1,9 +1,10 @@
 #include "dml.h"
 
-
-bool openConnection() {
+bool openConnection()
+{
     int resultCode = sqlite3_open(DATABASE_FILE_NAME, &db);
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         char errorMessage[ERROR_SIZE];
         snprintf(errorMessage, sizeof(errorMessage),
                  "There was an error opening %s.\nError: %s ",
@@ -11,7 +12,7 @@ bool openConnection() {
         throw std::runtime_error(errorMessage);
     }
     // enable foreign key
-    const char *foreignKey = "PRAGMA foreign_keys = ON;" ;
+    const char *foreignKey = "PRAGMA foreign_keys = ON;";
 
     // execute query
     sqlite3_exec(db, foreignKey, nullptr, nullptr, nullptr);
@@ -19,7 +20,8 @@ bool openConnection() {
 }
 
 int addPlayer(const char *username, const char *firstName, const char *lastName, const char *email,
-              const char *password) {
+              const char *password)
+{
     // prepare query
     char query[QUERY_SIZE];
     snprintf(query, sizeof(query),
@@ -30,7 +32,8 @@ int addPlayer(const char *username, const char *firstName, const char *lastName,
     // execute query
     char *sqlError;
     int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         char errorMessage[ERROR_SIZE];
         snprintf(errorMessage, sizeof(errorMessage),
                  "There was an error registering the player.\nError: %s", sqlError);
@@ -48,7 +51,8 @@ int addPlayer(const char *username, const char *firstName, const char *lastName,
     return playerID;
 }
 
-int addGame(const char *word) {
+int addGame(const char *word)
+{
     // prepare query
     char query[QUERY_SIZE];
     snprintf(query, sizeof(query),
@@ -57,7 +61,8 @@ int addGame(const char *word) {
     // execute query
     char *sqlError;
     int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         char errorMessage[ERROR_SIZE];
         snprintf(errorMessage, sizeof(errorMessage),
                  "There was an error creating a game.\nError: %s", sqlError);
@@ -75,7 +80,8 @@ int addGame(const char *word) {
     return gameID;
 }
 
-bool addPlayerToGame(int playerID, int gameID) {
+bool addPlayerToGame(int playerID, int gameID)
+{
     // prepare query
     char query[QUERY_SIZE];
     snprintf(query, sizeof(query),
@@ -84,7 +90,8 @@ bool addPlayerToGame(int playerID, int gameID) {
     // execute query
     char *sqlError;
     int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         char errorMessage[ERROR_SIZE];
         snprintf(errorMessage, sizeof(errorMessage),
                  "There was an error adding player #%d to game #%d.\nError: %s", playerID, gameID, sqlError);
@@ -99,7 +106,8 @@ bool addPlayerToGame(int playerID, int gameID) {
     return true;
 }
 
-bool startNewGame(int gameID) {
+bool dbStartGame(int gameID)
+{
     // prepare query
     char query[QUERY_SIZE];
     snprintf(query, sizeof(query),
@@ -108,7 +116,8 @@ bool startNewGame(int gameID) {
     // execute query
     char *sqlError;
     int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         char errorMessage[ERROR_SIZE];
         snprintf(errorMessage, sizeof(errorMessage),
                  "There was an error starting game #%d.\nError: %s", gameID, sqlError);
@@ -123,7 +132,34 @@ bool startNewGame(int gameID) {
     return true;
 }
 
-int addTournament(int adminID) {
+bool dbEndGame(int gameID)
+{
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( UPDATE Game SET state = 2 WHERE gameID = %d ; )", gameID);
+
+    // execute query
+    char *sqlError;
+    int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
+    if (resultCode != SQLITE_OK)
+    {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage),
+                 "There was an error ending game #%d.\nError: %s", gameID, sqlError);
+
+        // free memory
+        sqlite3_free(sqlError);
+        throw std::runtime_error(errorMessage);
+    }
+
+    // free memory
+    sqlite3_free(sqlError);
+    return true;
+}
+
+int addTournament(int adminID)
+{
     // prepare query
     char query[QUERY_SIZE];
     snprintf(query, sizeof(query),
@@ -132,7 +168,8 @@ int addTournament(int adminID) {
     // execute query
     char *sqlError;
     int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         char errorMessage[ERROR_SIZE];
         snprintf(errorMessage, sizeof(errorMessage),
                  "There was an error creating a tournament.\nError: %s", sqlError);
@@ -150,7 +187,8 @@ int addTournament(int adminID) {
     return tournamentID;
 }
 
-bool addPlayerToTournament(int playerID, int tournamentID) {
+bool addPlayerToTournament(int playerID, int tournamentID)
+{
     // prepare query
     char query[QUERY_SIZE];
     snprintf(query, sizeof(query),
@@ -159,7 +197,8 @@ bool addPlayerToTournament(int playerID, int tournamentID) {
     // execute query
     char *sqlError;
     int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         char errorMessage[ERROR_SIZE];
         snprintf(errorMessage, sizeof(errorMessage),
                  "There was an error adding player #%d to tournament #%d.\nError: %s", playerID, tournamentID,
@@ -175,7 +214,8 @@ bool addPlayerToTournament(int playerID, int tournamentID) {
     return true;
 }
 
-bool addGameToTournament(int tournamentID, int gameID, int stage) {
+bool addGameToTournament(int tournamentID, int gameID, int stage)
+{
     // prepare query
     char query[QUERY_SIZE];
     snprintf(query, sizeof(query),
@@ -184,7 +224,8 @@ bool addGameToTournament(int tournamentID, int gameID, int stage) {
     // execute query
     char *sqlError;
     int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         char errorMessage[ERROR_SIZE];
         snprintf(errorMessage, sizeof(errorMessage),
                  "There was an error adding game #%d to tournament #%d.\nError: %s", gameID, tournamentID,
@@ -200,15 +241,16 @@ bool addGameToTournament(int tournamentID, int gameID, int stage) {
     return true;
 }
 
-
-int addChat() {
+int addChat()
+{
     // prepare query
     char query[] = "INSERT INTO Chat (chatID) VALUES (NULL);";
 
     // execute query
     char *sqlError;
     int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         char errorMessage[ERROR_SIZE];
         snprintf(errorMessage, sizeof(errorMessage),
                  "There was an error creating a chat.\nError: %s", sqlError);
@@ -226,7 +268,8 @@ int addChat() {
     return chatID;
 }
 
-bool addPlayerToChat(int playerID, int chatID) {
+bool addPlayerToChat(int playerID, int chatID)
+{
     // prepare query
     char query[QUERY_SIZE];
     snprintf(query, sizeof(query),
@@ -235,7 +278,8 @@ bool addPlayerToChat(int playerID, int chatID) {
     // execute query
     char *sqlError;
     int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         char errorMessage[ERROR_SIZE];
         snprintf(errorMessage, sizeof(errorMessage),
                  "There was an error adding player #%d to chat #%d.\nError: %s", playerID, chatID, sqlError);
@@ -250,7 +294,8 @@ bool addPlayerToChat(int playerID, int chatID) {
     return true;
 }
 
-bool addMessageToChat(int senderID, int chatID, const char *content) {
+bool addMessageToChat(int senderID, int chatID, const char *content)
+{
     // prepare query
     char query[QUERY_SIZE];
     snprintf(query, sizeof(query),
@@ -259,7 +304,8 @@ bool addMessageToChat(int senderID, int chatID, const char *content) {
     // execute query
     char *sqlError;
     int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         char errorMessage[ERROR_SIZE];
         snprintf(errorMessage, sizeof(errorMessage),
                  "There was an error adding message to chat #%d.\nError: %s", chatID, sqlError);
@@ -274,7 +320,8 @@ bool addMessageToChat(int senderID, int chatID, const char *content) {
     return true;
 }
 
-bool winTournament(int playerID, int tournamentID) {
+bool winTournament(int playerID, int tournamentID)
+{
     // prepare query
     char query[QUERY_SIZE];
     snprintf(query, sizeof(query),
@@ -283,7 +330,8 @@ bool winTournament(int playerID, int tournamentID) {
     // execute query
     char *sqlError;
     int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         char errorMessage[ERROR_SIZE];
         snprintf(errorMessage, sizeof(errorMessage),
                  "There was an error winning tournament #%d with player #%d.\nError: %s", tournamentID, playerID,
@@ -299,7 +347,8 @@ bool winTournament(int playerID, int tournamentID) {
     return true;
 }
 
-bool winGame(int playerID, int gameID) {
+bool dbWinGame(int playerID, int gameID)
+{
     // prepare query
     char query[QUERY_SIZE];
     snprintf(query, sizeof(query),
@@ -308,7 +357,8 @@ bool winGame(int playerID, int gameID) {
     // execute query
     char *sqlError;
     int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         char errorMessage[ERROR_SIZE];
         snprintf(errorMessage, sizeof(errorMessage),
                  "There was an error winning game #%d with player #%d.\nError: %s", gameID, playerID, sqlError);
@@ -323,7 +373,8 @@ bool winGame(int playerID, int gameID) {
     return true;
 }
 
-bool changeFirstName(int userID, const char *firstName) {
+bool changeFirstName(int userID, const char *firstName)
+{
     // prepare query
     char query[QUERY_SIZE];
     snprintf(query, sizeof(query),
@@ -332,7 +383,8 @@ bool changeFirstName(int userID, const char *firstName) {
     // execute query
     char *sqlError;
     int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         char errorMessage[ERROR_SIZE];
         snprintf(errorMessage, sizeof(errorMessage),
                  "There was an error changing first name for user #%d.\nError: %s", userID, sqlError);
@@ -347,7 +399,8 @@ bool changeFirstName(int userID, const char *firstName) {
     return true;
 }
 
-bool changeLastName(int userID, const char *lastName) {
+bool changeLastName(int userID, const char *lastName)
+{
     // prepare query
     char query[QUERY_SIZE];
     snprintf(query, sizeof(query),
@@ -356,7 +409,8 @@ bool changeLastName(int userID, const char *lastName) {
     // execute query
     char *sqlError;
     int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         char errorMessage[ERROR_SIZE];
         snprintf(errorMessage, sizeof(errorMessage),
                  "There was an error changing last name for user #%d.\nError: %s", userID, sqlError);
@@ -371,7 +425,8 @@ bool changeLastName(int userID, const char *lastName) {
     return true;
 }
 
-bool changeEmail(int userID, const char *email) {
+bool changeEmail(int userID, const char *email)
+{
     // prepare query
     char query[QUERY_SIZE];
     snprintf(query, sizeof(query),
@@ -380,7 +435,8 @@ bool changeEmail(int userID, const char *email) {
     // execute query
     char *sqlError;
     int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         char errorMessage[ERROR_SIZE];
         snprintf(errorMessage, sizeof(errorMessage),
                  "There was an error changing email for user #%d.\nError: %s", userID, sqlError);
@@ -395,7 +451,8 @@ bool changeEmail(int userID, const char *email) {
     return true;
 }
 
-bool changePassword(int userID, const char *password) {
+bool changePassword(int userID, const char *password)
+{
     // prepare query
     char query[QUERY_SIZE];
     snprintf(query, sizeof(query),
@@ -404,7 +461,8 @@ bool changePassword(int userID, const char *password) {
     // execute query
     char *sqlError;
     int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         char errorMessage[ERROR_SIZE];
         snprintf(errorMessage, sizeof(errorMessage),
                  "There was an error changing password for user #%d.\nError: %s", userID, sqlError);
@@ -419,7 +477,8 @@ bool changePassword(int userID, const char *password) {
     return true;
 }
 
-bool deleteTournament(int tournamentID) {
+bool deleteTournament(int tournamentID)
+{
     // prepare query
     char query[QUERY_SIZE];
     snprintf(query, sizeof(query),
@@ -428,7 +487,8 @@ bool deleteTournament(int tournamentID) {
     // execute query
     char *sqlError;
     int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         char errorMessage[ERROR_SIZE];
         snprintf(errorMessage, sizeof(errorMessage),
                  "There was an error removing tournament #%d.\nError: %s", tournamentID, sqlError);
@@ -443,7 +503,8 @@ bool deleteTournament(int tournamentID) {
     return true;
 }
 
-bool deleteGame(int gameID) {
+bool deleteGame(int gameID)
+{
     // prepare query
     char query[QUERY_SIZE];
     snprintf(query, sizeof(query),
@@ -452,7 +513,8 @@ bool deleteGame(int gameID) {
     // execute query
     char *sqlError;
     int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         char errorMessage[ERROR_SIZE];
         snprintf(errorMessage, sizeof(errorMessage),
                  "There was an error removing game #%d.\nError: %s", gameID, sqlError);
@@ -467,9 +529,11 @@ bool deleteGame(int gameID) {
     return true;
 }
 
-bool closeConnection() {
+bool closeConnection()
+{
     int resultCode = sqlite3_close(db);
-    if (resultCode != SQLITE_OK) {
+    if (resultCode != SQLITE_OK)
+    {
         char errorMessage[ERROR_SIZE];
         snprintf(errorMessage, sizeof(errorMessage),
                  "There was an error closing %s.\nError: %s",
@@ -478,5 +542,3 @@ bool closeConnection() {
     }
     return true;
 }
-
-

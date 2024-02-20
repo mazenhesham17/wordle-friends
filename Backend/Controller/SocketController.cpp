@@ -11,11 +11,11 @@ SocketController::SocketController()
     acceptor = tcp::acceptor{ioc, {address, port}};
 };
 
-void SocketController::singleGameSession(tcp::socket socket)
+void SocketController::singleGameSession(tcp::socket socket, int playerID)
 {
+    int gameId = 0;
     try
     {
-        // Construct the stream by moving in the socket
         websocket::stream<tcp::socket> ws{std::move(socket)};
 
         // Set a decorator to change the Server of the handshake
@@ -27,18 +27,19 @@ void SocketController::singleGameSession(tcp::socket socket)
                             "websocket-server-sync");
             }));
 
-        // Accept the websocket handshake
         ws.accept();
 
         beast::flat_buffer buffer;
 
         ws.read(buffer);
 
-        int gameId = std::stoi(beast::buffers_to_string(buffer.data()));
+        gameId = std::stoi(beast::buffers_to_string(buffer.data()));
 
         gameController->startGame(gameId);
 
         ws.write(net::buffer("Game started!"));
+
+        bool flag = false;
 
         for (int i = 0; i < 6; i++)
         {
@@ -47,41 +48,57 @@ void SocketController::singleGameSession(tcp::socket socket)
             std::string message = beast::buffers_to_string(word_buffer.data());
             std::string result = gameController->submitGuess(message, gameId);
             ws.write(net::buffer(result));
+            if (gameController->match(message, gameId))
+            {
+                flag = true;
+                break;
+            }
         }
-
-        ws.write(net::buffer("You lose!"));
+        if (flag)
+        {
+            ws.write(net::buffer("You win!"));
+            gameController->winGame(gameId, playerID);
+            ws.close(websocket::close_code::normal);
+        }
+        else
+        {
+            ws.write(net::buffer("You lose!"));
+            gameController->endGame(gameId);
+            ws.close(websocket::close_code::normal);
+        }
     }
     catch (beast::system_error const &se)
     {
+        gameController->endGame(gameId);
         // This indicates that the session was closed
         if (se.code() != websocket::error::closed)
+        {
             std::cerr << "Error: " << se.code().message() << std::endl;
+        }
     }
     catch (std::exception const &e)
     {
+        gameController->endGame(gameId);
         std::cerr << "Error: " << e.what() << std::endl;
     }
 }
 
-void SocketController::start()
+void SocketController::start(int playerID)
 {
     try
     {
-        while (true)
-        {
-            // This will receive the new connection
-            tcp::socket socket{ioc};
+        // This will receive the new connection
+        tcp::socket socket{ioc};
 
-            // Block until we get a connection
-            acceptor.accept(socket);
+        // Block until we get a connection
+        acceptor.accept(socket);
 
-            // Launch the session, transferring ownership of the socket
-            std::thread(
-                &SocketController::singleGameSession,
-                this,
-                std::move(socket))
-                .detach();
-        }
+        // Launch the session, transferring ownership of the socket
+        std::thread(
+            &SocketController::singleGameSession,
+            this,
+            std::move(socket), playerID)
+            .join();
     }
     catch (const std::exception &e)
     {

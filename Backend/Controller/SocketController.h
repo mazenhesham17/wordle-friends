@@ -17,17 +17,18 @@ namespace websocket = beast::websocket; // from <boost/beast/websocket.hpp>
 namespace net = boost::asio;            // from <boost/asio.hpp>
 using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
 
-class SocketController {
+class SocketController
+{
     static SocketController *instance;
     GameController *gameController;
     net::io_context ioc{1};
     tcp::acceptor acceptor{ioc};
     SocketController();
-    public:
+
+public:
     static SocketController *getInstance();
-    void start();
-    void singleGameSession(tcp::socket socket);
+    void start(int playerID);
+    void singleGameSession(tcp::socket socket, int playerID);
 };
 
-
-#endif //BACKEND_SOCKETCONTROLLER_H
+#endif // BACKEND_SOCKETCONTROLLER_H

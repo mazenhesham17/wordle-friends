@@ -2,7 +2,6 @@
 
 GameController *GameController::instance = nullptr;
 
-
 GameController *GameController::getInstance()
 {
     if (instance == nullptr)
@@ -21,7 +20,7 @@ std::string GameController::newSinglePlayerGame(const std::string &word, const i
 
 void GameController::startGame(const int &gameId)
 {
-    startNewGame(gameId);
+    dbStartGame(gameId);
 }
 
 std::string GameController::submitGuess(const std::string &guess, const int &gameId)
@@ -33,11 +32,29 @@ std::string GameController::submitGuess(const std::string &guess, const int &gam
         word[i] = tolower(word[i]);
         if (word[i] == tolower(guess[i]))
         {
-            result[i] = '+' ;
-        }else if ( word.find(tolower(guess[i])) != -1){
+            result[i] = '+';
+        }
+        else if (word.find(tolower(guess[i])) != -1)
+        {
             result[i] = '-';
         }
     }
     result = "Result: " + result;
     return result;
+}
+
+void GameController::winGame(const int &gameId, const int &playerId)
+{
+    dbWinGame(playerId, gameId);
+}
+
+bool GameController::match(const std::string &guess, const int &gameId)
+{
+    std::string word = getWordByGameID(gameId);
+    return word == guess;
+}
+
+void GameController::endGame(const int &gameId)
+{
+    dbEndGame(gameId);
 }
