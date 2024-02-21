@@ -28,6 +28,8 @@ public:
     Response login(const std::string &identifier, const std::string &password);
 
     Response registerUser(const User &user);
+
+    Response info(const int &userType);
 };
 
 #endif // BACKEND_USERAPI_H

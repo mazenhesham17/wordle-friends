@@ -1,10 +1,11 @@
 import './App.css';
-import { HomePage } from './Page/HomePage';
+import { Route , Routes } from 'react-router-dom';
+import HomePage from './Page/HomePage';
 import LoginPage from './Page/LoginPage';
 import Profile from './Page/ProfilePage';
-import { Route , Routes } from 'react-router-dom';
 import RegisterPage from './Page/RegisterPage';
 import GamePage from './Page/GamePage';
+import Dashboard from './Page/Dashboard';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/register" element={<RegisterPage/>} />
         <Route path="/game" element={<GamePage />} />
+        <Route path="/dashboard" element={<Dashboard/>} />
       </Routes>
     </div>
   );

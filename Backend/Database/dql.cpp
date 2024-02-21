@@ -1,6 +1,5 @@
 #include "dql.h"
 
-
 int checkPasswordByUsername(const std::string &username, const std::string &password)
 {
     // prepare query
@@ -360,6 +359,175 @@ std::string getWordByGameID(int gameID)
     sqlite3_finalize(stmt);
 
     return word;
+}
+
+int getGamesCountByUserID(int userID)
+{
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( SELECT COUNT(*)
+                    FROM Game 
+                    INNER JOIN GamePlayers ON Game.gameID = GamePlayers.gameID
+                    WHERE Game.state = 2 AND GamePlayers.playerID = 2 )",
+             userID);
+
+    // prepare statement
+    sqlite3_stmt *stmt;
+    int resultCode = sqlite3_prepare_v2(db, query, -1, &stmt, nullptr);
+    if (resultCode != SQLITE_OK)
+    {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage),
+                 R"(There was an error getting games count.\n
+                    Error: %s )",
+                 sqlite3_errmsg(db));
+        throw std::runtime_error(errorMessage);
+    }
+
+    int gamesCount = 0;
+    if (sqlite3_step(stmt) == SQLITE_ROW)
+    {
+        gamesCount = sqlite3_column_int(stmt, 0);
+    }
+    else if (sqlite3_step(stmt) == SQLITE_DONE)
+    {
+        return -1;
+    }
+    sqlite3_finalize(stmt);
+
+    return gamesCount;
+}
+
+int getWinsCountByUserID(int userID)
+{
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( SELECT COUNT(*)
+                    FROM Game 
+                    INNER JOIN GamePlayers ON Game.gameID = GamePlayers.gameID
+                    WHERE Game.state = 2 AND GamePlayers.playerID = 2 AND GamePlayers.playerID = Game.winnerID  )",
+             userID);
+
+    // prepare statement
+    sqlite3_stmt *stmt;
+    int resultCode = sqlite3_prepare_v2(db, query, -1, &stmt, nullptr);
+    if (resultCode != SQLITE_OK)
+    {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage),
+                 R"(There was an error getting wins count.\n
+                    Error: %s )",
+                 sqlite3_errmsg(db));
+        throw std::runtime_error(errorMessage);
+    }
+
+    int winsCount = 0;
+    if (sqlite3_step(stmt) == SQLITE_ROW)
+    {
+        winsCount = sqlite3_column_int(stmt, 0);
+    }
+    else if (sqlite3_step(stmt) == SQLITE_DONE)
+    {
+        return -1;
+    }
+    sqlite3_finalize(stmt);
+
+    return winsCount;
+}
+
+int getTotalGamesCount()
+{
+    // prepare query
+    const char *query = R"( SELECT COUNT(*) FROM Game WHERE state = 2 ; )";
+
+    // prepare statement
+    sqlite3_stmt *stmt;
+    int resultCode = sqlite3_prepare_v2(db, query, -1, &stmt, nullptr);
+    if (resultCode != SQLITE_OK)
+    {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage), R"(There was an error getting total games count.\n
+                    Error: %s )",
+                 sqlite3_errmsg(db));
+        throw std::runtime_error(errorMessage);
+    }
+
+    int totalGamesCount = 0;
+    if (sqlite3_step(stmt) == SQLITE_ROW)
+    {
+        totalGamesCount = sqlite3_column_int(stmt, 0);
+    }
+    else if (sqlite3_step(stmt) == SQLITE_DONE)
+    {
+        return -1;
+    }
+    sqlite3_finalize(stmt);
+
+    return totalGamesCount;
+}
+
+int getTotalWinsCount()
+{
+    // prepare query
+    const char *query = R"( SELECT COUNT(*) FROM Game WHERE state = 2 AND winnerID IS NOT NULL ; )";
+
+    // prepare statement
+    sqlite3_stmt *stmt;
+    int resultCode = sqlite3_prepare_v2(db, query, -1, &stmt, nullptr);
+    if (resultCode != SQLITE_OK)
+    {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage), R"(There was an error getting total wins count.\n
+                    Error: %s )",
+                 sqlite3_errmsg(db));
+        throw std::runtime_error(errorMessage);
+    }
+
+    int totalWinsCount = 0;
+    if (sqlite3_step(stmt) == SQLITE_ROW)
+    {
+        totalWinsCount = sqlite3_column_int(stmt, 0);
+    }
+    else if (sqlite3_step(stmt) == SQLITE_DONE)
+    {
+        return -1;
+    }
+    sqlite3_finalize(stmt);
+
+    return totalWinsCount;
+}
+
+int getTotalPlayersCount()
+{
+    // prepare query
+    const char *query = R"( SELECT COUNT(*) FROM User WHERE userType = 1 ; )";
+
+    // prepare statement
+    sqlite3_stmt *stmt;
+    int resultCode = sqlite3_prepare_v2(db, query, -1, &stmt, nullptr);
+    if (resultCode != SQLITE_OK)
+    {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage), R"(There was an error getting total players count.\n
+                    Error: %s )",
+                 sqlite3_errmsg(db));
+        throw std::runtime_error(errorMessage);
+    }
+
+    int totalPlayersCount = 0;
+    if (sqlite3_step(stmt) == SQLITE_ROW)
+    {
+        totalPlayersCount = sqlite3_column_int(stmt, 0);
+    }
+    else if (sqlite3_step(stmt) == SQLITE_DONE)
+    {
+        return -1;
+    }
+    sqlite3_finalize(stmt);
+
+    return totalPlayersCount;
 }
 
 bool isUsernameExist(const std::string &username)

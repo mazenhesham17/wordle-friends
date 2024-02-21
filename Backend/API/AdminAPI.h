@@ -18,6 +18,8 @@ public:
     static AdminAPI *getInstance();
 
     Response profile(const User *admin);
+
+    Response dashboard(const Admin &admin);
 };
 
 #endif // BACKEND_ADMINAPI_H

@@ -50,6 +50,32 @@ void ServerController::requests(httplib::Server &server)
             Response response = userApi->login(identifier, password);
             res.set_content(response.getJson(), "application/json"); });
 
+    server.Get("/info", [&](const httplib::Request &req, httplib::Response &res)
+               {
+            std::cout << "Request received on thread : " << std::this_thread::get_id() << std::endl;
+            std::string token = req.get_header_value("Authorization");
+            if (token.empty() || !tokenController->verifyToken(token)) {
+                res.status = 401;
+                return;
+            }
+            int userType = tokenController->getUserType(token);
+            Response response = userApi->info(userType);
+            res.set_content(response.getJson(), "application/json"); });
+
+    server.Get("/dashboard", [&](const httplib::Request &req, httplib::Response &res)
+               {
+            std::cout << "Request received on thread : " << std::this_thread::get_id() << std::endl;
+            std::string token = req.get_header_value("Authorization");
+            if (token.empty() || !tokenController->verifyToken(token) || !tokenController->isUserAdmin(token)) {
+                res.status = 401;
+                return;
+            }
+            int userID = tokenController->getUserID(token);
+            User *user = new Admin(userController->retriveUserFromDB(userID));
+            Admin admin = AdminController::getInstance()->createAdmin(user);
+            Response response = adminApi->dashboard(admin);
+            res.set_content(response.getJson(), "application/json"); });
+
     server.Post("/new-game", [&](const httplib::Request &req, httplib::Response &res)
                 {
             std::cout << "Request received on thread : " << std::this_thread::get_id() << std::endl;

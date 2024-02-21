@@ -26,6 +26,16 @@ std::string getUsernameByUserID(int userID);
 
 std::string getWordByGameID(int gameID);
 
+int getGamesCountByUserID(int userID);
+
+int getWinsCountByUserID(int userID);
+
+int getTotalGamesCount();
+
+int getTotalWinsCount();
+
+int getTotalPlayersCount();
+
 bool isUsernameExist(const std::string &username);
 
 bool isEmailExist(const std::string &email);

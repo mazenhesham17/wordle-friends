@@ -11,8 +11,17 @@ PlayerController *PlayerController::getInstance()
     return instance;
 }
 
+Player PlayerController::createPlayer(const User *user)
+{
+    Player player(*user);
+    player.setWins(getWinsCountByUserID(user->getUserID()));
+    player.setGames(getGamesCountByUserID(user->getUserID()));
+    return player;
+}
+
 std::string PlayerController::profile(const User *user)
 {
-    return PlayerWebView::getInstance()->profile(user->getUsername(), user->getFirstName(), user->getLastName(),
-                                                 user->getEmail());
+    Player player = createPlayer(user);
+    return PlayerWebView::getInstance()->profile(player.getUsername(), player.getFirstName(), player.getLastName(),
+                                                 player.getEmail(), player.getWins(), player.getGames());
 }

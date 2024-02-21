@@ -60,3 +60,19 @@ Response UserAPI::registerUser(const User &user)
     }
     return response;
 }
+
+Response UserAPI::info(const int &userType)
+{
+    ResponseController *responseController = ResponseController::getInstance();
+    Response response;
+    std::string userTypeStr = R"({ "userType": ")" ;
+    if (userType == 0)
+    {
+        userTypeStr += "admin";
+    }else{
+        userTypeStr += "player";
+    }
+    userTypeStr += R"("})" ;
+    responseController->setSuccess(response, userTypeStr) ;
+    return response;
+}

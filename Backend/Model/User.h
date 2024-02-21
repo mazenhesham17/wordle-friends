@@ -1,6 +1,7 @@
 #ifndef BACKEND_USER_H
 #define BACKEND_USER_H
 
+#include <utility>
 #include <string>
 
 class User
@@ -12,6 +13,7 @@ class User
     std::string email;
     std::string firstName;
     std::string lastName;
+    std::pair<int, int> gameCounts;
 
 public:
     User() = default;
@@ -48,6 +50,14 @@ public:
     std::string getLastName() const;
 
     void setLastName(const std::string &lastName);
+
+    int getWins() const;
+
+    void setWins(int wins);
+
+    int getGames() const;
+
+    void setGames(int games);
 };
 
 #endif // BACKEND_USER_H

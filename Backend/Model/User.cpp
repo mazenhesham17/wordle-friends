@@ -87,3 +87,23 @@ void User::setLastName(const std::string &lastName)
 {
     User::lastName = lastName;
 }
+
+int User::getWins() const
+{
+    return gameCounts.first;
+}
+
+void User::setWins(int wins)
+{
+    gameCounts.first = wins;
+}
+
+int User::getGames() const
+{
+    return gameCounts.second;
+}
+
+void User::setGames(int games)
+{
+    gameCounts.second = games;
+}

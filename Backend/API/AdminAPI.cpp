@@ -18,3 +18,11 @@ Response AdminAPI::profile(const User *admin)
     responseController->setSuccess(response, AdminController::getInstance()->profile(admin));
     return response;
 }
+
+Response AdminAPI::dashboard(const Admin &admin)
+{
+    Response response;
+    ResponseController *responseController = ResponseController::getInstance();
+    responseController->setSuccess(response, AdminController::getInstance()->dashboard(admin));
+    return response;
+}

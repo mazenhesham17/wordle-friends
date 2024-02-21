@@ -14,7 +14,7 @@ public:
     static PlayerWebView *getInstance();
 
     std::string profile(const std::string &username, const std::string &firstName, const std::string &lastName,
-                        const std::string &email);
+                        const std::string &email, const int &wins, const int &games);
 };
 
 #endif // BACKEND_PLAYERWEBVIEW_H

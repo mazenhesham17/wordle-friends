@@ -16,3 +16,12 @@ std::string AdminWebView::profile(const std::string &username, const std::string
                           R"(","email": ")" + email + R"(", "userType" : "admin" })";
     return profile;
 }
+
+std::string AdminWebView::dashboard(const int &totalPlayers, const int &totalGames, const int &totalWins)
+{
+    std::string dashboard = R"({
+        "totalPlayers": )" + std::to_string(totalPlayers) +
+                            R"(,"totalGames": )" + std::to_string(totalGames) +
+                            R"(,"totalWins": )" + std::to_string(totalWins) + R"(})";
+    return dashboard;
+}

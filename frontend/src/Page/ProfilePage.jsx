@@ -17,6 +17,7 @@ export const Profile = () => {
     useEffect(() => {
         fetchData();
     }, []);
+
     return (
         <div>
             <h1>Profile</h1>
@@ -25,12 +26,35 @@ export const Profile = () => {
                 <li>Username: {data.username}</li>
                 {data.userType === "player" &&
                     <>
-                        <li>First Name: {data.firstName}</li> <li>Last Name: {data.lastName}</li>
+                        <li>First Name: {data.firstName}</li>
+                        <li>Last Name: {data.lastName}</li>
                     </>
                 }
                 <li>Email: {data.email}</li>
+                {data.userType === "player" &&
+                    <>
+                        <li>Games Won: {data.wins}</li>
+                        <li>Games Played: {data.games}</li>
+                    </>
+                }
             </ul>
-            <Link to="/game">New Game</Link>
+            {data.userType === "player" &&
+                <>
+                    <Link to="/game">New Game</Link>
+                    <br />
+                </>
+            }
+            {data.userType === "admin" &&
+                <>
+                    <Link to="/dashboard">dashboard</Link>
+                    <br />
+                </>
+            }
+            <button onClick={() => {
+                localStorage.removeItem('token');
+                window.location.href = '/';
+            }
+            }>Logout</button>
         </div>
     )
 }
