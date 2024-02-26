@@ -24,15 +24,6 @@ bool dbStartGame(int gameID);
 // end game
 bool dbEndGame(int gameID);
 
-// add new tournament
-int addTournament(int adminID);
-
-// add player to tournament
-bool addPlayerToTournament(int playerID, int tournamentID);
-
-// add game to tournament
-bool addGameToTournament(int tournamentID, int gameID, int stage);
-
 // add new chat
 int addChat();
 
@@ -45,23 +36,8 @@ bool addMessageToChat(int senderID, int chatID, const char *content);
 // win game
 bool dbWinGame(int playerID, int gameID);
 
-// win tournament
-bool winTournament(int playerID, int tournamentID);
-
-// update the first name
-bool changeFirstName(int userID, const char *firstName);
-
-// update the last name
-bool changeLastName(int userID, const char *lastName);
-
-// update the email
-bool changeEmail(int userID, const char *email);
-
-// update the password
-bool changePassword(int userID, const char *password);
-
-// remove tournament
-bool deleteTournament(int tournamentID);
+// update user field
+bool updatePlayerField(int userID, const char *field, const char *value);
 
 // remove game
 bool deleteGame(int gameID);

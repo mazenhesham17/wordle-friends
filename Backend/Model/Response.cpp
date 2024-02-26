@@ -1,6 +1,6 @@
 #include "Response.h"
 
-bool Response::isStatus() const
+bool Response::isSuccess() const
 {
     return status;
 }

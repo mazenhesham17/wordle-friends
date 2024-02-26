@@ -9,7 +9,7 @@ class Response
     std::string json;
 
 public:
-    bool isStatus() const;
+    bool isSuccess() const;
 
     void setStatus(bool status);
 

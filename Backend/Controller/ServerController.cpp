@@ -10,6 +10,7 @@ ServerController::ServerController()
     tokenController = TokenController::getInstance();
     userController = UserController::getInstance();
     socketController = SocketController::getInstance();
+    responseController = ResponseController::getInstance();
 }
 
 ServerController *ServerController::getInstance()
@@ -29,7 +30,7 @@ void ServerController::requests(httplib::Server &server)
     // handle preflight requests
     server.Options(R"(/.*)", [&](const httplib::Request &req, httplib::Response &res)
                    {
-            res.set_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+            res.set_header("Access-Control-Allow-Methods", "GET, PUT, POST, OPTIONS");
             res.set_header("Access-Control-Allow-Headers", "Content-Type , Authorization");
             res.status = 204; });
 
@@ -124,6 +125,29 @@ void ServerController::requests(httplib::Server &server)
                 response = playerApi->profile(user);
             }
             res.set_content(response.getJson(), "application/json"); });
+
+    server.Put("/profile", [&](const httplib::Request &req, httplib::Response &res)
+               {
+        std::cout << "Request received on thread : " << std::this_thread::get_id() << std::endl;
+        std::string token = req.get_header_value("Authorization");
+        if (token.empty() || !tokenController->verifyToken(token)) {
+            res.status = 401;
+            return;
+        }
+        int userID = tokenController->getUserID(token);
+        jsoncons::json body = jsoncons::json::parse(req.body);
+        Response response;
+        for ( auto & element : body.object_range()){
+            std::string key = element.key();
+            std::string value = element.value().as<std::string>();
+            response = playerApi->updatePlayer(userID,key,value);
+            // there is a field that is not updated
+            if ( !responseController->isSuccess(response) ) {
+                res.set_content(response.getJson(), "application/json");
+                return;
+            }
+        }
+        res.set_content(response.getJson(), "application/json"); });
 }
 
 void ServerController::start()

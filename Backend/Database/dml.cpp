@@ -158,89 +158,6 @@ bool dbEndGame(int gameID)
     return true;
 }
 
-int addTournament(int adminID)
-{
-    // prepare query
-    char query[QUERY_SIZE];
-    snprintf(query, sizeof(query),
-             R"( INSERT INTO Tournament (adminID) VALUES (%d); )", adminID);
-
-    // execute query
-    char *sqlError;
-    int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK)
-    {
-        char errorMessage[ERROR_SIZE];
-        snprintf(errorMessage, sizeof(errorMessage),
-                 "There was an error creating a tournament.\nError: %s", sqlError);
-
-        // free memory
-        sqlite3_free(sqlError);
-        throw std::runtime_error(errorMessage);
-    }
-
-    // retrieve created tournament ID
-    int tournamentID = static_cast<int>(sqlite3_last_insert_rowid(db));
-
-    // free memory
-    sqlite3_free(sqlError);
-    return tournamentID;
-}
-
-bool addPlayerToTournament(int playerID, int tournamentID)
-{
-    // prepare query
-    char query[QUERY_SIZE];
-    snprintf(query, sizeof(query),
-             R"( INSERT INTO TournamentPlayers VALUES (%d,%d); )", tournamentID, playerID);
-
-    // execute query
-    char *sqlError;
-    int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK)
-    {
-        char errorMessage[ERROR_SIZE];
-        snprintf(errorMessage, sizeof(errorMessage),
-                 "There was an error adding player #%d to tournament #%d.\nError: %s", playerID, tournamentID,
-                 sqlError);
-
-        // free memory
-        sqlite3_free(sqlError);
-        throw std::runtime_error(errorMessage);
-    }
-
-    // free memory
-    sqlite3_free(sqlError);
-    return true;
-}
-
-bool addGameToTournament(int tournamentID, int gameID, int stage)
-{
-    // prepare query
-    char query[QUERY_SIZE];
-    snprintf(query, sizeof(query),
-             R"( INSERT INTO TournamentGames VALUES (%d,%d,%d); )", tournamentID, gameID, stage);
-
-    // execute query
-    char *sqlError;
-    int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK)
-    {
-        char errorMessage[ERROR_SIZE];
-        snprintf(errorMessage, sizeof(errorMessage),
-                 "There was an error adding game #%d to tournament #%d.\nError: %s", gameID, tournamentID,
-                 sqlError);
-
-        // free memory
-        sqlite3_free(sqlError);
-        throw std::runtime_error(errorMessage);
-    }
-
-    // free memory
-    sqlite3_free(sqlError);
-    return true;
-}
-
 int addChat()
 {
     // prepare query
@@ -320,33 +237,6 @@ bool addMessageToChat(int senderID, int chatID, const char *content)
     return true;
 }
 
-bool winTournament(int playerID, int tournamentID)
-{
-    // prepare query
-    char query[QUERY_SIZE];
-    snprintf(query, sizeof(query),
-             R"( UPDATE Tournament SET winnerID = %d WHERE tournamentID = %d ; )", playerID, tournamentID);
-
-    // execute query
-    char *sqlError;
-    int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK)
-    {
-        char errorMessage[ERROR_SIZE];
-        snprintf(errorMessage, sizeof(errorMessage),
-                 "There was an error winning tournament #%d with player #%d.\nError: %s", tournamentID, playerID,
-                 sqlError);
-
-        // free memory
-        sqlite3_free(sqlError);
-        throw std::runtime_error(errorMessage);
-    }
-
-    // free memory
-    sqlite3_free(sqlError);
-    return true;
-}
-
 bool dbWinGame(int playerID, int gameID)
 {
     // prepare query
@@ -373,12 +263,12 @@ bool dbWinGame(int playerID, int gameID)
     return true;
 }
 
-bool changeFirstName(int userID, const char *firstName)
+bool updatePlayerField(int userID, const char *field, const char *value)
 {
     // prepare query
     char query[QUERY_SIZE];
     snprintf(query, sizeof(query),
-             R"( UPDATE User SET firstName = '%s' WHERE userID = %d ; )", firstName, userID);
+             R"( UPDATE User SET %s = '%s' WHERE userID = %d ; )", field, value, userID);
 
     // execute query
     char *sqlError;
@@ -386,112 +276,8 @@ bool changeFirstName(int userID, const char *firstName)
     if (resultCode != SQLITE_OK)
     {
         char errorMessage[ERROR_SIZE];
-        snprintf(errorMessage, sizeof(errorMessage),
-                 "There was an error changing first name for user #%d.\nError: %s", userID, sqlError);
-
-        // free memory
-        sqlite3_free(sqlError);
-        throw std::runtime_error(errorMessage);
-    }
-
-    // free memory
-    sqlite3_free(sqlError);
-    return true;
-}
-
-bool changeLastName(int userID, const char *lastName)
-{
-    // prepare query
-    char query[QUERY_SIZE];
-    snprintf(query, sizeof(query),
-             R"( UPDATE User SET lastName = '%s' WHERE userID = %d ; )", lastName, userID);
-
-    // execute query
-    char *sqlError;
-    int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK)
-    {
-        char errorMessage[ERROR_SIZE];
-        snprintf(errorMessage, sizeof(errorMessage),
-                 "There was an error changing last name for user #%d.\nError: %s", userID, sqlError);
-
-        // free memory
-        sqlite3_free(sqlError);
-        throw std::runtime_error(errorMessage);
-    }
-
-    // free memory
-    sqlite3_free(sqlError);
-    return true;
-}
-
-bool changeEmail(int userID, const char *email)
-{
-    // prepare query
-    char query[QUERY_SIZE];
-    snprintf(query, sizeof(query),
-             R"( UPDATE User SET email = '%s' WHERE userID = %d ; )", email, userID);
-
-    // execute query
-    char *sqlError;
-    int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK)
-    {
-        char errorMessage[ERROR_SIZE];
-        snprintf(errorMessage, sizeof(errorMessage),
-                 "There was an error changing email for user #%d.\nError: %s", userID, sqlError);
-
-        // free memory
-        sqlite3_free(sqlError);
-        throw std::runtime_error(errorMessage);
-    }
-
-    // free memory
-    sqlite3_free(sqlError);
-    return true;
-}
-
-bool changePassword(int userID, const char *password)
-{
-    // prepare query
-    char query[QUERY_SIZE];
-    snprintf(query, sizeof(query),
-             R"( UPDATE User SET password = '%s' WHERE userID = %d ; )", password, userID);
-
-    // execute query
-    char *sqlError;
-    int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK)
-    {
-        char errorMessage[ERROR_SIZE];
-        snprintf(errorMessage, sizeof(errorMessage),
-                 "There was an error changing password for user #%d.\nError: %s", userID, sqlError);
-
-        // free memory
-        sqlite3_free(sqlError);
-        throw std::runtime_error(errorMessage);
-    }
-
-    // free memory
-    sqlite3_free(sqlError);
-    return true;
-}
-
-bool deleteTournament(int tournamentID)
-{
-    // prepare query
-    char query[QUERY_SIZE];
-    snprintf(query, sizeof(query),
-             R"( DELETE FROM Tournament WHERE tournamentID = %d ; )", tournamentID);
-
-    // execute query
-    char *sqlError;
-    int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
-    if (resultCode != SQLITE_OK)
-    {
-        char errorMessage[ERROR_SIZE];
-        snprintf(errorMessage, sizeof(errorMessage),
-                 "There was an error removing tournament #%d.\nError: %s", tournamentID, sqlError);
+        snprintf(errorMessage, sizeof(errorMessage), "There was an error updating %s for user #%d.\nError: %s",
+                 field, userID, sqlError);
 
         // free memory
         sqlite3_free(sqlError);

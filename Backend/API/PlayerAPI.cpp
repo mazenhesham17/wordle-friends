@@ -26,3 +26,19 @@ Response PlayerAPI::newSingleGame(const std::string &word, const int &playerID)
     responseController->setSuccess(response, GameController::getInstance()->newSinglePlayerGame(word, playerID));
     return response;
 }
+
+Response PlayerAPI::updatePlayer(const int playerID, const std::string &field, const std::string &value)
+{
+    Response response;
+    ResponseController *responseController = ResponseController::getInstance();
+    if (PlayerController::getInstance()->updatePlayer(playerID, field, value))
+    {
+        User *user = new Player(UserController::getInstance()->retriveUserFromDB(playerID));
+        return profile(user);
+    }
+    else
+    {
+        responseController->setFailure(response, "Player update failed");
+    }
+    return response;
+}

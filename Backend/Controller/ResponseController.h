@@ -15,6 +15,8 @@ public:
     void setSuccess(Response &response, const std::string &json);
 
     void setFailure(Response &response, const std::string &error);
+
+    bool isSuccess(const Response &response);
 };
 
 #endif // BACKEND_RESPONSECONTROLLER_H

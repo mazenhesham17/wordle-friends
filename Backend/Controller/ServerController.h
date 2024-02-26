@@ -5,6 +5,7 @@
 #include <httplib.h>
 #include <jsoncons/json.hpp>
 #include "SocketController.h"
+#include "ResponseController.h"
 #include "TokenController.h"
 #include "UserController.h"
 #include "../API/AdminAPI.h"
@@ -19,12 +20,13 @@ class ServerController
     UserAPI *userApi;
     AdminAPI *adminApi;
     PlayerAPI *playerApi;
+    ResponseController *responseController;
     TokenController *tokenController;
     UserController *userController;
     SocketController *socketController;
     static ServerController *instance;
     ServerController();
-    void requests( httplib::Server &server);
+    void requests(httplib::Server &server);
 
 public:
     static ServerController *getInstance();
