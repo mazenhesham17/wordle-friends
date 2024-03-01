@@ -12,7 +12,8 @@ class GameController
 
 public:
     static GameController *getInstance();
-    std::string newSinglePlayerGame(const std::string &word, const int &playerId);
+    int newGame(const std::string &word, const int &playerId);
+    void joinGame(const int &gameId, const int &playerId);
     void startGame(const int &gameId);
     std::string submitGuess(const std::string &guess, const int &gameId);
     bool match(const std::string &guess, const int &gameId);

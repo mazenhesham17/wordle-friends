@@ -8,12 +8,16 @@
 #include "ResponseController.h"
 #include "TokenController.h"
 #include "UserController.h"
+#include "RoomController.h"
 #include "../API/AdminAPI.h"
 #include "../API/PlayerAPI.h"
 #include "../API/UserAPI.h"
 #include "../Model/Admin.h"
 #include "../Model/User.h"
 #include "../Model/Player.h"
+#include "../Session/Session.h"
+#include "../Session/SingleGameSession.h"
+#include "../Session/DuoGameSession.h"
 
 class ServerController
 {
@@ -21,12 +25,15 @@ class ServerController
     AdminAPI *adminApi;
     PlayerAPI *playerApi;
     ResponseController *responseController;
+    RoomController *roomController;
     TokenController *tokenController;
     UserController *userController;
     SocketController *socketController;
     static ServerController *instance;
     ServerController();
     void requests(httplib::Server &server);
+
+    void connectSocketAndLanuchGameSession(const std::string roomID, int playerID);
 
 public:
     static ServerController *getInstance();

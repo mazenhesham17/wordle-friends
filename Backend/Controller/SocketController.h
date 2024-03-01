@@ -22,13 +22,14 @@ class SocketController
     static SocketController *instance;
     GameController *gameController;
     net::io_context ioc{1};
-    tcp::acceptor acceptor{ioc};
-    SocketController();
+    SocketController(){};
 
 public:
     static SocketController *getInstance();
-    void start(int playerID);
-    void singleGameSession(tcp::socket socket, int playerID);
+
+    void connectSocket(tcp::socket &socket);
+
+    net::io_context &getIOContext();
 };
 
 #endif // BACKEND_SOCKETCONTROLLER_H

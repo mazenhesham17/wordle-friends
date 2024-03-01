@@ -10,6 +10,7 @@ export const GamePage = () => {
     const [flag, setFlag] = useState(false);
     const [finsihed, setFinished] = useState(false);
     const [won, setWon] = useState(false);
+    const [roomID, setRoomID] = useState('');
 
     const updateWord = (e) => {
         setWord(e.target.value);
@@ -74,7 +75,8 @@ export const GamePage = () => {
         updateWS(webSocket);
         webSocket.onopen = () => {
             console.log('WebSocket Client Connected');
-            webSocket.send(data.gameID);
+            const gameID = roomID.split('G')[1];
+            webSocket.send(gameID);
         };
         webSocket.onmessage = socketOnMessage;
         webSocket.onclose = () => {
@@ -91,26 +93,28 @@ export const GamePage = () => {
         })
         const temp = await respose.json();
         setData(temp);
+        setRoomID(temp.roomID);
     }
 
     const startGame = async () => {
+        console.log("hello from start game");
         const response = await fetch('http://localhost:4000/start-game', {
             method: 'Post',
             headers: {
                 'Authorization': token
-            }
+            },
+            body: JSON.stringify({ roomID: roomID })
         });
         const temp = await response.json();
+        setData(temp);
     }
 
     const resetGame = async () => {
         resetAll();
-        await newGame();
-        await startGame();
+        newGame();
     }
 
     const handleBeforeUnload = (event) => {
-        
         const confirmationMessage = 'Are you sure you want to leave? You will lose the game.';
         event.returnValue = confirmationMessage;
         return confirmationMessage;
@@ -120,7 +124,6 @@ export const GamePage = () => {
     // create new game
     useEffect(() => {
         newGame();
-        startGame();
         window.addEventListener('beforeunload', handleBeforeUnload);
         return () => {
             window.removeEventListener('beforeunload', handleBeforeUnload);
@@ -129,13 +132,19 @@ export const GamePage = () => {
 
     // create socket
     useEffect(() => {
-        if (!data.gameID) return;
-        createSocket();
+        console.log("data changed : ", data);
+        if (data.roomID) {
+            startGame();
+        }
+        if (data.message) {
+            createSocket();
+        }
         return () => {
             if (WS)
                 WS.close();
         }
     }, [data]);
+
 
     // update history
     useEffect(() => {
@@ -153,7 +162,7 @@ export const GamePage = () => {
     return (
         <>
             <h1> Welcome to wordle </h1>
-            <h2> Game ID: {data.gameID} </h2>
+            <h2> Room ID: {roomID} </h2>
             <table>
                 <thead>
                     <tr>

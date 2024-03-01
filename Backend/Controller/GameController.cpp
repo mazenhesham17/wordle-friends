@@ -11,11 +11,16 @@ GameController *GameController::getInstance()
     return instance;
 }
 
-std::string GameController::newSinglePlayerGame(const std::string &word, const int &playerId)
+int GameController::newGame(const std::string &word, const int &playerId)
 {
     int gameID = addGame(word.c_str());
     addPlayerToGame(playerId, gameID);
-    return GameWebView::getInstance()->newGame(gameID);
+    return gameID;
+}
+
+void GameController::joinGame(const int &gameId, const int &playerId)
+{
+    addPlayerToGame(playerId, gameId);
 }
 
 void GameController::startGame(const int &gameId)

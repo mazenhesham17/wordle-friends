@@ -11,6 +11,7 @@ ServerController::ServerController()
     userController = UserController::getInstance();
     socketController = SocketController::getInstance();
     responseController = ResponseController::getInstance();
+    roomController = RoomController::getInstance();
 }
 
 ServerController *ServerController::getInstance()
@@ -20,6 +21,26 @@ ServerController *ServerController::getInstance()
         instance = new ServerController();
     }
     return instance;
+}
+
+void ServerController::connectSocketAndLanuchGameSession(const std::string roomID, int playerID)
+{
+    Room &room = roomController->getRoom(roomID);
+    tcp::socket socket{socketController->getIOContext()};
+    socketController->connectSocket(socket);
+    roomController->addSocketToRoom(room, playerID, socket);
+    Session *session;
+    if (roomID.find("S") != -1)
+    {
+        // single player game
+        session = new SingleGameSession();
+    }
+    else if (roomID.find("D") != -1)
+    {
+        // two player game
+        session = new DuoGameSession();
+    }
+    session->launchSession(room);
 }
 
 void ServerController::requests(httplib::Server &server)
@@ -89,8 +110,9 @@ void ServerController::requests(httplib::Server &server)
             httplib::Client client("localhost", 5000);
             auto clientResponse = client.Get("/wordle");
             std::string word = jsoncons::json::parse(clientResponse->body)["word"].as<std::string>();
-            Response response = playerApi->newSingleGame(word, playerID);
-            res.set_content(response.getJson(), "application/json"); });
+            Response response = playerApi->newGame(word, playerID);
+            res.set_content(response.getJson(), "application/json"); 
+            std::cout << "Request finished on thread : " << std::this_thread::get_id() << std::endl; });
 
     server.Post("/start-game", [&](const httplib::Request &req, httplib::Response &res)
                 {
@@ -101,7 +123,16 @@ void ServerController::requests(httplib::Server &server)
                 return;
             }
             int playerID = tokenController->getUserID(token);
-            std::thread(&SocketController::start, socketController,playerID).detach();
+            jsoncons::json body = jsoncons::json::parse(req.body);
+            std::string roomID = body["roomID"].as<std::string>();
+            if ( !roomController->isRoomExist(roomID) ) {
+                Response response;
+                responseController->setFailure(response,"there is no room with this ID");
+                res.set_content(response.getJson(), "application/json");
+                res.status = 200;
+                return;
+            }
+            std::thread (&ServerController::connectSocketAndLanuchGameSession, this, roomID, playerID).detach();
             res.set_content(R"({"message": "success"})", "application/json");
             res.status = 200; });
 

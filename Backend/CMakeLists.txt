@@ -56,6 +56,20 @@ add_executable(
         Controller/SocketController.h
         Controller/GameController.cpp
         Controller/GameController.h
+        Controller/RoomController.cpp
+        Controller/RoomController.h
+        Model/Room.cpp
+        Model/Room.h
+        Model/RoomContainer.cpp
+        Model/RoomContainer.h
+        Session/Session.cpp
+        Session/Session.h
+        Session/SingleGameSession.cpp
+        Session/SingleGameSession.h
+        Session/DuoGameSession.cpp
+        Session/DuoGameSession.h
+        WebView/RoomWebView.cpp
+        WebView/RoomWebView.h
 )
 
 add_executable(
