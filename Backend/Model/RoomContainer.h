@@ -4,13 +4,14 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "Room.h"
+
+class Room;
 
 class RoomContainer
 {
     std::vector<Room> rooms;
 
-    std::map<std::string, int> roomIDToidx;
+    std::map<std::string, int> roomIDToRoomIndex;
 
 public:
     RoomContainer() = default;

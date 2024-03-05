@@ -32,7 +32,11 @@ export const HomePage = () => {
     return (
       <>
         <div>Welcome to wordle</div>
-        <Link to="/game">Game</Link>
+        <Link to="/single-game">Single Game</Link>
+        <br />
+        <Link to="/duo-game"> Create Duo Game</Link>
+        <br />
+        <Link to="/join-room">Join Duo Game</Link>
         <br />
         <Link to="/profile">Profile</Link>
       </>

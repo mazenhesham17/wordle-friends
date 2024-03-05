@@ -22,13 +22,9 @@ public:
 
     Response profile(const User *player);
 
-    Response newGame(const std::string &word, const int &playerID);
+    Response newGame(const std::string &word, const int &playerID, const std::string &type);
 
-    Response updatePlayer(const int playerID, const std::string &field, const std::string &value);
-
-    Response createRoom(const int &playerID, boost::asio::io_context &ioContext);
-
-    Response joinRoom(const std::string &roomID, boost::asio::io_context &ioContext);
+    Response updatePlayer(const int &playerID, const std::string &field, const std::string &value);
 };
 
 #endif // BACKEND_PLAYERAPI_H

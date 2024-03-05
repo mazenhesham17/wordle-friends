@@ -1,11 +1,12 @@
 #include "Room.h"
+#include "../Session/Session.h"
 
 Room::Room(std::string roomID)
 {
-    this->roomID = roomID;
+    this->roomID = std::move(roomID);
 }
 
-Room::Room(Room &&other) noexcept : roomID(std::move(other.roomID)), playerIDs(std::move(other.playerIDs)), sockets(std::move(other.sockets))
+Room::Room(Room &&other) noexcept : roomID(std::move(other.roomID)), sessions(std::move(other.sessions))
 {
 }
 
@@ -14,31 +15,48 @@ std::string Room::getRoomID() const
     return roomID;
 }
 
-void Room::setRoomID(const std::string &roomID)
+void Room::addSession(std::shared_ptr<Session> &session, const int &playerID)
 {
-    this->roomID = roomID;
+    playerIDToSessionIndex[playerID] = (int)sessions.size();
+    sessions.push_back(session);
 }
 
-std::vector<int> &Room::getPlayerIDs()
+void Room::blockRoom()
 {
-    return playerIDs;
+    std::unique_lock<std::mutex> lock(roomMutex);
+    auto now = std::chrono::system_clock::now();
+    roomCV.wait_until(lock, now + std::chrono::seconds(60), [&]()
+                      { return getConnectedSessionsCount() == 2; });
 }
 
-std::vector<tcp::socket> &Room::getSockets()
+int Room::getConnectedSessionsCount()
 {
-    return sockets;
-}
-
-void Room::addSocket(const int playerID, tcp::socket &socket)
-{
-    playerIDs.push_back(playerID);
-    sockets.push_back(std::move(socket));
-}
-
-Room::~Room()
-{
-    for (auto &socket : sockets)
+    int cnt = 0;
+    for (auto &session : sessions)
     {
-        socket.close();
+        if (session->isConnected())
+        {
+            cnt++;
+        }
     }
+    roomCV.notify_all();
+    return cnt;
+}
+
+int Room::getFinishedSessionsCount()
+{
+    int cnt = 0;
+    for (auto &session : sessions)
+    {
+        if (session->isFinished())
+        {
+            cnt++;
+        }
+    }
+    return cnt;
+}
+
+std::vector<std::shared_ptr<Session>> &Room::getSessions()
+{
+    return sessions;
 }

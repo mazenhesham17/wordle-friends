@@ -21,7 +21,7 @@ void SocketController::connectSocket(tcp::socket &socket)
     try
     {
         auto const address = net::ip::make_address("127.0.0.1");
-        auto const port = static_cast<unsigned short>(std::atoi("8080"));
+        auto const port = static_cast<unsigned short>(8080);
         tcp::acceptor acceptor{ioc, {address, port}};
         acceptor.accept(socket);
     }

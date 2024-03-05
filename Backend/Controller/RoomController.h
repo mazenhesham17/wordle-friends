@@ -8,14 +8,8 @@
 #include "../Model/Room.h"
 #include "../Model/RoomContainer.h"
 #include "../WebView/RoomWebView.h"
-#include <boost/beast/core.hpp>
-#include <boost/beast/websocket.hpp>
 
-namespace beast = boost::beast;         // from <boost/beast.hpp>
-namespace http = beast::http;           // from <boost/beast/http.hpp>
-namespace websocket = beast::websocket; // from <boost/beast/websocket.hpp>
-namespace net = boost::asio;            // from <boost/asio.hpp>
-using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
+class Session;
 
 class RoomController
 {
@@ -25,6 +19,8 @@ class RoomController
 
     RoomContainer roomContainer;
 
+    Room &getRoom(const std::string &roomID);
+
 public:
     static RoomController *getInstance();
 
@@ -32,15 +28,19 @@ public:
 
     std::string createChatRoom(int playerID, int friendID);
 
-    void addSocketToRoom(Room &room, int &playerID, tcp::socket &socket);
-
     bool isRoomExist(const std::string &roomID);
 
-    std::vector<int> &getPlayerIDs(Room &room);
+    void addSession(const std::string &roomID, std::shared_ptr<Session> &session, const int &playerID);
 
-    std::vector<tcp::socket> &getSockets(Room &room);
+    void broadcast(const std::string &message, const std::string &roomID, const int &playerID);
 
-    Room &getRoom(const std::string &roomID);
+    void blockRoom(const std::string &roomID);
+
+    int getConnectedPlayersCount(const std::string &roomID);
+
+    int getFinishedPlayersCount(const std::string &roomID);
+
+    void endAllSessions(const std::string &roomID);
 };
 
 #endif // BACKEND_ROOMCONTROLLER_H

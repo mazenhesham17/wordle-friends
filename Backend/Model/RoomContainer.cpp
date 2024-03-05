@@ -1,17 +1,18 @@
 #include "RoomContainer.h"
+#include "Room.h"
 
 void RoomContainer::addRoom(Room &room)
 {
-    roomIDToidx[room.getRoomID()] = rooms.size();
+    roomIDToRoomIndex[room.getRoomID()] = (int)rooms.size();
     rooms.emplace_back(std::move(room));
 }
 
 bool RoomContainer::isRoomExist(const std::string &roomID)
 {
-    return roomIDToidx.find(roomID) != roomIDToidx.end();
+    return roomIDToRoomIndex.find(roomID) != roomIDToRoomIndex.end();
 }
 
 Room &RoomContainer::getRoom(const std::string &roomID)
 {
-    return rooms[roomIDToidx[roomID]];
+    return rooms[roomIDToRoomIndex[roomID]];
 }

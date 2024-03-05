@@ -369,7 +369,7 @@ int getGamesCountByUserID(int userID)
              R"( SELECT COUNT(*)
                     FROM Game 
                     INNER JOIN GamePlayers ON Game.gameID = GamePlayers.gameID
-                    WHERE Game.state = 2 AND GamePlayers.playerID = 2 )",
+                    WHERE Game.state = 2 AND GamePlayers.playerID = %d )",
              userID);
 
     // prepare statement
@@ -407,7 +407,7 @@ int getWinsCountByUserID(int userID)
              R"( SELECT COUNT(*)
                     FROM Game 
                     INNER JOIN GamePlayers ON Game.gameID = GamePlayers.gameID
-                    WHERE Game.state = 2 AND GamePlayers.playerID = 2 AND GamePlayers.playerID = Game.winnerID  )",
+                    WHERE Game.state = 2 AND GamePlayers.playerID = %d AND GamePlayers.playerID = Game.winnerID  )",
              userID);
 
     // prepare statement

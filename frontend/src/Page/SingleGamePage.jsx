@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
 
-export const GamePage = () => {
+export const SingleGamePage = () => {
     const [WS, setWS] = useState(null);
     const [data, setData] = useState({});
     const [word, setWord] = useState('');
@@ -85,7 +85,7 @@ export const GamePage = () => {
     }
 
     const newGame = async () => {
-        const respose = await fetch('http://localhost:4000/new-game', {
+        const respose = await fetch('http://localhost:4000/new-game/S', {
             method: 'Post',
             headers: {
                 'Authorization': token
@@ -132,7 +132,6 @@ export const GamePage = () => {
 
     // create socket
     useEffect(() => {
-        console.log("data changed : ", data);
         if (data.roomID) {
             startGame();
         }
@@ -189,4 +188,4 @@ export const GamePage = () => {
     )
 }
 
-export default GamePage;
+export default SingleGamePage;

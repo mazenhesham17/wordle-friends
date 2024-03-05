@@ -2,27 +2,25 @@
 #define BACKEND_ROOM_H
 
 #include <string>
-#include <unordered_set>
 #include <vector>
-#include <utility>
-#include <boost/beast/core.hpp>
-#include <boost/beast/websocket.hpp>
-#include <boost/asio/ip/tcp.hpp>
-#include "../Controller/SocketController.h"
+#include <map>
+#include <mutex>
+#include <condition_variable>
+#include <memory>
 
-namespace beast = boost::beast;         // from <boost/beast.hpp>
-namespace http = beast::http;           // from <boost/beast/http.hpp>
-namespace websocket = beast::websocket; // from <boost/beast/websocket.hpp>
-namespace net = boost::asio;            // from <boost/asio.hpp>
-using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
+class Session;
 
 class Room
 {
     std::string roomID;
 
-    std::vector<int> playerIDs;
+    std::vector<std::shared_ptr<Session>> sessions;
 
-    std::vector<tcp::socket> sockets;
+    std::map<int, int> playerIDToSessionIndex;
+
+    std::mutex roomMutex;
+
+    std::condition_variable roomCV;
 
 public:
     Room(std::string roomID);
@@ -31,15 +29,15 @@ public:
 
     std::string getRoomID() const;
 
-    void setRoomID(const std::string &roomID);
+    void addSession(std::shared_ptr<Session> &session, const int &playerID);
 
-    std::vector<int> &getPlayerIDs();
+    std::vector<std::shared_ptr<Session>> &getSessions();
 
-    std::vector<tcp::socket> &getSockets();
+    void blockRoom();
 
-    void addSocket(const int playerID, tcp::socket &socket);
+    int getConnectedSessionsCount();
 
-    ~Room();
+    int getFinishedSessionsCount();
 };
 
 #endif // BACKEND_ROOM_H

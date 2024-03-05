@@ -20,8 +20,8 @@ using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
 class SocketController
 {
     static SocketController *instance;
-    GameController *gameController;
-    net::io_context ioc{1};
+    net::io_context ioc{static_cast<int>(std::thread::hardware_concurrency())};
+
     SocketController(){};
 
 public:

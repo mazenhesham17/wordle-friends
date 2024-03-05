@@ -1,38 +1,36 @@
 #include "SingleGameSession.h"
+#include "../Controller/GameController.h"
 
-void SingleGameSession::launchSession(Room &room)
+SingleGameSession::SingleGameSession(tcp::socket &&socket, int playerID)
+    : Session(std::move(socket), playerID)
 {
-    int gameId = 0;
-    int playerID = roomController->getPlayerIDs(room).back();
-    tcp::socket &socket = roomController->getSockets(room).back();
+}
+
+void SingleGameSession::launchSession(const std::string &roomID)
+{
     try
     {
-        websocket::stream<tcp::socket> ws{std::move(socket)};
+        accept();
 
-        ws.accept();
+        gameID = std::stoi(receive());
 
-        ws.text(true);
+        gameController->joinGame(gameID, playerID);
 
-        beast::flat_buffer buffer;
+        gameController->startGame(gameID);
 
-        ws.read(buffer);
-
-        gameId = std::stoi(beast::buffers_to_string(buffer.data()));
-
-        gameController->startGame(gameId);
-
-        ws.write(net::buffer("Game started!"));
+        send("Game started!");
 
         bool flag = false;
 
         for (int i = 0; i < 6; i++)
         {
-            buffer.consume(buffer.size());
-            ws.read(buffer);
-            std::string message = beast::buffers_to_string(buffer.data());
-            std::string result = gameController->submitGuess(message, gameId);
-            ws.write(net::buffer(result));
-            if (gameController->match(message, gameId))
+            std::string message = receive();
+
+            std::string result = gameController->submitGuess(message, gameID);
+
+            send(result);
+
+            if (gameController->match(message, gameID))
             {
                 flag = true;
                 break;
@@ -40,21 +38,19 @@ void SingleGameSession::launchSession(Room &room)
         }
         if (flag)
         {
-            ws.write(net::buffer("You win!"));
-            gameController->winGame(gameId, playerID);
-            ws.close(websocket::close_code::normal);
-            std::cout << "Socket closed " << ws.is_open() << std::endl;
+            send("You win!");
+            gameController->winGame(gameID, playerID);
         }
         else
         {
-            ws.write(net::buffer("You lose!"));
-            gameController->endGame(gameId);
-            ws.close(websocket::close_code::normal);
+            send("You lose!");
+            gameController->endGame(gameID);
         }
+        close();
     }
     catch (beast::system_error const &se)
     {
-        gameController->endGame(gameId);
+        gameController->endGame(gameID);
         // This indicates that the session was closed
         if (se.code() != websocket::error::closed)
         {
@@ -63,7 +59,12 @@ void SingleGameSession::launchSession(Room &room)
     }
     catch (std::exception const &e)
     {
-        gameController->endGame(gameId);
+        gameController->endGame(gameID);
         std::cerr << "Error: " << e.what() << std::endl;
     }
+}
+
+bool SingleGameSession::isFinished()
+{
+    return false;
 }

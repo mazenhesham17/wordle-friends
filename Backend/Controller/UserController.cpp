@@ -1,6 +1,5 @@
 #include "UserController.h"
 
-
 UserController *UserController::instance = nullptr;
 
 UserController *UserController::getInstance()

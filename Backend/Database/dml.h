@@ -40,7 +40,7 @@ bool dbWinGame(int playerID, int gameID);
 bool updatePlayerField(int userID, const char *field, const char *value);
 
 // remove game
-bool deleteGame(int gameID);
+bool dbDeleteGame(int gameID);
 
 // close database connection
 bool closeConnection();

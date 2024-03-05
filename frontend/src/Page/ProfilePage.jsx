@@ -132,7 +132,7 @@ export const Profile = () => {
                                 <li>Games Played: {data.games}</li>
                                 <button onClick={() => enableUpdate('password')} > change password </button>
                                 <br />
-                                <Link to="/game">New Game</Link>
+                                <Link to="/single-game">New Game</Link>
                                 <br />
                             </>}
 

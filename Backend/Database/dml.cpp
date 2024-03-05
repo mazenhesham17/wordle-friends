@@ -289,7 +289,7 @@ bool updatePlayerField(int userID, const char *field, const char *value)
     return true;
 }
 
-bool deleteGame(int gameID)
+bool dbDeleteGame(int gameID)
 {
     // prepare query
     char query[QUERY_SIZE];

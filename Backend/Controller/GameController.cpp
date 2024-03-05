@@ -11,10 +11,9 @@ GameController *GameController::getInstance()
     return instance;
 }
 
-int GameController::newGame(const std::string &word, const int &playerId)
+int GameController::newGame(const std::string &word)
 {
     int gameID = addGame(word.c_str());
-    addPlayerToGame(playerId, gameID);
     return gameID;
 }
 
@@ -62,4 +61,27 @@ bool GameController::match(const std::string &guess, const int &gameId)
 void GameController::endGame(const int &gameId)
 {
     dbEndGame(gameId);
+}
+
+std::string GameController::mergeTemplates(const std::string &template1, const std::string &template2)
+{
+    std::string result(template1.size(), '_');
+    for (int i = 0; i < template1.size(); i++)
+    {
+        if (template1[i] == '+' || (i < template2.size() && template2[i] == '+'))
+        {
+            result[i] = '+';
+        }
+        else if (template1[i] == '-' || (i < template2.size() && template2[i] == '-'))
+        {
+            result[i] = '-';
+        }
+    }
+    result = "Opponent's result: " + result;
+    return result;
+}
+
+void GameController::deleteGame(const int &gameId)
+{
+    dbDeleteGame(gameId);
 }

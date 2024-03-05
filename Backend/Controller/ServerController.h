@@ -2,6 +2,7 @@
 #define BACKEND_SERVERCONTROLLER_H
 
 #include <iostream>
+#include <memory>
 #include <httplib.h>
 #include <jsoncons/json.hpp>
 #include "SocketController.h"
@@ -30,13 +31,16 @@ class ServerController
     UserController *userController;
     SocketController *socketController;
     static ServerController *instance;
+
     ServerController();
+
     void requests(httplib::Server &server);
 
-    void connectSocketAndLanuchGameSession(const std::string roomID, int playerID);
+    void connectSocketAndLaunchGameSession(const std::string &roomID, int playerID);
 
 public:
     static ServerController *getInstance();
+
     void start();
 };
 

@@ -19,16 +19,16 @@ Response PlayerAPI::profile(const User *player)
     return response;
 }
 
-Response PlayerAPI::newGame(const std::string &word, const int &playerID)
+Response PlayerAPI::newGame(const std::string &word, const int &playerID, const std::string &type)
 {
     Response response;
     ResponseController *responseController = ResponseController::getInstance();
-    int gameID = GameController::getInstance()->newGame(word, playerID);
-    responseController->setSuccess(response, RoomController::getInstance()->createGameRoom(playerID, gameID, "S"));
+    int gameID = GameController::getInstance()->newGame(word);
+    responseController->setSuccess(response, RoomController::getInstance()->createGameRoom(playerID, gameID, type));
     return response;
 }
 
-Response PlayerAPI::updatePlayer(const int playerID, const std::string &field, const std::string &value)
+Response PlayerAPI::updatePlayer(const int &playerID, const std::string &field, const std::string &value)
 {
     Response response;
     ResponseController *responseController = ResponseController::getInstance();
@@ -43,30 +43,3 @@ Response PlayerAPI::updatePlayer(const int playerID, const std::string &field, c
     }
     return response;
 }
-
-// Response PlayerAPI::createRoom(const int &playerID, boost::asio::io_context &ioContext)
-// {
-//     Response response;
-//     ResponseController *responseController = ResponseController::getInstance();
-//     std::string roomID = RoomController::getInstance()->createRoom(playerID, ioContext);
-//     responseController->setSuccess(response, R"({"roomID": ")" + roomID + R"("})" );
-//     return response;
-// }
-
-// Response PlayerAPI::joinRoom(const std::string &roomID, boost::asio::io_context &ioContext)
-// {
-//     Response response;
-//     ResponseController *responseController = ResponseController::getInstance();
-//     if (RoomController::getInstance()->isRoomExist(roomID, ioContext))
-//     {
-//         Room room = RoomController::getInstance()->getRoom(roomID, ioContext);
-//         boost::asio::ip::tcp::socket &socket = RoomController::getInstance()->getSocket(room);
-//         SocketController::getInstance()->joinMultiplayerGameSession(std::move(socket));
-//         responseController->setSuccess(response, R"({"message": "success"})");
-//     }
-//     else
-//     {
-//         responseController->setFailure(response, "Room does not exist");
-//     }
-//     return response;
-// }
