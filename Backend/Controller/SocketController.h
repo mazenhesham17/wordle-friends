@@ -29,6 +29,8 @@ public:
 
     void connectSocket(tcp::socket &socket);
 
+    void waitForAsyncOperations();
+
     net::io_context &getIOContext();
 };
 

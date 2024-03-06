@@ -39,6 +39,11 @@ bool RoomController::isRoomExist(const std::string &roomID)
     return roomContainer.isRoomExist(roomID);
 }
 
+bool RoomController::isRoomFull(const std::string &roomID)
+{
+    return getRoom(roomID).getSessions().size() == 2;
+}
+
 Room &RoomController::getRoom(const std::string &roomID)
 {
     return roomContainer.getRoom(roomID);

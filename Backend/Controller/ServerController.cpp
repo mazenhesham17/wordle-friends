@@ -113,6 +113,13 @@ void ServerController::requests(httplib::Server &server)
             res.status = 200;
             return;
         }
+        if (roomController->isRoomFull(roomID)) {
+            Response response;
+            responseController->setFailure(response, "room is full");
+            res.set_content(response.getJson(), "application/json");
+            res.status = 200;
+            return;
+        }
         res.set_content(R"({"message": "success"})", "application/json"); });
 
     server.Post("/new-game/:type", [&](const httplib::Request &req, httplib::Response &res)

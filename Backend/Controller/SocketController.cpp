@@ -38,3 +38,9 @@ void SocketController::connectSocket(tcp::socket &socket)
         std::cerr << e.what() << std::endl;
     }
 }
+
+void SocketController::waitForAsyncOperations()
+{
+    ioc.restart();
+    ioc.run();
+}

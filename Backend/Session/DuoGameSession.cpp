@@ -11,20 +11,30 @@ DuoGameSession::DuoGameSession(tcp::socket &&socket, std::string roomID, int pla
 
 void DuoGameSession::onRead(beast::error_code ec, std::size_t bytes_transferred)
 {
-    if (ec && ec != websocket::error::closed)
-    {
-        std::cerr << "Error: " << ec.message() << std::endl;
-        return;
-    }
+    boost::ignore_unused(bytes_transferred);
 
-    if (buffer.size() == 0)
+    if (ec)
     {
+        if (roomController->getConnectedPlayersCount(roomID) == 0)
+        {
+            // both users are disconnected
+            gameController->endGame(gameID);
+        }
+        if (ec != websocket::error::closed && ec != net::error::not_connected)
+        {
+            std::cerr << "OnRead error: " << ec.message() << std::endl;
+        }
         return;
     }
 
     if (turnsLeft == 0)
     {
         send("You lose!");
+        if (roomController->getFinishedPlayersCount(roomID) == 2)
+        {
+            gameController->endGame(gameID);
+            roomController->endAllSessions(roomID);
+        }
         return;
     }
 
@@ -58,6 +68,24 @@ void DuoGameSession::onRead(beast::error_code ec, std::size_t bytes_transferred)
     asyncReceive();
 }
 
+void DuoGameSession::onWrite(beast::error_code ec, std::size_t bytes_transferred)
+{
+    boost::ignore_unused(bytes_transferred);
+    if (roomController->getConnectedPlayersCount(roomID) == 0)
+    {
+        // both users are disconnected
+        gameController->endGame(gameID);
+    }
+    if (ec)
+    {
+        if (ec != websocket::error::closed && ec != net::error::not_connected)
+        {
+            std::cerr << "OnWrite error: " << ec.message() << std::endl;
+        }
+        return;
+    }
+}
+
 void DuoGameSession::launchSession(const std::string &roomID)
 {
     try
@@ -85,21 +113,7 @@ void DuoGameSession::launchSession(const std::string &roomID)
 
         asyncReceive();
 
-        SocketController::getInstance()->getIOContext().run();
-
-        if (roomController->getFinishedPlayersCount(roomID) == 2)
-        {
-            gameController->endGame(gameID);
-            roomController->endAllSessions(roomID);
-        }
-
-        if (roomController->getConnectedPlayersCount(roomID) == 0)
-        {
-            // both users are disconnected
-            gameController->endGame(gameID);
-        }
-
-        std::cout << "Duo Session ended" << std::endl;
+        SocketController::getInstance()->waitForAsyncOperations();
     }
     catch (beast::system_error const &se)
     {

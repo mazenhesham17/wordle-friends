@@ -26,6 +26,7 @@ export const DuoGamePage = () => {
         }
         window.addEventListener('beforeunload', handleBeforeUnload);
         return () => {
+            closeSocket();
             window.removeEventListener('beforeunload', handleBeforeUnload);
         };
     }, [urlRoomID]);
@@ -50,6 +51,7 @@ export const DuoGamePage = () => {
     const finishGame = (won) => {
         setFinished(true);
         setWon(won);
+        window.removeEventListener('beforeunload', handleBeforeUnload);
     }
 
     const pushOnHistory = (row) => {
@@ -139,8 +141,7 @@ export const DuoGamePage = () => {
             createSocket();
         }
         return () => {
-            if (WS)
-                WS.close();
+            closeSocket();
         }
     }, [data, roomID]);
 
@@ -156,6 +157,11 @@ export const DuoGamePage = () => {
 
     const sendMessage = (message) => {
         WS.send(message);
+    }
+
+    const closeSocket = () => {
+        if (WS)
+            WS.close();
     }
 
     return (

@@ -20,6 +20,8 @@ public:
 
     void onRead(beast::error_code ec, std::size_t bytes_transferred) override;
 
+    void onWrite(beast::error_code ec, std::size_t bytes_transferred) override;
+
     void launchSession(const std::string &roomID) override;
 
     ~DuoGameSession() = default;

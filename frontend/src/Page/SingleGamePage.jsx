@@ -31,6 +31,7 @@ export const SingleGamePage = () => {
     const finishGame = (won) => {
         setFinished(true);
         setWon(won);
+        window.removeEventListener('beforeunload', handleBeforeUnload);
     }
 
     const pushOnHistory = (row) => {
@@ -112,6 +113,7 @@ export const SingleGamePage = () => {
     const resetGame = async () => {
         resetAll();
         newGame();
+        window.addEventListener('beforeunload', handleBeforeUnload);
     }
 
     const handleBeforeUnload = (event) => {
@@ -126,6 +128,7 @@ export const SingleGamePage = () => {
         newGame();
         window.addEventListener('beforeunload', handleBeforeUnload);
         return () => {
+            closeSocket();
             window.removeEventListener('beforeunload', handleBeforeUnload);
         };
     }, []);
@@ -139,8 +142,7 @@ export const SingleGamePage = () => {
             createSocket();
         }
         return () => {
-            if (WS)
-                WS.close();
+            closeSocket();
         }
     }, [data]);
 
@@ -156,6 +158,11 @@ export const SingleGamePage = () => {
 
     const sendMessage = (message) => {
         WS.send(message);
+    }
+
+    const closeSocket = () => {
+        if (WS)
+            WS.close();
     }
 
     return (

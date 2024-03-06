@@ -19,9 +19,12 @@ void Session::onRead(beast::error_code ec, std::size_t bytes_transferred)
 {
     boost::ignore_unused(bytes_transferred);
 
-    if (ec && ec != websocket::error::closed)
+    if (ec)
     {
-        std::cerr << "Error: " << ec.message() << std::endl;
+        if (ec != websocket::error::closed)
+        {
+            std::cerr << "Error: " << ec.message() << std::endl;
+        }
         return;
     }
 }
@@ -30,9 +33,12 @@ void Session::onWrite(beast::error_code ec, std::size_t bytes_transferred)
 {
     boost::ignore_unused(bytes_transferred);
 
-    if (ec && ec != websocket::error::closed)
+    if (ec)
     {
-        std::cerr << "Error: " << ec.message() << std::endl;
+        if (ec != websocket::error::closed)
+        {
+            std::cerr << "Error: " << ec.message() << std::endl;
+        }
         return;
     }
 }
