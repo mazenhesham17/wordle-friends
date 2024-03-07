@@ -11,6 +11,7 @@
 #include "TokenController.h"
 #include "UserController.h"
 #include "RoomController.h"
+#include "GameController.h"
 #include "../API/AdminAPI.h"
 #include "../API/PlayerAPI.h"
 #include "../API/UserAPI.h"
@@ -27,6 +28,7 @@ class ServerController
     UserAPI *userAPI;
     AdminAPI *adminAPI;
     PlayerAPI *playerAPI;
+    GameController *gameController;
     ResponseController *responseController;
     RoomController *roomController;
     TokenController *tokenController;

@@ -1,18 +1,10 @@
 #ifndef BACKEND_DUOGAMESESSION_H
 #define BACKEND_DUOGAMESESSION_H
 
-#include "Session.h"
+#include "GameSession.h"
 
-class DuoGameSession : public Session
+class DuoGameSession : public GameSession
 {
-    std::string oldTemplate;
-
-    std::string roomID;
-
-    int gameID;
-
-    int turnsLeft = 6;
-
 public:
     DuoGameSession(tcp::socket &&socket, std::string roomID, int playerID);
 
@@ -22,9 +14,7 @@ public:
 
     void onWrite(beast::error_code ec, std::size_t bytes_transferred) override;
 
-    void launchSession(const std::string &roomID) override;
-
-    ~DuoGameSession() = default;
+    void launchSession() override;
 };
 
 #endif // BACKEND_DUOGAMESESSION_H

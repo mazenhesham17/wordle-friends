@@ -14,6 +14,7 @@ export const DuoGamePage = () => {
     const [won, setWon] = useState(false);
     const [opponentTemplate, setOpponentTemplate] = useState('');
     const [roomID, setRoomID] = useState('');
+    const [error, setError] = useState('');
     const { urlRoomID } = useParams();
 
     useEffect(() => {
@@ -110,6 +111,10 @@ export const DuoGamePage = () => {
             }
         })
         const temp = await respose.json();
+        if (temp.error) {
+            setError(temp.error);
+            return;
+        }
         setData(temp);
         setRoomID(temp.roomID);
     }
@@ -123,7 +128,12 @@ export const DuoGamePage = () => {
             body: JSON.stringify({ roomID: roomID })
         });
         const temp = await response.json();
-        setData(temp);
+        if (temp.error) {
+            setError(temp.error);
+        } else {
+            setData(temp);
+        }
+
     }
 
     const handleBeforeUnload = (event) => {
@@ -167,33 +177,37 @@ export const DuoGamePage = () => {
     return (
         <>
             <h1> Welcome to wordle </h1>
-            <h2> Room ID: {roomID} </h2>
-            {waiting ? (timeout ? <h2> Time out! </h2> : <h2> Waiting for opponent to join... </h2>)
-                : <>
-                    <h3> Opponent's Template : {opponentTemplate} </h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Guess</th>
-                                <th>Template</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {history.map((item, idx) => {
-                                return (
-                                    <tr key={idx}>
-                                        <td>{item.word}</td>
-                                        <td>{item.template}</td>
+            {error ? <h2> {error} </h2> :
+                <>
+                    <h2> Room ID: {roomID} </h2>
+                    {waiting ? (timeout ? <h2> Time out! </h2> : <h2> Waiting for opponent to join... </h2>)
+                        : <>
+                            <h3> Opponent's Template : {opponentTemplate} </h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Guess</th>
+                                        <th>Template</th>
                                     </tr>
-                                )
-                            })}
-                        </tbody>
-                    </table>
-                    <input type="text" value={word} placeholder='Enter a word' onChange={updateWord} disabled={finsihed} />
-                    <button onClick={() => { sendMessage(word); }} disabled={finsihed} >Submit</button>
-                    {finsihed && (won ? <h2> You won! </h2> : <h2> You lost! </h2>)}
-                </>
-            }
+                                </thead>
+                                <tbody>
+                                    {history.map((item, idx) => {
+                                        return (
+                                            <tr key={idx}>
+                                                <td>{item.word}</td>
+                                                <td>{item.template}</td>
+                                            </tr>
+                                        )
+                                    })}
+                                </tbody>
+                            </table>
+                            <input type="text" value={word} placeholder='Enter a word' onChange={updateWord} disabled={finsihed} />
+                            <button onClick={() => { sendMessage(word); }} disabled={finsihed} >Submit</button>
+                            {finsihed && (won ? <h2> You won! </h2> : <h2> You lost! </h2>)}
+                        </>
+                    }
+                </>}
+
 
         </>
     )

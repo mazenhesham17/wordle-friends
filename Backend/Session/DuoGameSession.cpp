@@ -4,7 +4,7 @@
 #include "../Controller/SocketController.h"
 
 DuoGameSession::DuoGameSession(tcp::socket &&socket, std::string roomID, int playerID)
-    : Session(std::move(socket), playerID), roomID(std::move(roomID))
+    : GameSession(std::move(socket), roomID, playerID)
 {
 }
 
@@ -18,6 +18,7 @@ void DuoGameSession::onRead(beast::error_code ec, std::size_t bytes_transferred)
         {
             // both users are disconnected
             gameController->endGame(gameID);
+            roomController->closeRoom(roomID);
         }
         if (ec != websocket::error::closed && ec != net::error::not_connected)
         {
@@ -33,6 +34,7 @@ void DuoGameSession::onRead(beast::error_code ec, std::size_t bytes_transferred)
         {
             gameController->endGame(gameID);
             roomController->endAllSessions(roomID);
+            roomController->closeRoom(roomID);
         }
         return;
     }
@@ -74,6 +76,7 @@ void DuoGameSession::onWrite(beast::error_code ec, std::size_t bytes_transferred
     {
         // both users are disconnected
         gameController->endGame(gameID);
+        roomController->closeRoom(roomID);
     }
     if (ec)
     {
@@ -85,13 +88,15 @@ void DuoGameSession::onWrite(beast::error_code ec, std::size_t bytes_transferred
     }
 }
 
-void DuoGameSession::launchSession(const std::string &roomID)
+void DuoGameSession::launchSession()
 {
     try
     {
         accept();
 
         gameID = std::stoi(receive());
+
+        gameController->joinGame(gameID, playerID);
 
         // wait until the other user joins
 
@@ -102,10 +107,10 @@ void DuoGameSession::launchSession(const std::string &roomID)
             send("Time out!");
             gameController->deleteGame(gameID);
             roomController->endAllSessions(roomID);
+            roomController->closeRoom(roomID);
             return;
         }
 
-        gameController->joinGame(gameID, playerID);
         gameController->startGame(gameID);
 
         send("Game started!");
@@ -123,7 +128,7 @@ void DuoGameSession::launchSession(const std::string &roomID)
     }
     catch (std::exception const &e)
     {
-        std::cerr << "Exception Eeror: " << e.what() << std::endl;
+        std::cerr << "Exception error: " << e.what() << std::endl;
     }
 }
 

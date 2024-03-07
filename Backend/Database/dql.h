@@ -40,4 +40,6 @@ bool isUsernameExist(const std::string &username);
 
 bool isEmailExist(const std::string &email);
 
+bool dbIsPlayerInGame(const int &playerID);
+
 #endif // BACKEND_DQL_H

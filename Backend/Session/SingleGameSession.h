@@ -1,20 +1,17 @@
 #ifndef BACKEND_SINGLEGAMESESSION_H
 #define BACKEND_SINGLEGAMESESSION_H
 
-#include "Session.h"
+#include "GameSession.h"
 
-class SingleGameSession : public Session
+class SingleGameSession : public GameSession
 {
-    int gameID;
 
 public:
-    SingleGameSession(tcp::socket &&socket, int playerID);
+    SingleGameSession(tcp::socket &&socket, std::string roomID, int playerID);
 
     bool isFinished() override;
 
-    void launchSession(const std::string &roomID) override;
-
-    ~SingleGameSession() = default;
+    void launchSession() override;
 };
 
 #endif // BACKEND_SINGLEGAMESESSION_H

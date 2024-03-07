@@ -69,6 +69,8 @@ add_executable(
         WebView/RoomWebView.h
         Controller/AuthenticationController.cpp
         Controller/AuthenticationController.h
+        Session/GameSession.cpp
+        Session/GameSession.h
 )
 
 add_executable(

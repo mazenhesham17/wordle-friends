@@ -2,12 +2,10 @@
 #include "../Controller/GameController.h"
 #include "../Controller/RoomController.h"
 
-Session::Session(tcp::socket &&socket, int playerID)
-    : ws(std::move(socket))
+Session::Session(tcp::socket &&socket, std::string roomID, int playerID)
+    : ws(std::move(socket)), roomID(std::move(roomID)), playerID(playerID)
 {
-    gameController = GameController::getInstance();
     roomController = RoomController::getInstance();
-    this->playerID = playerID;
 }
 
 void Session::accept()

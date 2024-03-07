@@ -24,6 +24,8 @@ class Room
 
     std::condition_variable roomCV;
 
+    bool closed = false;
+
 public:
     Room(std::string roomID, int max_connections);
 
@@ -40,6 +42,10 @@ public:
     std::condition_variable &getRoomCV();
 
     std::mutex &getRoomMutex();
+
+    bool isClosed() const;
+
+    void closeRoom();
 };
 
 #endif // BACKEND_ROOM_H

@@ -11,6 +11,7 @@ export const SingleGamePage = () => {
     const [finsihed, setFinished] = useState(false);
     const [won, setWon] = useState(false);
     const [roomID, setRoomID] = useState('');
+    const [error, setError] = useState('');
 
     const updateWord = (e) => {
         setWord(e.target.value);
@@ -93,6 +94,10 @@ export const SingleGamePage = () => {
             }
         })
         const temp = await respose.json();
+        if (temp.error) {
+            setError(temp.error);
+            return;
+        }
         setData(temp);
         setRoomID(temp.roomID);
     }
@@ -107,6 +112,11 @@ export const SingleGamePage = () => {
             body: JSON.stringify({ roomID: roomID })
         });
         const temp = await response.json();
+        console.log(temp);
+        if (temp.error) {
+            setError(temp.error);
+            return;
+        }
         setData(temp);
     }
 
@@ -168,29 +178,33 @@ export const SingleGamePage = () => {
     return (
         <>
             <h1> Welcome to wordle </h1>
-            <h2> Room ID: {roomID} </h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Guess</th>
-                        <th>Template</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {history.map((item, idx) => {
-                        return (
-                            <tr key={idx}>
-                                <td>{item.word}</td>
-                                <td>{item.template}</td>
+            {error ? <h2> {error} </h2> :
+                <>
+                    <h2> Room ID: {roomID} </h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Guess</th>
+                                <th>Template</th>
                             </tr>
-                        )
-                    })}
-                </tbody>
-            </table>
-            <input type="text" value={word} placeholder='Enter a word' onChange={updateWord} disabled={finsihed} />
-            <button onClick={() => { sendMessage(word); }} disabled={finsihed} >Submit</button>
-            {finsihed && (won ? <h2> You won! </h2> : <h2> You lost! </h2>)}
-            {finsihed && <button onClick={resetGame}>New Game</button>}
+                        </thead>
+                        <tbody>
+                            {history.map((item, idx) => {
+                                return (
+                                    <tr key={idx}>
+                                        <td>{item.word}</td>
+                                        <td>{item.template}</td>
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
+                    </table>
+                    <input type="text" value={word} placeholder='Enter a word' onChange={updateWord} disabled={finsihed} />
+                    <button onClick={() => { sendMessage(word); }} disabled={finsihed} >Submit</button>
+                    {finsihed && (won ? <h2> You won! </h2> : <h2> You lost! </h2>)}
+                    {finsihed && <button onClick={resetGame}>New Game</button>}
+                </>}
+
         </>
     )
 }

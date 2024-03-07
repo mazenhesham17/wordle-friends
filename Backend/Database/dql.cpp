@@ -595,3 +595,38 @@ bool isEmailExist(const std::string &email)
     }
     return false;
 }
+
+bool dbIsPlayerInGame(const int &playerID)
+{
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( SELECT * FROM Game
+                INNER JOIN GamePlayers ON Game.gameID = GamePlayers.gameID
+                WHERE GamePlayers.playerID = %d and ( Game.state = 0 or Game.state = 1 ) ; )",
+             playerID);
+
+    // prepare statement
+    sqlite3_stmt *stmt;
+    int resultCode = sqlite3_prepare_v2(db, query, -1, &stmt, nullptr);
+    if (resultCode != SQLITE_OK)
+    {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage), R"(There was an error checking for player in game.\n
+                    Error: %s )",
+                 sqlite3_errmsg(db));
+        throw std::runtime_error(errorMessage);
+    }
+
+    if (sqlite3_step(stmt) == SQLITE_ROW)
+    {
+        sqlite3_finalize(stmt);
+        return true;
+    }
+    else if (sqlite3_step(stmt) == SQLITE_DONE)
+    {
+        sqlite3_finalize(stmt);
+        return false;
+    }
+    return false;
+}

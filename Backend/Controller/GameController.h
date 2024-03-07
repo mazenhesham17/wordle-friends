@@ -16,6 +16,8 @@ public:
 
     int newGame(const std::string &word);
 
+    bool isPlayerInGame(const int &playerID);
+
     void joinGame(const int &gameId, const int &playerId);
 
     void startGame(const int &gameId);

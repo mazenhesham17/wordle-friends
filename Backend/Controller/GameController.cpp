@@ -11,6 +11,11 @@ GameController *GameController::getInstance()
     return instance;
 }
 
+bool GameController::isPlayerInGame(const int &playerID)
+{
+    return dbIsPlayerInGame(playerID);
+}
+
 int GameController::newGame(const std::string &word)
 {
     int gameID = addGame(word.c_str());

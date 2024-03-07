@@ -36,7 +36,7 @@ std::string RoomController::createChatRoom(int playerID, int friendID)
 
 bool RoomController::isRoomExist(const std::string &roomID)
 {
-    return roomContainer.isRoomExist(roomID);
+    return roomContainer.isRoomExist(roomID) && !getRoom(roomID).isClosed();
 }
 
 bool RoomController::isRoomFull(const std::string &roomID)
@@ -102,6 +102,11 @@ void RoomController::blockRoom(const std::string &roomID)
     auto now = std::chrono::system_clock::now();
     room.getRoomCV().wait_until(lock, now + std::chrono::seconds(60), [&]()
                                 { return getConnectedSessionsCount(roomID) == room.getMaxConnections(); });
+}
+
+void RoomController::closeRoom(const std::string &roomID)
+{
+    getRoom(roomID).closeRoom();
 }
 
 void RoomController::endAllSessions(const std::string &roomID)

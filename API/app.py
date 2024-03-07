@@ -1,6 +1,6 @@
 import pandas as pd
 import random
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify
 
 app = Flask(__name__)
 
@@ -9,7 +9,7 @@ LEN = words.shape[0]
 
 @app.route('/wordle', methods=['GET'])
 def wordle():
-    word = words[random.randint(0, LEN)][0]
+    word = words[random.randint(0, LEN-1)][0]
     return jsonify({'word': word})
 
 if __name__ == '__main__':

@@ -1,12 +1,13 @@
 #include "SingleGameSession.h"
 #include "../Controller/GameController.h"
+#include "../Controller/RoomController.h"
 
-SingleGameSession::SingleGameSession(tcp::socket &&socket, int playerID)
-    : Session(std::move(socket), playerID)
+SingleGameSession::SingleGameSession(tcp::socket &&socket, std::string roomID, int playerID)
+    : GameSession(std::move(socket), roomID, playerID)
 {
 }
 
-void SingleGameSession::launchSession(const std::string &roomID)
+void SingleGameSession::launchSession()
 {
     try
     {
@@ -22,7 +23,7 @@ void SingleGameSession::launchSession(const std::string &roomID)
 
         bool flag = false;
 
-        for (int i = 0; i < 6; i++)
+        while (turnsLeft)
         {
             std::string message = receive();
 
@@ -35,7 +36,9 @@ void SingleGameSession::launchSession(const std::string &roomID)
                 flag = true;
                 break;
             }
+            turnsLeft--;
         }
+        std::cout << "Turns : " << turnsLeft << std::endl;
         if (flag)
         {
             send("You win!");
@@ -46,11 +49,13 @@ void SingleGameSession::launchSession(const std::string &roomID)
             send("You lose!");
             gameController->endGame(gameID);
         }
+        roomController->closeRoom(roomID);
         close();
     }
     catch (beast::system_error const &se)
     {
         gameController->endGame(gameID);
+        roomController->closeRoom(roomID);
         // This indicates that the session was closed
         if (se.code() != websocket::error::closed)
         {
@@ -60,6 +65,7 @@ void SingleGameSession::launchSession(const std::string &roomID)
     catch (std::exception const &e)
     {
         gameController->endGame(gameID);
+        roomController->closeRoom(roomID);
         std::cerr << "Exception error: " << e.what() << std::endl;
     }
 }

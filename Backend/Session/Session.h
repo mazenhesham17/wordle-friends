@@ -25,7 +25,6 @@ class SocketController;
 class Session : public std::enable_shared_from_this<Session>
 {
 protected:
-    GameController *gameController;
     RoomController *roomController;
 
     beast::flat_buffer buffer;
@@ -33,12 +32,13 @@ protected:
     std::mutex writeMutex;
     std::mutex readMutex;
 
+    std::string roomID;
     int playerID;
 
     void accept();
 
 public:
-    Session(tcp::socket &&socket, int playerID);
+    Session(tcp::socket &&socket, std::string roomID, int playerID);
 
     int getPlayerID();
 
@@ -58,7 +58,7 @@ public:
 
     void close();
 
-    virtual void launchSession(const std::string &roomID) = 0;
+    virtual void launchSession() = 0;
 
     virtual bool isFinished() = 0;
 

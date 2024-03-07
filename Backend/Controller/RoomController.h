@@ -37,6 +37,8 @@ public:
 
     void blockRoom(const std::string &roomID);
 
+    void closeRoom(const std::string &roomID);
+
     int getConnectedSessionsCount(const std::string &roomID);
 
     int getFinishedSessionsCount(const std::string &roomID);

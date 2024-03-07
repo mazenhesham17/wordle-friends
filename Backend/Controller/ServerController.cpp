@@ -32,7 +32,7 @@ void ServerController::connectSocketAndLaunchGameSession(const std::string &room
     if (roomID.find('S') != -1)
     {
         // single player game
-        session = std::make_shared<SingleGameSession>(std::move(socket), playerID);
+        session = std::make_shared<SingleGameSession>(std::move(socket), roomID, playerID);
     }
     else if (roomID.find('D') != -1)
     {
@@ -40,7 +40,7 @@ void ServerController::connectSocketAndLaunchGameSession(const std::string &room
         session = std::make_shared<DuoGameSession>(std::move(socket), roomID, playerID);
     }
     roomController->addSession(roomID, session, playerID);
-    session->launchSession(roomID);
+    session->launchSession();
 }
 
 void ServerController::PostRegister(const httplib::Request &req, httplib::Response &res)
@@ -135,8 +135,16 @@ void ServerController::PostNewGame(const httplib::Request &req, httplib::Respons
         return;
     }
 
-    auto gameType = req.path_params.at("type");
     int playerID = tokenController->getUserID(token);
+    if (gameController->isPlayerInGame(playerID))
+    {
+        Response response;
+        responseController->setFailure(response, "you are already in a game");
+        res.set_content(responseController->getJson(response), "application/json");
+        return;
+    }
+
+    auto gameType = req.path_params.at("type");
     httplib::Client client("localhost", 5000);
     auto clientResponse = client.Get("/wordle");
     std::string word = jsoncons::json::parse(clientResponse->body)["word"].as<std::string>();
@@ -155,6 +163,14 @@ void ServerController::PostStartGame(const httplib::Request &req, httplib::Respo
     }
 
     int playerID = tokenController->getUserID(token);
+    if (gameController->isPlayerInGame(playerID))
+    {
+        Response response;
+        responseController->setFailure(response, "you are already in a game");
+        res.set_content(responseController->getJson(response), "application/json");
+        return;
+    }
+
     jsoncons::json body = jsoncons::json::parse(req.body);
     std::string roomID = body["roomID"].as<std::string>();
     if (!roomController->isRoomExist(roomID))

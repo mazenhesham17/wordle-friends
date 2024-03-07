@@ -39,3 +39,13 @@ std::mutex &Room::getRoomMutex()
 {
     return roomMutex;
 }
+
+bool Room::isClosed() const
+{
+    return closed;
+}
+
+void Room::closeRoom()
+{
+    closed = true;
+}
