@@ -12,7 +12,9 @@ class AdminAPI
 {
     static AdminAPI *instance;
 
-    AdminAPI() {}
+    ResponseController *responseController;
+
+    AdminAPI();
 
 public:
     static AdminAPI *getInstance();

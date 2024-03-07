@@ -21,6 +21,16 @@ void ResponseController::setFailure(Response &response, const std::string &error
     response.setJson(R"( { "error" : ")" + error + R"(" } )");
 }
 
+std::string ResponseController::getJson(const Response &response)
+{
+    return response.getJson();
+}
+
+std::string ResponseController::success()
+{
+    return R"({"message": "success"})";
+}
+
 bool ResponseController::isSuccess(const Response &response)
 {
     return response.isSuccess();

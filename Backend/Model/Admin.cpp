@@ -9,5 +9,5 @@ int Admin::getUserCounts() const
 
 void Admin::setUserCounts(int userCounts)
 {
-    Admin::playerCounts = userCounts;
+    this->playerCounts = userCounts;
 }

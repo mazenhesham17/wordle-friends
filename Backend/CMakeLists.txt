@@ -44,11 +44,8 @@ add_executable(
         WebView/PlayerWebView.cpp
         WebView/PlayerWebView.h
         main.cpp
-        WebView/GameWebView.cpp
-        WebView/GameWebView.h
         Controller/TokenController.cpp
         Controller/TokenController.h
-        Controller/BaseController.cpp
         Controller/BaseController.h
         Controller/ServerController.cpp
         Controller/ServerController.h
@@ -70,6 +67,8 @@ add_executable(
         Session/DuoGameSession.h
         WebView/RoomWebView.cpp
         WebView/RoomWebView.h
+        Controller/AuthenticationController.cpp
+        Controller/AuthenticationController.h
 )
 
 add_executable(

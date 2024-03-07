@@ -12,6 +12,8 @@ class Session;
 
 class Room
 {
+    int max_connections;
+
     std::string roomID;
 
     std::vector<std::shared_ptr<Session>> sessions;
@@ -23,21 +25,21 @@ class Room
     std::condition_variable roomCV;
 
 public:
-    Room(std::string roomID);
+    Room(std::string roomID, int max_connections);
 
     Room(Room &&other) noexcept;
 
-    std::string getRoomID() const;
-
     void addSession(std::shared_ptr<Session> &session, const int &playerID);
+
+    int getMaxConnections() const;
+
+    std::string getRoomID() const;
 
     std::vector<std::shared_ptr<Session>> &getSessions();
 
-    void blockRoom();
+    std::condition_variable &getRoomCV();
 
-    int getConnectedSessionsCount();
-
-    int getFinishedSessionsCount();
+    std::mutex &getRoomMutex();
 };
 
 #endif // BACKEND_ROOM_H

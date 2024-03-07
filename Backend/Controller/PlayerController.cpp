@@ -26,7 +26,7 @@ std::string PlayerController::profile(const User *user)
                                                  player.getEmail(), player.getWins(), player.getGames());
 }
 
-bool PlayerController::updatePlayer(const int playerID, const std::string &field, const std::string &value)
+bool PlayerController::updatePlayer(const int &playerID, const std::string &field, const std::string &value)
 {
     return updatePlayerField(playerID, field.c_str(), value.c_str());
 }

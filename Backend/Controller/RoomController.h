@@ -3,7 +3,6 @@
 
 #include <string>
 #include <vector>
-#include <boost/asio/ip/tcp.hpp>
 #include "../Database/dql.h"
 #include "../Model/Room.h"
 #include "../Model/RoomContainer.h"
@@ -38,9 +37,9 @@ public:
 
     void blockRoom(const std::string &roomID);
 
-    int getConnectedPlayersCount(const std::string &roomID);
+    int getConnectedSessionsCount(const std::string &roomID);
 
-    int getFinishedPlayersCount(const std::string &roomID);
+    int getFinishedSessionsCount(const std::string &roomID);
 
     void endAllSessions(const std::string &roomID);
 };

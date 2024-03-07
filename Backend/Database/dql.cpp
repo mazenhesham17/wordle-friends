@@ -20,11 +20,11 @@ int checkPasswordByUsername(const std::string &username, const std::string &pass
         throw std::runtime_error(errorMessage);
     }
 
-    std::string retrivedPassword;
+    std::string retrievedPassword;
     if (sqlite3_step(stmt) == SQLITE_ROW)
     {
         const char *temp = const_cast<char *>(reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0)));
-        retrivedPassword = temp;
+        retrievedPassword = temp;
     }
     else if (sqlite3_step(stmt) == SQLITE_DONE)
     {
@@ -32,7 +32,7 @@ int checkPasswordByUsername(const std::string &username, const std::string &pass
     }
     sqlite3_finalize(stmt);
 
-    if (password == retrivedPassword)
+    if (password == retrievedPassword)
     {
         return getUserIDByUsername(username); // Password is correct
     }
@@ -62,11 +62,11 @@ int checkPasswordByEmailAddress(const std::string &email, const std::string &pas
         throw std::runtime_error(errorMessage);
     }
 
-    std::string retrivedPassword;
+    std::string retrievedPassword;
     if (sqlite3_step(stmt) == SQLITE_ROW)
     {
         const char *temp = const_cast<char *>(reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0)));
-        retrivedPassword = temp;
+        retrievedPassword = temp;
     }
     else if (sqlite3_step(stmt) == SQLITE_DONE)
     {
@@ -74,7 +74,7 @@ int checkPasswordByEmailAddress(const std::string &email, const std::string &pas
     }
     sqlite3_finalize(stmt);
 
-    if (password == retrivedPassword)
+    if (password == retrievedPassword)
     {
         return getUserIDByEmailAddress(email); // Password is correct
     }

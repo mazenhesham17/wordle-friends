@@ -30,12 +30,12 @@ void SocketController::connectSocket(tcp::socket &socket)
         // This indicates that the session was closed
         if (se.code() != websocket::error::closed)
         {
-            std::cerr << "Error: " << se.code().message() << std::endl;
+            std::cerr << "Beast error: " << se.code().message() << std::endl;
         }
     }
     catch (std::exception &e)
     {
-        std::cerr << e.what() << std::endl;
+        std::cerr << "Exception error: " << e.what() << std::endl;
     }
 }
 

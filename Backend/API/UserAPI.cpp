@@ -2,6 +2,11 @@
 
 UserAPI *UserAPI::instance = nullptr;
 
+UserAPI::UserAPI()
+{
+    responseController = ResponseController::getInstance();
+}
+
 UserAPI *UserAPI::getInstance()
 {
     if (instance == nullptr)
@@ -20,7 +25,6 @@ Response UserAPI::login(const std::string &identifier, const std::string &passwo
     {
         resCode = checkPasswordByUsername(identifier, password);
     }
-    ResponseController *responseController = ResponseController::getInstance();
     Response response;
     if (resCode == -1)
     {
@@ -42,7 +46,6 @@ Response UserAPI::login(const std::string &identifier, const std::string &passwo
 
 Response UserAPI::registerUser(const User &user)
 {
-    ResponseController *responseController = ResponseController::getInstance();
     Response response;
     if (isUsernameExist(user.getUsername()))
     {
@@ -63,7 +66,6 @@ Response UserAPI::registerUser(const User &user)
 
 Response UserAPI::info(const int &userType)
 {
-    ResponseController *responseController = ResponseController::getInstance();
     Response response;
     std::string userTypeStr = R"({ "userType": ")";
     if (userType == 0)

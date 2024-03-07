@@ -1,12 +1,11 @@
 #include "Room.h"
 #include "../Session/Session.h"
 
-Room::Room(std::string roomID)
+Room::Room(std::string roomID, int max_connections) : roomID(std::move(roomID)), max_connections(max_connections)
 {
-    this->roomID = std::move(roomID);
 }
 
-Room::Room(Room &&other) noexcept : roomID(std::move(other.roomID)), sessions(std::move(other.sessions))
+Room::Room(Room &&other) noexcept : roomID(std::move(other.roomID)), max_connections(other.max_connections), sessions(std::move(other.sessions))
 {
 }
 
@@ -21,42 +20,22 @@ void Room::addSession(std::shared_ptr<Session> &session, const int &playerID)
     sessions.push_back(session);
 }
 
-void Room::blockRoom()
-{
-    std::unique_lock<std::mutex> lock(roomMutex);
-    auto now = std::chrono::system_clock::now();
-    roomCV.wait_until(lock, now + std::chrono::seconds(60), [&]()
-                      { return getConnectedSessionsCount() == 2; });
-}
-
-int Room::getConnectedSessionsCount()
-{
-    int cnt = 0;
-    for (auto &session : sessions)
-    {
-        if (session->isConnected())
-        {
-            cnt++;
-        }
-    }
-    roomCV.notify_all();
-    return cnt;
-}
-
-int Room::getFinishedSessionsCount()
-{
-    int cnt = 0;
-    for (auto &session : sessions)
-    {
-        if (session->isFinished())
-        {
-            cnt++;
-        }
-    }
-    return cnt;
-}
-
 std::vector<std::shared_ptr<Session>> &Room::getSessions()
 {
     return sessions;
+}
+
+std::condition_variable &Room::getRoomCV()
+{
+    return roomCV;
+}
+
+int Room::getMaxConnections() const
+{
+    return max_connections;
+}
+
+std::mutex &Room::getRoomMutex()
+{
+    return roomMutex;
 }

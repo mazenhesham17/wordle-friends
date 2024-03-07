@@ -23,7 +23,7 @@ void Session::onRead(beast::error_code ec, std::size_t bytes_transferred)
     {
         if (ec != websocket::error::closed)
         {
-            std::cerr << "Error: " << ec.message() << std::endl;
+            std::cerr << "OnRead error: " << ec.message() << std::endl;
         }
         return;
     }
@@ -37,7 +37,7 @@ void Session::onWrite(beast::error_code ec, std::size_t bytes_transferred)
     {
         if (ec != websocket::error::closed)
         {
-            std::cerr << "Error: " << ec.message() << std::endl;
+            std::cerr << "OnWrite Error: " << ec.message() << std::endl;
         }
         return;
     }
@@ -90,5 +90,4 @@ int Session::getPlayerID()
 Session::~Session()
 {
     close();
-    std::cout << "Session ended" << std::endl;
 }

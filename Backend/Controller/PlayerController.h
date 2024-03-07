@@ -22,7 +22,7 @@ public:
 
     Player createPlayer(const User *user);
 
-    bool updatePlayer(const int playerID, const std::string &field, const std::string &value);
+    bool updatePlayer(const int &playerID, const std::string &field, const std::string &value);
 };
 
 #endif // BACKEND_PLAYERCONTROLLER_H

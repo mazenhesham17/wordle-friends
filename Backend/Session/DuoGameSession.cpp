@@ -4,9 +4,8 @@
 #include "../Controller/SocketController.h"
 
 DuoGameSession::DuoGameSession(tcp::socket &&socket, std::string roomID, int playerID)
-    : Session(std::move(socket), playerID)
+    : Session(std::move(socket), playerID), roomID(std::move(roomID))
 {
-    this->roomID = std::move(roomID);
 }
 
 void DuoGameSession::onRead(beast::error_code ec, std::size_t bytes_transferred)
@@ -15,7 +14,7 @@ void DuoGameSession::onRead(beast::error_code ec, std::size_t bytes_transferred)
 
     if (ec)
     {
-        if (roomController->getConnectedPlayersCount(roomID) == 0)
+        if (roomController->getConnectedSessionsCount(roomID) == 0)
         {
             // both users are disconnected
             gameController->endGame(gameID);
@@ -30,7 +29,7 @@ void DuoGameSession::onRead(beast::error_code ec, std::size_t bytes_transferred)
     if (turnsLeft == 0)
     {
         send("You lose!");
-        if (roomController->getFinishedPlayersCount(roomID) == 2)
+        if (roomController->getFinishedSessionsCount(roomID) == 2)
         {
             gameController->endGame(gameID);
             roomController->endAllSessions(roomID);
@@ -71,7 +70,7 @@ void DuoGameSession::onRead(beast::error_code ec, std::size_t bytes_transferred)
 void DuoGameSession::onWrite(beast::error_code ec, std::size_t bytes_transferred)
 {
     boost::ignore_unused(bytes_transferred);
-    if (roomController->getConnectedPlayersCount(roomID) == 0)
+    if (roomController->getConnectedSessionsCount(roomID) == 0)
     {
         // both users are disconnected
         gameController->endGame(gameID);
@@ -98,7 +97,7 @@ void DuoGameSession::launchSession(const std::string &roomID)
 
         roomController->blockRoom(roomID);
 
-        if (roomController->getConnectedPlayersCount(roomID) != 2)
+        if (roomController->getConnectedSessionsCount(roomID) != 2)
         {
             send("Time out!");
             gameController->deleteGame(gameID);
@@ -119,12 +118,12 @@ void DuoGameSession::launchSession(const std::string &roomID)
     {
         if (se.code() != websocket::error::closed)
         {
-            std::cerr << "Error: " << se.code().message() << std::endl;
+            std::cerr << "Beast error: " << se.code().message() << std::endl;
         }
     }
     catch (std::exception const &e)
     {
-        std::cerr << "Error: " << e.what() << std::endl;
+        std::cerr << "Exception Eeror: " << e.what() << std::endl;
     }
 }
 

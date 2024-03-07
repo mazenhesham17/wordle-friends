@@ -16,6 +16,10 @@ public:
 
     void setFailure(Response &response, const std::string &error);
 
+    std::string getJson(const Response &response);
+
+    std::string success();
+
     bool isSuccess(const Response &response);
 };
 

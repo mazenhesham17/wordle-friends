@@ -1,5 +1,7 @@
 #include "User.h"
 
+#include <utility>
+
 User::User(int userID, int userType)
 {
     this->userID = userID;
@@ -11,11 +13,11 @@ User::User(int userID, int userType, std::string username, std::string password,
 {
     this->userID = userID;
     this->userType = userType;
-    this->username = username;
-    this->password = password;
-    this->email = email;
-    this->firstName = firstName;
-    this->lastName = lastName;
+    this->username = std::move(username);
+    this->password = std::move(password);
+    this->email = std::move(email);
+    this->firstName = std::move(firstName);
+    this->lastName = std::move(lastName);
 }
 
 int User::getUserID() const

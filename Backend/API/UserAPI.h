@@ -1,9 +1,6 @@
 #ifndef BACKEND_USERAPI_H
 #define BACKEND_USERAPI_H
 
-#include <jsoncons/json.hpp>
-#include <jwt-cpp/jwt.h>
-#include "../Database/constants.h"
 #include "../Database/dml.h"
 #include "../Database/dql.h"
 #include "../Controller/ResponseController.h"
@@ -13,14 +10,13 @@
 #include "../Model/User.h"
 #include "../WebView/AdminWebView.h"
 #include "../WebView/PlayerWebView.h"
-#include "../WebView/GameWebView.h"
 #include "../WebView/TokenWebView.h"
 
 class UserAPI
 {
     static UserAPI *instance;
-
-    UserAPI() {}
+    ResponseController *responseController;
+    UserAPI();
 
 public:
     static UserAPI *getInstance();

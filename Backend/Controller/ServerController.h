@@ -5,6 +5,7 @@
 #include <memory>
 #include <httplib.h>
 #include <jsoncons/json.hpp>
+#include "AuthenticationController.h"
 #include "SocketController.h"
 #include "ResponseController.h"
 #include "TokenController.h"
@@ -22,9 +23,10 @@
 
 class ServerController
 {
-    UserAPI *userApi;
-    AdminAPI *adminApi;
-    PlayerAPI *playerApi;
+    AuthenticationController *authenticationController;
+    UserAPI *userAPI;
+    AdminAPI *adminAPI;
+    PlayerAPI *playerAPI;
     ResponseController *responseController;
     RoomController *roomController;
     TokenController *tokenController;
@@ -34,6 +36,24 @@ class ServerController
 
     ServerController();
 
+    void PostRegister(const httplib::Request &req, httplib::Response &res);
+
+    void PostLogin(const httplib::Request &req, httplib::Response &res);
+
+    void GetInfo(const httplib::Request &req, httplib::Response &res);
+
+    void GetDashboard(const httplib::Request &req, httplib::Response &res);
+
+    void GetCheckRoom(const httplib::Request &req, httplib::Response &res);
+
+    void PostNewGame(const httplib::Request &req, httplib::Response &res);
+
+    void PostStartGame(const httplib::Request &req, httplib::Response &res);
+
+    void GetProfile(const httplib::Request &req, httplib::Response &res);
+
+    void PutProfile(const httplib::Request &req, httplib::Response &res);
+
     void requests(httplib::Server &server);
 
     void connectSocketAndLaunchGameSession(const std::string &roomID, int playerID);
@@ -41,7 +61,7 @@ class ServerController
 public:
     static ServerController *getInstance();
 
-    void start();
+    void start(int port);
 };
 
 #endif // BACKEND_SERVERCONTROLLER_H

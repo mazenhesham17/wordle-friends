@@ -14,8 +14,9 @@ int main()
     try
     {
         openConnection();
+        int port = 4000;
         ServerController *serverController = ServerController::getInstance();
-        serverController->start();
+        serverController->start(port);
         //        int c = addChat();
         //        addPlayerToChat(a, c);
         //        addPlayerToChat(b, c);
@@ -25,7 +26,7 @@ int main()
     }
     catch (std::exception &error)
     {
-        std::cerr << error.what() << std::endl;
+        std::cerr << "Exception error :" << error.what() << std::endl;
     }
     return 0;
 }

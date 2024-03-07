@@ -1,7 +1,6 @@
 #ifndef BACKEND_PLAYERAPI_H
 #define BACKEND_PLAYERAPI_H
 
-#include <boost/asio/ip/tcp.hpp>
 #include "../Controller/GameController.h"
 #include "../Controller/PlayerController.h"
 #include "../Controller/SocketController.h"
@@ -15,7 +14,10 @@ class PlayerAPI
 {
     static PlayerAPI *instance;
 
-    PlayerAPI() {}
+    ResponseController *responseController;
+    PlayerController *playerController;
+
+    PlayerAPI();
 
 public:
     static PlayerAPI *getInstance();

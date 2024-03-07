@@ -7,7 +7,7 @@ bool Response::isSuccess() const
 
 void Response::setStatus(bool status)
 {
-    Response::status = status;
+    this->status = status;
 }
 
 const std::string &Response::getJson() const
@@ -17,5 +17,5 @@ const std::string &Response::getJson() const
 
 void Response::setJson(const std::string &json)
 {
-    Response::json = json;
+    this->json = json;
 }

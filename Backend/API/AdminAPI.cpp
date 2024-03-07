@@ -2,6 +2,11 @@
 
 AdminAPI *AdminAPI::instance = nullptr;
 
+AdminAPI::AdminAPI()
+{
+    responseController = ResponseController::getInstance();
+}
+
 AdminAPI *AdminAPI::getInstance()
 {
     if (instance == nullptr)
@@ -14,7 +19,6 @@ AdminAPI *AdminAPI::getInstance()
 Response AdminAPI::profile(const User *admin)
 {
     Response response;
-    ResponseController *responseController = ResponseController::getInstance();
     responseController->setSuccess(response, AdminController::getInstance()->profile(admin));
     return response;
 }
@@ -22,7 +26,6 @@ Response AdminAPI::profile(const User *admin)
 Response AdminAPI::dashboard(const Admin &admin)
 {
     Response response;
-    ResponseController *responseController = ResponseController::getInstance();
     responseController->setSuccess(response, AdminController::getInstance()->dashboard(admin));
     return response;
 }

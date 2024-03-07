@@ -17,7 +17,7 @@ std::string RoomController::createGameRoom(const int &playerID, const int &gameI
     int game_count = getTotalGamesCount();
     std::string roomID =
         std::to_string(playerID) + type + std::to_string(game_count + 1) + "G" + std::to_string(gameID);
-    Room room(roomID);
+    Room room(roomID, (type == "S" ? 1 : 2));
     roomContainer.addRoom(room);
     return RoomWebView::getInstance()->newRoom(roomID);
 }
@@ -29,7 +29,7 @@ std::string RoomController::createChatRoom(int playerID, int friendID)
         std::swap(playerID, friendID);
     }
     std::string roomID = std::to_string(playerID) + "C" + std::to_string(friendID);
-    Room room(roomID);
+    Room room(roomID, 1);
     roomContainer.addRoom(room);
     return RoomWebView::getInstance()->newRoom(roomID);
 }
@@ -41,7 +41,8 @@ bool RoomController::isRoomExist(const std::string &roomID)
 
 bool RoomController::isRoomFull(const std::string &roomID)
 {
-    return getRoom(roomID).getSessions().size() == 2;
+    Room &room = getRoom(roomID);
+    return room.getSessions().size() == room.getMaxConnections();
 }
 
 Room &RoomController::getRoom(const std::string &roomID)
@@ -66,19 +67,41 @@ void RoomController::broadcast(const std::string &message, const std::string &ro
     }
 }
 
-int RoomController::getConnectedPlayersCount(const std::string &roomID)
+int RoomController::getConnectedSessionsCount(const std::string &roomID)
 {
-    return getRoom(roomID).getConnectedSessionsCount();
+    Room &room = getRoom(roomID);
+    int cnt = 0;
+    for (auto &session : room.getSessions())
+    {
+        if (session->isConnected())
+        {
+            cnt++;
+        }
+    }
+    room.getRoomCV().notify_all();
+    return cnt;
 }
 
-int RoomController::getFinishedPlayersCount(const std::string &roomID)
+int RoomController::getFinishedSessionsCount(const std::string &roomID)
 {
-    return getRoom(roomID).getFinishedSessionsCount();
+    int cnt = 0;
+    for (auto &session : getRoom(roomID).getSessions())
+    {
+        if (session->isFinished())
+        {
+            cnt++;
+        }
+    }
+    return cnt;
 }
 
 void RoomController::blockRoom(const std::string &roomID)
 {
-    getRoom(roomID).blockRoom();
+    Room &room = getRoom(roomID);
+    std::unique_lock<std::mutex> lock(room.getRoomMutex());
+    auto now = std::chrono::system_clock::now();
+    room.getRoomCV().wait_until(lock, now + std::chrono::seconds(60), [&]()
+                                { return getConnectedSessionsCount(roomID) == room.getMaxConnections(); });
 }
 
 void RoomController::endAllSessions(const std::string &roomID)

@@ -54,13 +54,13 @@ void SingleGameSession::launchSession(const std::string &roomID)
         // This indicates that the session was closed
         if (se.code() != websocket::error::closed)
         {
-            std::cerr << "Error: " << se.code().message() << std::endl;
+            std::cerr << "Beast error: " << se.code().message() << std::endl;
         }
     }
     catch (std::exception const &e)
     {
         gameController->endGame(gameID);
-        std::cerr << "Error: " << e.what() << std::endl;
+        std::cerr << "Exception error: " << e.what() << std::endl;
     }
 }
 

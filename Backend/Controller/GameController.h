@@ -4,7 +4,6 @@
 #include <string>
 #include "../Database/dml.h"
 #include "../Database/dql.h"
-#include "../WebView/GameWebView.h"
 
 class GameController
 {

@@ -24,6 +24,8 @@ std::string TokenController::createToken(int userID, int userType)
 
 bool TokenController::verifyToken(const std::string &token)
 {
+    if (token.empty())
+        return false;
     try
     {
         jwt::decoded_jwt decoded = jwt::decode(token);

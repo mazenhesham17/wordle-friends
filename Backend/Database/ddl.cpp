@@ -1,6 +1,5 @@
 #include <iostream>
 #include <sqlite3.h>
-#include "constants.h"
 
 const char *DATABASE_FILE_NAME = "wordle_data.db";
 sqlite3 *db;
