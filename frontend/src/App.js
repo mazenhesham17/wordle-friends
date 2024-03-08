@@ -8,6 +8,8 @@ import SingleGamePage from './Page/SingleGamePage';
 import Dashboard from './Page/Dashboard';
 import DuoGamePage from './Page/DuoGamePage';
 import JoinRoom from './Page/JoinRoom';
+import ChatPage from './Page/ChatPage';
+import SearchPage from './Page/SearchPage';
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
         <Route path="/duo-game/:urlRoomID?" element={<DuoGamePage />} />
         <Route path="/join-room" element={<JoinRoom />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/chat" element={<ChatPage />} />
+        <Route path="/search" element={<SearchPage />} />
       </Routes>
     </div>
   );

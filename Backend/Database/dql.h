@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <cstring>
+#include <vector>
 #include <sqlite3.h>
 #include "constants.h"
 
@@ -26,6 +27,10 @@ std::string getUsernameByUserID(int userID);
 
 std::string getWordByGameID(int gameID);
 
+std::vector<int> getFriendListByUserID(int userID);
+
+std::vector<int> getPlayersListByPartialUsername(const std::string &partialUsername);
+
 int getGamesCountByUserID(int userID);
 
 int getWinsCountByUserID(int userID);
@@ -39,6 +44,10 @@ int getTotalPlayersCount();
 bool isUsernameExist(const std::string &username);
 
 bool isEmailExist(const std::string &email);
+
+bool isUserExist(int userID);
+
+bool dbIsFriend(int userID, int freindID);
 
 bool dbIsPlayerInGame(const int &playerID);
 

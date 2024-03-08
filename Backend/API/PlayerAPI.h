@@ -24,6 +24,12 @@ public:
 
     Response profile(const User *player);
 
+    Response addFriend(const int &playerID, const int &friendID);
+
+    Response friends(const int &playerID);
+
+    Response search(const int &playerID, const std::string &paritialUsername);
+
     Response newGame(const std::string &word, const int &playerID, const std::string &type);
 
     Response updatePlayer(const int &playerID, const std::string &field, const std::string &value);

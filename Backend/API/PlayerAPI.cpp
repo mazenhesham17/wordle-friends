@@ -24,6 +24,34 @@ Response PlayerAPI::profile(const User *player)
     return response;
 }
 
+Response PlayerAPI::addFriend(const int &playerID, const int &friendID)
+{
+    Response response;
+    if (playerController->addFriend(playerID, friendID))
+    {
+        responseController->setSuccess(response, responseController->success());
+    }
+    else
+    {
+        responseController->setFailure(response, "Friend add failed");
+    }
+    return response;
+}
+
+Response PlayerAPI::friends(const int &playerID)
+{
+    Response response;
+    responseController->setSuccess(response, playerController->friends(playerID));
+    return response;
+}
+
+Response PlayerAPI::search(const int &playerID, const std::string &paritialUsername)
+{
+    Response response;
+    responseController->setSuccess(response, playerController->search(playerID, paritialUsername));
+    return response;
+}
+
 Response PlayerAPI::newGame(const std::string &word, const int &playerID, const std::string &type)
 {
     Response response;

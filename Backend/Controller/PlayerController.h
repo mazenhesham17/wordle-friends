@@ -2,6 +2,7 @@
 #define BACKEND_PLAYERCONTROLLER_H
 
 #include <string>
+#include <vector>
 #include "BaseController.h"
 #include "../Database/dml.h"
 #include "../Database/dql.h"
@@ -13,6 +14,8 @@ class PlayerController : public BaseController
 
     static PlayerController *instance;
 
+    PlayerWebView *playerWebView;
+
     PlayerController(){};
 
 public:
@@ -20,7 +23,17 @@ public:
 
     std::string profile(const User *user) override;
 
+    std::string friendView(const int &playerID);
+
+    std::string friends(const int &playerID);
+
+    std::string search(const int &playerID, const std::string &partialUsername);
+
     Player createPlayer(const User *user);
+
+    bool addFriend(const int &playerID, const int &friendID);
+
+    bool isFriend(const int &playerID, const int &friendID);
 
     bool updatePlayer(const int &playerID, const std::string &field, const std::string &value);
 };

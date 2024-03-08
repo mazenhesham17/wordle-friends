@@ -51,6 +51,32 @@ int addPlayer(const char *username, const char *firstName, const char *lastName,
     return playerID;
 }
 
+bool dbAddFriend(int playerID, int friendID)
+{
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( INSERT INTO Friends VALUES (%d,%d); )", playerID, friendID);
+
+    // execute query
+    char *sqlError;
+    int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
+    if (resultCode != SQLITE_OK)
+    {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage),
+                 "There was an error adding friend #%d to player #%d.\nError: %s", friendID, playerID, sqlError);
+
+        // free memory
+        sqlite3_free(sqlError);
+        throw std::runtime_error(errorMessage);
+    }
+
+    // free memory
+    sqlite3_free(sqlError);
+    return true;
+}
+
 int addGame(const char *word)
 {
     // prepare query

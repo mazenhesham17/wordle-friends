@@ -22,11 +22,50 @@ Player PlayerController::createPlayer(const User *user)
 std::string PlayerController::profile(const User *user)
 {
     Player player = createPlayer(user);
-    return PlayerWebView::getInstance()->profile(player.getUsername(), player.getFirstName(), player.getLastName(),
-                                                 player.getEmail(), player.getWins(), player.getGames());
+    return playerWebView->profile(player.getUsername(), player.getFirstName(), player.getLastName(),
+                                  player.getEmail(), player.getWins(), player.getGames());
+}
+
+bool PlayerController::addFriend(const int &playerID, const int &friendID)
+{
+    return dbAddFriend(playerID, friendID);
+}
+
+bool PlayerController::isFriend(const int &playerID, const int &friendID)
+{
+    return dbIsFriend(playerID, friendID);
 }
 
 bool PlayerController::updatePlayer(const int &playerID, const std::string &field, const std::string &value)
 {
     return updatePlayerField(playerID, field.c_str(), value.c_str());
+}
+
+std::string PlayerController::friendView(const int &playerID)
+{
+    return playerWebView->friendView(getFirstNameByUserID(playerID), getLastNameByUserID(playerID), playerID);
+}
+
+std::string PlayerController::friends(const int &playerID)
+{
+    auto friends = getFriendListByUserID(playerID);
+    std::vector<std::pair<int, std::pair<std::string, std::string>>> players;
+    for (auto &friendID : friends)
+    {
+        players.push_back(std::make_pair(friendID, std::make_pair(getFirstNameByUserID(friendID), getLastNameByUserID(friendID))));
+    }
+    return playerWebView->playersFriendView(players);
+}
+
+std::string PlayerController::search(const int &playerID, const std::string &partialUsername)
+{
+    auto playersID = getPlayersListByPartialUsername(partialUsername);
+    std::vector<std::pair<std::pair<int, int>, std::pair<std::string, std::string>>> players;
+    for (auto &friendID : playersID)
+    {
+        if (friendID == playerID)
+            continue;
+        players.push_back(std::make_pair(std::make_pair(friendID, !isFriend(playerID, friendID)), std::make_pair(getFirstNameByUserID(friendID), getLastNameByUserID(friendID))));
+    }
+    return playerWebView->playersSearchView(players);
 }

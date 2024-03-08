@@ -12,6 +12,9 @@ bool openConnection();
 int addPlayer(const char *username, const char *firstName, const char *lastName, const char *email,
               const char *password);
 
+// add new friend
+bool dbAddFriend(int playerID, int friendID);
+
 // add new game
 int addGame(const char *word);
 

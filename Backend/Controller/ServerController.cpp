@@ -13,6 +13,8 @@ ServerController::ServerController()
     socketController = SocketController::getInstance();
     responseController = ResponseController::getInstance();
     roomController = RoomController::getInstance();
+    gameController = GameController::getInstance();
+    playerController = PlayerController::getInstance();
 }
 
 ServerController *ServerController::getInstance()
@@ -238,6 +240,67 @@ void ServerController::PutProfile(const httplib::Request &req, httplib::Response
     res.set_content(responseController->getJson(response), "application/json");
 }
 
+void ServerController::GetFriends(const httplib::Request &req, httplib::Response &res)
+{
+    std::cout << "Friends request of type GET received on thread : " << std::this_thread::get_id() << std::endl;
+    std::string token = req.get_header_value("Authorization");
+    if (!authenticationController->isAuthenticatedPlayer(token))
+    {
+        res.status = 401;
+        return;
+    }
+
+    int userID = tokenController->getUserID(token);
+    Response response = playerAPI->friends(userID);
+    res.set_content(responseController->getJson(response), "application/json");
+}
+
+void ServerController::GetSearch(const httplib::Request &req, httplib::Response &res)
+{
+    std::cout << "Search request of type GET received on thread : " << std::this_thread::get_id() << std::endl;
+    std::string token = req.get_header_value("Authorization");
+    if (!authenticationController->isAuthenticatedPlayer(token))
+    {
+        res.status = 401;
+        return;
+    }
+
+    int userID = tokenController->getUserID(token);
+    std::string query = req.path_params.at("query");
+    Response response = playerAPI->search(userID, query);
+    res.set_content(responseController->getJson(response), "application/json");
+}
+
+void ServerController::PostAddFriend(const httplib::Request &req, httplib::Response &res)
+{
+    std::cout << "Add friend request of type POST received on thread : " << std::this_thread::get_id() << std::endl;
+    std::string token = req.get_header_value("Authorization");
+    if (!authenticationController->isAuthenticatedPlayer(token))
+    {
+        res.status = 401;
+        return;
+    }
+
+    int userID = tokenController->getUserID(token);
+    int friendID = std::stoi(req.path_params.at("friendID"));
+    Response response;
+    if (userID == friendID)
+    {
+        responseController->setFailure(response, "you can't add yourself as a friend");
+        res.set_content(responseController->getJson(response), "application/json");
+        return;
+    }
+    if (playerController->isFriend(userID, friendID))
+    {
+        responseController->setFailure(response, "you are already friend with this user");
+        res.set_content(responseController->getJson(response), "application/json");
+        return;
+    }
+
+    response = playerAPI->addFriend(userID, friendID);
+    res.set_content(responseController->getJson(response), "application/json");
+}
+
 void ServerController::requests(httplib::Server &server)
 {
     // allow cross-origin requests
@@ -276,6 +339,15 @@ void ServerController::requests(httplib::Server &server)
 
     server.Put("/profile", [&](const httplib::Request &req, httplib::Response &res)
                { PutProfile(req, res); });
+
+    server.Get("/friends", [&](const httplib::Request &req, httplib::Response &res)
+               { GetFriends(req, res); });
+
+    server.Get("/search/:query", [&](const httplib::Request &req, httplib::Response &res)
+               { GetSearch(req, res); });
+
+    server.Post("/add-friend/:friendID", [&](const httplib::Request &req, httplib::Response &res)
+                { PostAddFriend(req, res); });
 }
 
 void ServerController::start(int port)

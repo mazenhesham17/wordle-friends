@@ -361,6 +361,73 @@ std::string getWordByGameID(int gameID)
     return word;
 }
 
+std::vector<int> getFriendListByUserID(int userID)
+{
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( SELECT * FROM Friends WHERE (senderID = %d or acceptorID = %d ))", userID, userID);
+
+    // prepare statement
+    sqlite3_stmt *stmt;
+    int resultCode = sqlite3_prepare_v2(db, query, -1, &stmt, nullptr);
+
+    if (resultCode != SQLITE_OK)
+    {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage),
+                 R"(There was an error getting for friend list.\n
+                    Error: %s )",
+                 sqlite3_errmsg(db));
+        throw std::runtime_error(errorMessage);
+    }
+
+    std::vector<int> friendList;
+
+    while (sqlite3_step(stmt) == SQLITE_ROW)
+    {
+        if (sqlite3_column_int(stmt, 0) == userID)
+            friendList.push_back(sqlite3_column_int(stmt, 1));
+        else
+            friendList.push_back(sqlite3_column_int(stmt, 0));
+    }
+    sqlite3_finalize(stmt);
+
+    return friendList;
+}
+
+std::vector<int> getPlayersListByPartialUsername(const std::string &partialUsername)
+{
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( SELECT userID FROM User WHERE username LIKE '%%%s%%' AND userType = 1)", partialUsername.c_str());
+
+    // prepare statement
+    sqlite3_stmt *stmt;
+    int resultCode = sqlite3_prepare_v2(db, query, -1, &stmt, nullptr);
+
+    if (resultCode != SQLITE_OK)
+    {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage),
+                 R"(There was an error getting for players list.\n
+                    Error: %s )",
+                 sqlite3_errmsg(db));
+        throw std::runtime_error(errorMessage);
+    }
+
+    std::vector<int> playersList;
+
+    while (sqlite3_step(stmt) == SQLITE_ROW)
+    {
+        playersList.push_back(sqlite3_column_int(stmt, 0));
+    }
+    sqlite3_finalize(stmt);
+
+    return playersList;
+}
+
 int getGamesCountByUserID(int userID)
 {
     // prepare query
@@ -578,6 +645,73 @@ bool isEmailExist(const std::string &email)
         char errorMessage[ERROR_SIZE];
         snprintf(errorMessage, sizeof(errorMessage),
                  R"(There was an error checking for email.\n
+                    Error: %s )",
+                 sqlite3_errmsg(db));
+        throw std::runtime_error(errorMessage);
+    }
+
+    if (sqlite3_step(stmt) == SQLITE_ROW)
+    {
+        sqlite3_finalize(stmt);
+        return true;
+    }
+    else if (sqlite3_step(stmt) == SQLITE_DONE)
+    {
+        sqlite3_finalize(stmt);
+        return false;
+    }
+    return false;
+}
+
+bool isUserExist(int userID)
+{
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( SELECT userID FROM User WHERE userID = %d)", userID);
+
+    // prepare statement
+    sqlite3_stmt *stmt;
+    int resultCode = sqlite3_prepare_v2(db, query, -1, &stmt, nullptr);
+    if (resultCode != SQLITE_OK)
+    {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage), R"(There was an error checking for user.\n
+                    Error: %s )",
+                 sqlite3_errmsg(db));
+        throw std::runtime_error(errorMessage);
+    }
+
+    if (sqlite3_step(stmt) == SQLITE_ROW)
+    {
+        sqlite3_finalize(stmt);
+        return true;
+    }
+    else if (sqlite3_step(stmt) == SQLITE_DONE)
+    {
+        sqlite3_finalize(stmt);
+        return false;
+    }
+    return false;
+}
+
+bool dbIsFriend(int userID, int friendID)
+{
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( SELECT * FROM Friends WHERE (senderID = %d and acceptorID = %d) or (senderID = %d and acceptorID = %d) )",
+             userID, friendID, friendID, userID);
+
+    // prepare statement
+    sqlite3_stmt *stmt;
+    int resultCode = sqlite3_prepare_v2(db, query, -1, &stmt, nullptr);
+
+    if (resultCode != SQLITE_OK)
+    {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage),
+                 R"(There was an error checking for friend.\n
                     Error: %s )",
                  sqlite3_errmsg(db));
         throw std::runtime_error(errorMessage);

@@ -55,13 +55,37 @@ int main()
   	        lastName TEXT,
   	        email TEXT,
   	        password TEXT,
-  	        userType INTEGER
+  	        userType INTEGER,
+            joinDate DATE DEFAULT CURRENT_DATE
         );
     )";
 
     // execution
     resultCode = executeQuery(userTableCreation,
                               "There was an error creating user table.");
+    if (resultCode != SQLITE_OK)
+    {
+        return resultCode;
+    }
+
+    // create friends table
+
+    // query
+
+    const char *friendsTableCreation = R"(
+        CREATE TABLE IF NOT EXISTS Friends(
+  	        senderID INTEGER,
+  	        acceptorID INTEGER,
+  	        PRIMARY KEY (senderID,acceptorID),
+  	        FOREIGN KEY (senderID) REFERENCES User(userID) ON DELETE CASCADE,
+  	        FOREIGN KEY (acceptorID) REFERENCES User(userID) ON DELETE CASCADE
+        );
+    )";
+
+    // execution
+
+    resultCode = executeQuery(friendsTableCreation,
+                              "There was an error creating friends table.");
     if (resultCode != SQLITE_OK)
     {
         return resultCode;
@@ -76,6 +100,7 @@ int main()
   	        word TEXT,
             state INTEGER,
   	        winnerID INTEGER,
+            createDate DATE DEFAULT CURRENT_DATE,
   	        FOREIGN KEY (winnerID) REFERENCES User(userid)
         );
     )";
@@ -83,27 +108,6 @@ int main()
     // execution
     resultCode = executeQuery(gameTableCreation,
                               "There was an error creating game table.");
-    if (resultCode != SQLITE_OK)
-    {
-        return resultCode;
-    }
-
-    // create tournament table
-
-    // query
-    const char *tournamentTableCreation = R"(
-        CREATE TABLE IF NOT EXISTS Tournament(
-  	        tournamentID INTEGER UNIQUE PRIMARY KEY,
-  	        adminID INTEGER,
-  	        winnerID INTEGER,
-  	        FOREIGN KEY (adminID) REFERENCES User(userID),
-  	        FOREIGN KEY (winnerID) REFERENCES User(userID)
-        );
-    )";
-
-    // execution
-    resultCode = executeQuery(tournamentTableCreation,
-                              "There was an error creating tournament table.");
     if (resultCode != SQLITE_OK)
     {
         return resultCode;
@@ -147,49 +151,6 @@ int main()
         return resultCode;
     }
 
-    // create tournament players table
-
-    // query
-    const char *tournamentPlayersTableCreation = R"(
-        CREATE TABLE IF NOT EXISTS TournamentPlayers(
-            tournamentID INTEGER,
-            playerID INTEGER,
-            PRIMARY KEY (tournamentID,playerID),
-            FOREIGN KEY (tournamentID) REFERENCES Tournament(tournamentID) ON DELETE CASCADE,
-            FOREIGN KEY (playerID) REFERENCES User(userID)
-        );
-    )";
-
-    // execution
-    resultCode = executeQuery(tournamentPlayersTableCreation,
-                              "There was an error creating tournament players table.");
-    if (resultCode != SQLITE_OK)
-    {
-        return resultCode;
-    }
-
-    // create tournament games table
-
-    // query
-    const char *tournamentGamesTableCreation = R"(
-        CREATE TABLE IF NOT EXISTS TournamentGames(
-            tournamentID INTEGER,
-            gameID INTEGER,
-            stage INTEGER,
-            PRIMARY KEY (tournamentID,gameID),
-            FOREIGN KEY (tournamentID) REFERENCES Tournament(tournamentID) ON DELETE CASCADE,
-            FOREIGN KEY (gameID) REFERENCES Game(gameID)
-        );
-    )";
-
-    // execution
-    resultCode = executeQuery(tournamentGamesTableCreation,
-                              "There was an error creating tournament games table.");
-    if (resultCode != SQLITE_OK)
-    {
-        return resultCode;
-    }
-
     // create player chats table
 
     // query
@@ -221,7 +182,7 @@ int main()
             senderID INTEGER,
             dateAndTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             chatID INTEGER,
-            FOREIGN KEY (senderID) REFERENCES User(userID)
+            FOREIGN KEY (senderID) REFERENCES User(userID),
             FOREIGN KEY (chatID) REFERENCES Chat(chatID)
         );
     )";

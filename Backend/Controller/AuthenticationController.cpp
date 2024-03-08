@@ -16,7 +16,7 @@ AuthenticationController *AuthenticationController::getInstance()
 
 bool AuthenticationController::isAuthenticatedUser(const std::string &token)
 {
-    return tokenController->verifyToken(token);
+    return tokenController->verifyToken(token) && isUserExist(tokenController->getUserID(token));
 }
 
 bool AuthenticationController::isAuthenticatedAdmin(const std::string &token)
@@ -28,4 +28,3 @@ bool AuthenticationController::isAuthenticatedPlayer(const std::string &token)
 {
     return tokenController->verifyToken(token) && tokenController->isUserPlayer(token);
 }
-

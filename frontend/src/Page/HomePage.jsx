@@ -39,6 +39,11 @@ export const HomePage = () => {
         <Link to="/join-room">Join Duo Game</Link>
         <br />
         <Link to="/profile">Profile</Link>
+        <br />
+        <Link to="/chat">Chat</Link>
+        <br />
+        <Link to="/search">Search</Link>
+        <br />
       </>
     )
   }

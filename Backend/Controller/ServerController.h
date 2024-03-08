@@ -12,6 +12,7 @@
 #include "UserController.h"
 #include "RoomController.h"
 #include "GameController.h"
+#include "PlayerController.h"
 #include "../API/AdminAPI.h"
 #include "../API/PlayerAPI.h"
 #include "../API/UserAPI.h"
@@ -30,6 +31,7 @@ class ServerController
     PlayerAPI *playerAPI;
     GameController *gameController;
     ResponseController *responseController;
+    PlayerController *playerController;
     RoomController *roomController;
     TokenController *tokenController;
     UserController *userController;
@@ -55,6 +57,12 @@ class ServerController
     void GetProfile(const httplib::Request &req, httplib::Response &res);
 
     void PutProfile(const httplib::Request &req, httplib::Response &res);
+
+    void GetFriends(const httplib::Request &req, httplib::Response &res);
+
+    void GetSearch(const httplib::Request &req, httplib::Response &res);
+
+    void PostAddFriend(const httplib::Request &req, httplib::Response &res);
 
     void requests(httplib::Server &server);
 

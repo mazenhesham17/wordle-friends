@@ -3,9 +3,10 @@
 
 #include <string>
 #include "TokenController.h"
+#include "../Database/dql.h"
 
-
-class AuthenticationController {
+class AuthenticationController
+{
     static AuthenticationController *instance;
 
     TokenController *tokenController;
@@ -13,7 +14,6 @@ class AuthenticationController {
     AuthenticationController();
 
 public:
-
     static AuthenticationController *getInstance();
 
     bool isAuthenticatedUser(const std::string &token);
@@ -23,5 +23,4 @@ public:
     bool isAuthenticatedPlayer(const std::string &token);
 };
 
-
-#endif //BACKEND_AUTHENTICATIONCONTROLLER_H
+#endif // BACKEND_AUTHENTICATIONCONTROLLER_H
