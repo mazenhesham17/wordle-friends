@@ -131,8 +131,3 @@ void DuoGameSession::launchSession()
         std::cerr << "Exception error: " << e.what() << std::endl;
     }
 }
-
-bool DuoGameSession::isFinished()
-{
-    return turnsLeft == 0;
-}

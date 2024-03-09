@@ -11,7 +11,7 @@ RoomWebView *RoomWebView::getInstance()
     return instance;
 }
 
-std::string RoomWebView::newRoom(const std::string &roomID)
+std::string RoomWebView::room(const std::string &roomID)
 {
     return R"( {"roomID": ")" + roomID + R"(" } )";
 }

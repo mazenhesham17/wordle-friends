@@ -10,7 +10,7 @@ class RoomWebView
 
 public:
     static RoomWebView *getInstance();
-    std::string newRoom(const std::string &roomID);
+    std::string room(const std::string &roomID);
 };
 
 #endif // BACKEND_ROOMWEBVIEW_H

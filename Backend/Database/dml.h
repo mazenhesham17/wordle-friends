@@ -28,13 +28,13 @@ bool dbStartGame(int gameID);
 bool dbEndGame(int gameID);
 
 // add new chat
-int addChat();
+int dbAddChat();
 
 // add player to chat
 bool addPlayerToChat(int playerID, int chatID);
 
 // add message to chat
-bool addMessageToChat(int senderID, int chatID, const char *content);
+int addMessageToChat(int senderID, int chatID, const char *content);
 
 // win game
 bool dbWinGame(int playerID, int gameID);

@@ -65,7 +65,7 @@ Response PlayerAPI::updatePlayer(const int &playerID, const std::string &field, 
     Response response;
     if (playerController->updatePlayer(playerID, field, value))
     {
-        User *user = new Player(UserController::getInstance()->retriveUserFromDB(playerID));
+        User *user = new Player(UserController::getInstance()->retrieveUserFromDB(playerID));
         return profile(user);
     }
     else

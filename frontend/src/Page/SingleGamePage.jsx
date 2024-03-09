@@ -103,13 +103,11 @@ export const SingleGamePage = () => {
     }
 
     const startGame = async () => {
-        console.log("hello from start game");
-        const response = await fetch('http://localhost:4000/start-game', {
+        const response = await fetch(`http://localhost:4000/start-game/${roomID}`, {
             method: 'Post',
             headers: {
                 'Authorization': token
             },
-            body: JSON.stringify({ roomID: roomID })
         });
         const temp = await response.json();
         console.log(temp);

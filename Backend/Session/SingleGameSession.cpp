@@ -34,11 +34,11 @@ void SingleGameSession::launchSession()
             if (gameController->match(message, gameID))
             {
                 flag = true;
+                turnsLeft = 0;
                 break;
             }
             turnsLeft--;
         }
-        std::cout << "Turns : " << turnsLeft << std::endl;
         if (flag)
         {
             send("You win!");
@@ -68,9 +68,4 @@ void SingleGameSession::launchSession()
         roomController->closeRoom(roomID);
         std::cerr << "Exception error: " << e.what() << std::endl;
     }
-}
-
-bool SingleGameSession::isFinished()
-{
-    return false;
 }

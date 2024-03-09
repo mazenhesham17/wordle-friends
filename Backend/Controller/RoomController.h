@@ -7,6 +7,7 @@
 #include "../Model/Room.h"
 #include "../Model/RoomContainer.h"
 #include "../WebView/RoomWebView.h"
+#include "../Controller/ChatController.h"
 
 class Session;
 
@@ -25,7 +26,11 @@ public:
 
     std::string createGameRoom(const int &playerID, const int &gameID, const std::string &type);
 
-    std::string createChatRoom(int playerID, int friendID);
+    std::string chatRoomName(int playerID, int friendID);
+
+    std::string roomView(const std::string &roomID);
+
+    std::string createChatRoom(const int &playerID, const int &friendID);
 
     bool isRoomExist(const std::string &roomID);
 
@@ -34,6 +39,8 @@ public:
     void addSession(const std::string &roomID, std::shared_ptr<Session> &session, const int &playerID);
 
     void broadcast(const std::string &message, const std::string &roomID, const int &playerID);
+
+    void chatBroadcast(const std::string &message, const std::string &roomID);
 
     void blockRoom(const std::string &roomID);
 

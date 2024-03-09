@@ -9,8 +9,6 @@ class SingleGameSession : public GameSession
 public:
     SingleGameSession(tcp::socket &&socket, std::string roomID, int playerID);
 
-    bool isFinished() override;
-
     void launchSession() override;
 };
 

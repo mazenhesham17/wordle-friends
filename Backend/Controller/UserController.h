@@ -17,7 +17,7 @@ public:
 
     User createUser(const jsoncons::json &json);
 
-    User retriveUserFromDB(const int &userID);
+    User retrieveUserFromDB(const int &userID);
 
     int addUser(const User &user);
 

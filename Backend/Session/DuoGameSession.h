@@ -8,8 +8,6 @@ class DuoGameSession : public GameSession
 public:
     DuoGameSession(tcp::socket &&socket, std::string roomID, int playerID);
 
-    bool isFinished() override;
-
     void onRead(beast::error_code ec, std::size_t bytes_transferred) override;
 
     void onWrite(beast::error_code ec, std::size_t bytes_transferred) override;

@@ -19,19 +19,30 @@ std::string RoomController::createGameRoom(const int &playerID, const int &gameI
         std::to_string(playerID) + type + std::to_string(game_count + 1) + "G" + std::to_string(gameID);
     Room room(roomID, (type == "S" ? 1 : 2));
     roomContainer.addRoom(room);
-    return RoomWebView::getInstance()->newRoom(roomID);
+    return RoomWebView::getInstance()->room(roomID);
 }
 
-std::string RoomController::createChatRoom(int playerID, int friendID)
+std::string RoomController::chatRoomName(int playerID, int friendID)
 {
     if (playerID > friendID)
     {
         std::swap(playerID, friendID);
     }
-    std::string roomID = std::to_string(playerID) + "C" + std::to_string(friendID);
-    Room room(roomID, 1);
+    int chatID = ChatController::getInstance()->getChatID(playerID, friendID);
+    return std::to_string(playerID) + "F" + std::to_string(friendID) + "C" + std::to_string(chatID);
+}
+
+std::string RoomController::roomView(const std::string &roomID)
+{
+    return RoomWebView::getInstance()->room(roomID);
+}
+
+std::string RoomController::createChatRoom(const int &playerID, const int &friendID)
+{
+    std::string roomID = chatRoomName(playerID, friendID);
+    Room room(roomID, 2);
     roomContainer.addRoom(room);
-    return RoomWebView::getInstance()->newRoom(roomID);
+    return roomView(roomID);
 }
 
 bool RoomController::isRoomExist(const std::string &roomID)
@@ -61,6 +72,18 @@ void RoomController::broadcast(const std::string &message, const std::string &ro
     for (auto &session : room.getSessions())
     {
         if (session->getPlayerID() != playerID)
+        {
+            session->asyncSend(message);
+        }
+    }
+}
+
+void RoomController::chatBroadcast(const std::string &message, const std::string &roomID)
+{
+    Room &room = getRoom(roomID);
+    for (auto &session : room.getSessions())
+    {
+        if (session->isConnected())
         {
             session->asyncSend(message);
         }

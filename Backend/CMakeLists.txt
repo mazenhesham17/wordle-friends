@@ -71,6 +71,14 @@ add_executable(
         Controller/AuthenticationController.h
         Session/GameSession.cpp
         Session/GameSession.h
+        Controller/ChatController.cpp
+        Controller/ChatController.h
+        Model/Message.cpp
+        Model/Message.h
+        WebView/ChatWebView.cpp
+        WebView/ChatWebView.h
+        Session/ChatSession.cpp
+        Session/ChatSession.h
 )
 
 add_executable(

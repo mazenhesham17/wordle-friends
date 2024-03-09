@@ -17,11 +17,6 @@ int main()
         int port = 4000;
         ServerController *serverController = ServerController::getInstance();
         serverController->start(port);
-        //        int c = addChat();
-        //        addPlayerToChat(a, c);
-        //        addPlayerToChat(b, c);
-        //        addMessageToChat(a, c, "Hello Hazem");
-        //        addMessageToChat(b, c, "Hello Mazen");
         closeConnection();
     }
     catch (std::exception &error)

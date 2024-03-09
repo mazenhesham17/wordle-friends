@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-export const Friends = () => {
+export const Friends = (props) => {
     const token = localStorage.getItem('token');
     const [friends, setFriends] = useState([]);
     const [error, setError] = useState('');
@@ -28,11 +28,11 @@ export const Friends = () => {
             {error ? <div>{error}</div> :
                 <div>
                     <h1>Friends</h1>
-                    <ul style={{ display: "flex", flexDirection: "column", width: "200px" }}>
+                    <ul style={{ display: "flex", flexDirection: "column", width: "300px" }}>
                         {
                             friends.map((friend, index) => {
                                 return (
-                                    <li key={index} style={{ display: "flex" }}>
+                                    <li key={index} style={{ display: "flex", backgroundColor: "aquamarine" }} onClick={() => props.updateChat(friend.playerID)}>
                                         <h1>{friend.name[0]}</h1>
                                         <h2>{friend.name}</h2>
                                         <h3>{friend.playerID}</h3>

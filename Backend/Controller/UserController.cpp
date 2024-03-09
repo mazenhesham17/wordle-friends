@@ -20,7 +20,7 @@ User UserController::createUser(const jsoncons::json &json)
     return user;
 }
 
-User UserController::retriveUserFromDB(const int &userID)
+User UserController::retrieveUserFromDB(const int &userID)
 {
     User user;
     user.setUserID(userID);

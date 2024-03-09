@@ -16,6 +16,8 @@ protected:
 
 public:
     GameSession(tcp::socket &&socket, const std::string &roomId, int playerId);
+
+    bool isFinished() override;
 };
 
 #endif // BACKEND_GAMESESSION_H

@@ -27,6 +27,18 @@ std::string getUsernameByUserID(int userID);
 
 std::string getWordByGameID(int gameID);
 
+std::string getContentByMessageID(int messageID);
+
+std::string getSendTimeByMessageID(int messageID);
+
+int getSenderIDByMessageID(int messageID);
+
+int getChatIDByMessageID(int messageID);
+
+int getChatIDByPlayerID(int playerID, int friendID);
+
+std::vector<int> getChatListByChatID(int chatID);
+
 std::vector<int> getFriendListByUserID(int userID);
 
 std::vector<int> getPlayersListByPartialUsername(const std::string &partialUsername);
@@ -47,8 +59,12 @@ bool isEmailExist(const std::string &email);
 
 bool isUserExist(int userID);
 
+bool dbIsPlayerInChat(int chatID, int playerID);
+
 bool dbIsFriend(int userID, int freindID);
 
 bool dbIsPlayerInGame(const int &playerID);
+
+bool dbIsChatExist(const int &chatID);
 
 #endif // BACKEND_DQL_H

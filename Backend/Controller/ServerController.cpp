@@ -8,6 +8,7 @@ ServerController::ServerController()
     adminAPI = AdminAPI::getInstance();
     playerAPI = PlayerAPI::getInstance();
     authenticationController = AuthenticationController::getInstance();
+    chatController = ChatController::getInstance();
     tokenController = TokenController::getInstance();
     userController = UserController::getInstance();
     socketController = SocketController::getInstance();
@@ -40,6 +41,11 @@ void ServerController::connectSocketAndLaunchGameSession(const std::string &room
     {
         // two player game
         session = std::make_shared<DuoGameSession>(std::move(socket), roomID, playerID);
+    }
+    else if (roomID.find('C') != -1)
+    {
+        // chat room
+        session = std::make_shared<ChatSession>(std::move(socket), roomID, playerID);
     }
     roomController->addSession(roomID, session, playerID);
     session->launchSession();
@@ -92,7 +98,7 @@ void ServerController::GetDashboard(const httplib::Request &req, httplib::Respon
     }
 
     int userID = tokenController->getUserID(token);
-    User *user = new Admin(userController->retriveUserFromDB(userID));
+    User *user = new Admin(userController->retrieveUserFromDB(userID));
     Admin admin = AdminController::getInstance()->createAdmin(user);
     Response response = adminAPI->dashboard(admin);
     res.set_content(responseController->getJson(response), "application/json");
@@ -173,8 +179,7 @@ void ServerController::PostStartGame(const httplib::Request &req, httplib::Respo
         return;
     }
 
-    jsoncons::json body = jsoncons::json::parse(req.body);
-    std::string roomID = body["roomID"].as<std::string>();
+    std::string roomID = req.path_params.at("roomID");
     if (!roomController->isRoomExist(roomID))
     {
         Response response;
@@ -201,12 +206,12 @@ void ServerController::GetProfile(const httplib::Request &req, httplib::Response
     Response response;
     if (userType == 0)
     {
-        user = new Admin(userController->retriveUserFromDB(userID));
+        user = new Admin(userController->retrieveUserFromDB(userID));
         response = adminAPI->profile(user);
     }
     else
     {
-        user = new Player(userController->retriveUserFromDB(userID));
+        user = new Player(userController->retrieveUserFromDB(userID));
         response = playerAPI->profile(user);
     }
     res.set_content(responseController->getJson(response), "application/json");
@@ -301,6 +306,96 @@ void ServerController::PostAddFriend(const httplib::Request &req, httplib::Respo
     res.set_content(responseController->getJson(response), "application/json");
 }
 
+void ServerController::GetChat(const httplib::Request &req, httplib::Response &res)
+{
+    std::cout << "Chat request of type GET received on thread : " << std::this_thread::get_id() << std::endl;
+    std::string token = req.get_header_value("Authorization");
+    if (!authenticationController->isAuthenticatedPlayer(token))
+    {
+        res.status = 401;
+        return;
+    }
+
+    int chatID = std::stoi(req.path_params.at("chatID"));
+
+    Response response;
+    if (!chatController->isChatExist(chatID))
+    {
+        responseController->setFailure(response, "there is no chat with this ID");
+        res.set_content(responseController->getJson(response), "application/json");
+        return;
+    }
+
+    int playerID = tokenController->getUserID(token);
+
+    if (!chatController->isPlayerInChat(chatID, playerID))
+    {
+        responseController->setFailure(response, "you are not in this chat");
+        res.set_content(responseController->getJson(response), "application/json");
+        res.status = 401;
+        return;
+    }
+    responseController->setSuccess(response, chatController->getChat(chatID));
+    res.set_content(responseController->getJson(response), "application/json");
+}
+
+void ServerController::GetChatRoom(const httplib::Request &req, httplib::Response &res)
+{
+    std::cout << "Chat ID request of type GET received on thread : " << std::this_thread::get_id() << std::endl;
+    std::string token = req.get_header_value("Authorization");
+    if (!authenticationController->isAuthenticatedPlayer(token))
+    {
+        res.status = 401;
+        return;
+    }
+
+    int playerID = tokenController->getUserID(token);
+    int friendID = std::stoi(req.path_params.at("friendID"));
+    std::string roomID = roomController->chatRoomName(playerID, friendID);
+    Response response;
+    if (roomController->isRoomExist(roomID))
+    {
+        responseController->setSuccess(response, roomController->roomView(roomID));
+    }
+    else
+    {
+        responseController->setSuccess(response, roomController->createChatRoom(playerID, friendID));
+    }
+    res.set_content(responseController->getJson(response), "application/json");
+}
+
+void ServerController::PostStartChat(const httplib::Request &req, httplib::Response &res)
+{
+    std::cout << "Start chat request of type POST received on thread : " << std::this_thread::get_id() << std::endl;
+    std::string token = req.get_header_value("Authorization");
+    if (!authenticationController->isAuthenticatedPlayer(token))
+    {
+        res.status = 401;
+        return;
+    }
+
+    int playerID = tokenController->getUserID(token);
+    std::string roomID = req.path_params.at("roomID");
+    int chatID = chatController->getChatID(roomID);
+    ;
+    Response response;
+    if (!chatController->isChatExist(chatID))
+    {
+        responseController->setFailure(response, "there is no chat with this ID");
+        res.set_content(responseController->getJson(response), "application/json");
+        return;
+    }
+    if (!chatController->isPlayerInChat(chatID, playerID))
+    {
+        responseController->setFailure(response, "you are not in this chat");
+        res.set_content(responseController->getJson(response), "application/json");
+        res.status = 401;
+        return;
+    }
+    std::thread(&ServerController::connectSocketAndLaunchGameSession, this, roomID, playerID).detach();
+    res.set_content(responseController->success(), "application/json");
+}
+
 void ServerController::requests(httplib::Server &server)
 {
     // allow cross-origin requests
@@ -331,7 +426,7 @@ void ServerController::requests(httplib::Server &server)
     server.Post("/new-game/:type", [&](const httplib::Request &req, httplib::Response &res)
                 { PostNewGame(req, res); });
 
-    server.Post("/start-game", [&](const httplib::Request &req, httplib::Response &res)
+    server.Post("/start-game/:roomID", [&](const httplib::Request &req, httplib::Response &res)
                 { PostStartGame(req, res); });
 
     server.Get("/profile", [&](const httplib::Request &req, httplib::Response &res)
@@ -348,6 +443,16 @@ void ServerController::requests(httplib::Server &server)
 
     server.Post("/add-friend/:friendID", [&](const httplib::Request &req, httplib::Response &res)
                 { PostAddFriend(req, res); });
+
+    // return roomID for the chat
+    server.Get("/chat/:chatID", [&](const httplib::Request &req, httplib::Response &res)
+               { GetChat(req, res); });
+
+    server.Get("/chat-room/:friendID", [&](const httplib::Request &req, httplib::Response &res)
+               { GetChatRoom(req, res); });
+
+    server.Post("/start-chat/:roomID", [&](const httplib::Request &req, httplib::Response &res)
+                { PostStartChat(req, res); });
 }
 
 void ServerController::start(int port)

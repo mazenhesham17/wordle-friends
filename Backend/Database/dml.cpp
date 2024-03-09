@@ -184,7 +184,7 @@ bool dbEndGame(int gameID)
     return true;
 }
 
-int addChat()
+int dbAddChat()
 {
     // prepare query
     char query[] = "INSERT INTO Chat (chatID) VALUES (NULL);";
@@ -237,7 +237,7 @@ bool addPlayerToChat(int playerID, int chatID)
     return true;
 }
 
-bool addMessageToChat(int senderID, int chatID, const char *content)
+int addMessageToChat(int senderID, int chatID, const char *content)
 {
     // prepare query
     char query[QUERY_SIZE];
@@ -257,10 +257,12 @@ bool addMessageToChat(int senderID, int chatID, const char *content)
         sqlite3_free(sqlError);
         throw std::runtime_error(errorMessage);
     }
+    // retrieve created message ID
+    int messageID = static_cast<int>(sqlite3_last_insert_rowid(db));
 
     // free memory
     sqlite3_free(sqlError);
-    return true;
+    return messageID;
 }
 
 bool dbWinGame(int playerID, int gameID)

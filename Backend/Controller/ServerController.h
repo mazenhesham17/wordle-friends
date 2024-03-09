@@ -6,6 +6,7 @@
 #include <httplib.h>
 #include <jsoncons/json.hpp>
 #include "AuthenticationController.h"
+#include "ChatController.h"
 #include "SocketController.h"
 #include "ResponseController.h"
 #include "TokenController.h"
@@ -22,6 +23,7 @@
 #include "../Session/Session.h"
 #include "../Session/SingleGameSession.h"
 #include "../Session/DuoGameSession.h"
+#include "../Session/ChatSession.h"
 
 class ServerController
 {
@@ -30,6 +32,7 @@ class ServerController
     AdminAPI *adminAPI;
     PlayerAPI *playerAPI;
     GameController *gameController;
+    ChatController *chatController;
     ResponseController *responseController;
     PlayerController *playerController;
     RoomController *roomController;
@@ -63,6 +66,12 @@ class ServerController
     void GetSearch(const httplib::Request &req, httplib::Response &res);
 
     void PostAddFriend(const httplib::Request &req, httplib::Response &res);
+
+    void GetChat(const httplib::Request &req, httplib::Response &res);
+
+    void GetChatRoom(const httplib::Request &req, httplib::Response &res);
+
+    void PostStartChat(const httplib::Request &req, httplib::Response &res);
 
     void requests(httplib::Server &server);
 

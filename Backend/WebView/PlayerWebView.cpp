@@ -46,7 +46,10 @@ PlayerWebView::playersFriendView(const std::vector<std::pair<int, std::pair<std:
     {
         playersView += friendView(player.second.first, player.second.second, player.first) + ",";
     }
-    playersView.pop_back();
+    if (!players.empty())
+    {
+        playersView.pop_back();
+    }
     playersView += "]}";
     return playersView;
 }
@@ -59,7 +62,10 @@ PlayerWebView::playersSearchView(const std::vector<std::pair<std::pair<int, int>
     {
         playersView += searchView(player.second.first, player.second.second, player.first.first, player.first.second) + ",";
     }
-    playersView.pop_back();
+    if (!players.empty())
+    {
+        playersView.pop_back();
+    }
     playersView += "]}";
     return playersView;
 }
