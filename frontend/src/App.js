@@ -1,24 +1,24 @@
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
-import HomePage from './Page/HomePage';
-import LoginPage from './Page/LoginPage';
-import Profile from './Page/ProfilePage';
-import RegisterPage from './Page/RegisterPage';
-import SingleGamePage from './Page/SingleGamePage';
-import Dashboard from './Page/Dashboard';
-import DuoGamePage from './Page/DuoGamePage';
-import JoinRoom from './Page/JoinRoom';
-import ChatPage from './Page/ChatPage';
-import SearchPage from './Page/SearchPage';
+import HomePage from './Pages/HomePage';
+import Profile from './Pages/ProfilePage';
+import SingleGamePage from './Pages/SingleGamePage';
+import Dashboard from './Pages/Dashboard';
+import DuoGamePage from './Pages/DuoGamePage';
+import JoinRoom from './Pages/JoinRoom';
+import ChatPage from './Pages/ChatPage';
+import SearchPage from './Pages/SearchPage';
+import LoginForm from './Components/LoginForm';
+import RegistrationForm from './Components/RegistrationForm';
 
 function App() {
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={<LoginForm />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/register" element={<RegistrationForm />} />
         <Route path="/single-game" element={<SingleGamePage />} />
         <Route path="/duo-game/:urlRoomID?" element={<DuoGamePage />} />
         <Route path="/join-room" element={<JoinRoom />} />

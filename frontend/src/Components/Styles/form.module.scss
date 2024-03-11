@@ -1,0 +1,64 @@
+$primary-color: #B1B2FF;
+$secondary-color: #AAC4FF;
+
+.section {
+    background-color: $primary-color;
+    color: white;
+    width: 400px;
+    height: 550px;
+    margin: auto;
+    border-radius: 12px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+
+    form {
+        padding: 40px;
+
+        h1 {
+            text-align: left;
+            font-weight: normal;
+            font-size: 28px;
+            margin-bottom: 0 0 50px 0;
+        }
+    }
+
+    div {
+        a {
+            font-size: 0.9rem;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    button {
+        margin-top: 20px;
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 8px;
+        background-color: $secondary-color;
+        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+        color: white;
+        font-size: 1.2rem;
+        height: 40px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: darken($secondary-color, 20%);
+        }
+    }
+}
+
+.center {
+    display: flex;
+    align-items: center;
+    height: 90vh;
+}
+
+.row{
+    display: flex;
+    gap: 10px;
+}

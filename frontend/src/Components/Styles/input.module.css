@@ -1,0 +1,33 @@
+.section {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  border: none;
+  padding: 0px;
+  margin: 0 0 10px 0;
+}
+.section label {
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 2px;
+  padding-left: 2px;
+}
+.section input {
+  background: rgba(255, 255, 255, 0.3);
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  margin-bottom: 5px;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  padding-left: 2px;
+}
+.error input {
+  border-color: red;
+}/*# sourceMappingURL=input.module.css.map */

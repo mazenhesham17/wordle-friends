@@ -1,0 +1,53 @@
+.section {
+  background-color: #B1B2FF;
+  color: white;
+  width: 400px;
+  height: 550px;
+  margin: auto;
+  border-radius: 12px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+.section form {
+  padding: 40px;
+}
+.section form h1 {
+  text-align: left;
+  font-weight: normal;
+  font-size: 28px;
+  margin-bottom: 0 0 50px 0;
+}
+.section div a {
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+.section div a:hover {
+  text-decoration: underline;
+}
+.section button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background-color: #AAC4FF;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+  color: white;
+  font-size: 1.2rem;
+  height: 40px;
+  cursor: pointer;
+}
+.section button:hover {
+  background-color: #447dff;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  height: 90vh;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+}/*# sourceMappingURL=form.module.css.map */
