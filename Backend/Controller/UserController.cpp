@@ -31,6 +31,26 @@ User UserController::retrieveUserFromDB(const int &userID)
     return user;
 }
 
+std::string UserController::getUsername(const User &user)
+{
+    return user.getUsername();
+}
+
+std::string UserController::getEmail(const User &user)
+{
+    return user.getEmail();
+}
+
+std::string UserController::getFirstName(const User &user)
+{
+    return user.getFirstName();
+}
+
+std::string UserController::getLastName(const User &user)
+{
+    return user.getLastName();
+}
+
 int UserController::addUser(const User &user)
 {
     return addPlayer(user.getUsername().c_str(),
@@ -40,7 +60,12 @@ int UserController::addUser(const User &user)
                      user.getPassword().c_str());
 }
 
-std::string UserController::successfulAddition(const int &userID)
+bool UserController::isUsernameExist(const User &user)
 {
-    return R"({"userID":")" + std::to_string(userID) + R"("})";
+    return dbIsUsernameExist(user.getUsername());
+}
+
+bool UserController::isEmailExist(const User &user)
+{
+    return dbIsEmailExist(user.getEmail());
 }

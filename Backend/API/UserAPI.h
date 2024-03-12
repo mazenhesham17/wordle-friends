@@ -1,6 +1,7 @@
 #ifndef BACKEND_USERAPI_H
 #define BACKEND_USERAPI_H
 
+#include <regex>
 #include "../Database/dml.h"
 #include "../Database/dql.h"
 #include "../Controller/ResponseController.h"
@@ -16,6 +17,7 @@ class UserAPI
 {
     static UserAPI *instance;
     ResponseController *responseController;
+    UserController *userController;
     UserAPI();
 
 public:

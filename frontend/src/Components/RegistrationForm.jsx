@@ -26,14 +26,14 @@ export const RegistrationForm = () => {
             .max(30, 'Username must be at most 30 characters long'),
         email: Yup.string()
             .required('This field is required')
-            .email('Invalid email address').matches(/^[\w._-]+@[\w.]+\.[\w]{2,4}$/),
+            .matches(/^[\w._-]+@[\w.]+\.[\w]{2,4}$/, 'Invalid email address'),
         password: Yup.string()
             .required('This field is required')
             .min(5, 'Password must be at least 5 characters long')
     })
     const submit = async (data) => {
         const hashedPassword = await hashPassword(data.password);
-        const response = await fetch('http://localhost:4000/register', {
+        const response = await fetch('http://localhost:4000/api/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -76,10 +76,9 @@ export const RegistrationForm = () => {
                             <Form>
                                 <h1>LOG IN</h1>
                                 <div className={styles.row} >
-                                <InputField label="First Name" name="firstName" type="text" />
-                                <InputField label="Last Name" name="lastName" type="text" />
+                                    <InputField label="First Name" name="firstName" type="text" />
+                                    <InputField label="Last Name" name="lastName" type="text" />
                                 </div>
-                                
                                 <InputField label="Username" name="username" type="text" />
                                 <InputField label="Email" name="email" type="email" />
                                 <InputField label="Password" name="password" type="password" />

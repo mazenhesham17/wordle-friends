@@ -5,6 +5,7 @@ UserAPI *UserAPI::instance = nullptr;
 UserAPI::UserAPI()
 {
     responseController = ResponseController::getInstance();
+    userController = UserController::getInstance();
 }
 
 UserAPI *UserAPI::getInstance()
@@ -17,13 +18,24 @@ UserAPI *UserAPI::getInstance()
 Response UserAPI::login(const std::string &identifier, const std::string &password)
 {
     int resCode;
-    if (identifier.find('@') != -1)
+    std::regex emailRegex(R"(^[\w._-]+@[\w.]+\.[\w]{2,4}$)");
+    if (std::regex_match(identifier, emailRegex))
     {
         resCode = checkPasswordByEmailAddress(identifier, password);
     }
     else
     {
-        resCode = checkPasswordByUsername(identifier, password);
+        std::regex usernameRegex(R"(^[\w_]{3,30}$)");
+        if (std::regex_match(identifier, usernameRegex))
+        {
+            resCode = checkPasswordByUsername(identifier, password);
+        }
+        else
+        {
+            Response response;
+            responseController->setFailure(response, "Invalid email or username");
+            return response;
+        }
     }
     Response response;
     if (resCode == -1)
@@ -47,11 +59,41 @@ Response UserAPI::login(const std::string &identifier, const std::string &passwo
 Response UserAPI::registerUser(const User &user)
 {
     Response response;
-    if (isUsernameExist(user.getUsername()))
+    if (userController->getFirstName(user).size() < 3)
+    {
+        responseController->setFailure(response, "first name is too short");
+        return response;
+    }
+    else if (userController->getLastName(user).size() < 3)
+    {
+        responseController->setFailure(response, "last name is too short");
+        return response;
+    }
+    else if (userController->getUsername(user).size() < 3)
+    {
+        responseController->setFailure(response, "username is too short");
+        return response;
+    }
+    else if (userController->getUsername(user).size() > 30)
+    {
+        responseController->setFailure(response, "username is too long");
+        return response;
+    }
+    else
+    {
+        std::regex emailRegex(R"(^[\w._-]+@[\w.]+\.[\w]{2,4}$)");
+        if (!std::regex_match(userController->getEmail(user), emailRegex))
+        {
+            responseController->setFailure(response, "invalid email");
+            return response;
+        }
+    }
+
+    if (userController->isUsernameExist(user))
     {
         responseController->setFailure(response, "username already exist");
     }
-    else if (isEmailExist(user.getEmail()))
+    else if (userController->isEmailExist(user))
     {
         responseController->setFailure(response, "email already exist");
     }
@@ -59,7 +101,9 @@ Response UserAPI::registerUser(const User &user)
     {
         UserController *userController = UserController::getInstance();
         int userID = userController->addUser(user);
-        responseController->setSuccess(response, userController->successfulAddition(userID));
+        int userType = getUserTypeByUserID(userID);
+        TokenController *tokenController = TokenController::getInstance();
+        responseController->setSuccess(response, tokenController->createToken(userID, userType));
     }
     return response;
 }

@@ -811,7 +811,7 @@ int getTotalPlayersCount()
     return totalPlayersCount;
 }
 
-bool isUsernameExist(const std::string &username)
+bool dbIsUsernameExist(const std::string &username)
 {
     // prepare query
     char query[QUERY_SIZE];
@@ -844,7 +844,7 @@ bool isUsernameExist(const std::string &username)
     return false;
 }
 
-bool isEmailExist(const std::string &email)
+bool dbIsEmailExist(const std::string &email)
 {
     // prepare query
     char query[QUERY_SIZE];

@@ -408,10 +408,10 @@ void ServerController::requests(httplib::Server &server)
         res.set_header("Access-Control-Allow-Headers", "Content-Type , Authorization");
         res.status = 204; });
 
-    server.Post("/register", [&](const httplib::Request &req, httplib::Response &res)
+    server.Post("/api/register", [&](const httplib::Request &req, httplib::Response &res)
                 { PostRegister(req, res); });
 
-    server.Post("/login", [&](const httplib::Request &req, httplib::Response &res)
+    server.Post("/api/login", [&](const httplib::Request &req, httplib::Response &res)
                 { PostLogin(req, res); });
 
     server.Get("/info", [&](const httplib::Request &req, httplib::Response &res)

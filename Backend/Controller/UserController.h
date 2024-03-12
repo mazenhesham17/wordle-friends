@@ -19,9 +19,19 @@ public:
 
     User retrieveUserFromDB(const int &userID);
 
+    std::string getUsername(const User &user);
+
+    std::string getEmail(const User &user);
+
+    std::string getFirstName(const User &user);
+
+    std::string getLastName(const User &user);
+
     int addUser(const User &user);
 
-    std::string successfulAddition(const int &userID);
+    bool isUsernameExist(const User &user);
+
+    bool isEmailExist(const User &user);
 };
 
 #endif // BACKEND_USERCONTROLLER_H

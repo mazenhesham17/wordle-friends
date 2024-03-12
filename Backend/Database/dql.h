@@ -53,9 +53,9 @@ int getTotalWinsCount();
 
 int getTotalPlayersCount();
 
-bool isUsernameExist(const std::string &username);
+bool dbIsUsernameExist(const std::string &username);
 
-bool isEmailExist(const std::string &email);
+bool dbIsEmailExist(const std::string &email);
 
 bool isUserExist(int userID);
 
