@@ -9,7 +9,7 @@ TokenWebView *TokenWebView::getInstance()
     return instance;
 }
 
-std::string TokenWebView::token(const std::string &token)
+std::string TokenWebView::token(const std::string &token, const std::string &userType)
 {
-    return R"( {"token": ")" + token + R"("})";
+    return R"( {"token": ")" + token + R"(", "userType" : ")" + userType + R"("})";
 }

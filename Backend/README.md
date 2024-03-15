@@ -27,7 +27,8 @@ Response Example
 
 ```json
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJpc3MiOiJzZXJ2ZXIiLCJ1c2VySUQiOiIxIiwidXNlclR5cGUiOiJhZG1pbiJ9.qPwyN_FJ06KBq0fF0e8ocsCy7vHEF9LhS1kpwHnObgw"
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJpc3MiOiJzZXJ2ZXIiLCJ1c2VySUQiOiIxIiwidXNlclR5cGUiOiJhZG1pbiJ9.qPwyN_FJ06KBq0fF0e8ocsCy7vHEF9LhS1kpwHnObgw",
+  "userType": "admin"
 }
 ```
 
@@ -62,6 +63,88 @@ Response Example
 
 ```json
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJpc3MiOiJzZXJ2ZXIiLCJ1c2VySUQiOiIxIiwidXNlclR5cGUiOiJhZG1pbiJ9.qPwyN_FJ06KBq0fF0e8ocsCy7vHEF9LhS1kpwHnObgw"
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJpc3MiOiJzZXJ2ZXIiLCJ1c2VySUQiOiIxIiwidXNlclR5cGUiOiJhZG1pbiJ9.qPwyN_FJ06KBq0fF0e8ocsCy7vHEF9LhS1kpwHnObgw",
+  "userType": "player"
 }
+```
+
+### User info
+
+GET `/api/info`
+
+Example
+
+```
+GET /api/info
+Authorization: <token>
+```
+
+**Authorization header is required**
+
+Response Example
+
+```json
+{
+  "username": "mazen",
+  "firstName": "Mazen",
+  "lastName": "Hesham",
+  "userType": "Player"
+}
+```
+
+## Player
+
+### Search by username
+
+GET `/api/search/:query`
+
+Example
+
+```
+GET /api/search/a
+Authorization: <token>
+```
+
+**Authorization header is required**
+
+Response Example
+
+```json
+{
+  "players": [
+    {
+      "firstName": "hazem",
+      "lastName": "adel",
+      "username": "hazem",
+      "playerID": 3,
+      "isFriend": 1
+    },
+    {
+      "firstName": "abdelrahman",
+      "lastName": "gamal",
+      "username": "gamal",
+      "playerID": 5,
+      "isFriend": 1
+    }
+  ]
+}
+```
+
+### Add friend
+
+POST `api/add-friend/:friendID`
+
+Example
+
+```
+POST /api/add-friend/5
+Authorization: <token>
+```
+
+**Authorization header is required**
+
+Response Example
+
+```json
+{ "message": "success" }
 ```

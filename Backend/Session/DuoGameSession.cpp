@@ -27,18 +27,6 @@ void DuoGameSession::onRead(beast::error_code ec, std::size_t bytes_transferred)
         return;
     }
 
-    if (turnsLeft == 0)
-    {
-        send("You lose!");
-        if (roomController->getFinishedSessionsCount(roomID) == 2)
-        {
-            gameController->endGame(gameID);
-            roomController->endAllSessions(roomID);
-            roomController->closeRoom(roomID);
-        }
-        return;
-    }
-
     std::string message = beast::buffers_to_string(buffer.data());
 
     std::string result = gameController->submitGuess(message, gameID);
@@ -65,6 +53,18 @@ void DuoGameSession::onRead(beast::error_code ec, std::size_t bytes_transferred)
     oldTemplate = opponentResult.substr(opponentResult.find(':') + 2);
 
     turnsLeft--;
+
+    if (turnsLeft == 0)
+    {
+        send("You lose!");
+        if (roomController->getFinishedSessionsCount(roomID) == 2)
+        {
+            gameController->endGame(gameID);
+            roomController->endAllSessions(roomID);
+            roomController->closeRoom(roomID);
+        }
+        return;
+    }
 
     asyncReceive();
 }

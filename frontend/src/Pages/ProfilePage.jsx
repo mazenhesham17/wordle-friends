@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { hashPassword } from '../Util/encryption';
+import { useDispatch } from 'react-redux';
+import { chageTitle, changePage } from '../State/pageSlice';
 
 export const Profile = () => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(changePage('profile'));
+        dispatch(chageTitle('My profile'));
+    }, [])
+
     const [data, setData] = useState({});
     const [change, setChange] = useState({
         email: false,

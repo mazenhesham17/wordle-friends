@@ -1,19 +1,20 @@
-import React, { useState } from 'react'
-import FilteredList from '../Components/FilteredList';
+import React, { useEffect } from 'react'
+import FilteredList from '../Components/Search/FilteredList';
+import { useDispatch } from 'react-redux';
+import { changePage } from '../State/pageSlice';
+import { changeQuery } from '../State/searchSlice';
+
 
 export const SearchPage = () => {
-    const [query, setQuery] = useState('');
-
-    const updateQuery = (e) => {
-        setQuery(e.target.value);
-    }
-
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(changePage('search'));
+        return () => {
+            dispatch(changeQuery(''))
+        }
+    }, [])
     return (
-        <>
-            <div>SearchPage</div>
-            <input type="text" value={query} onChange={updateQuery} placeholder='search by username' />
-            <FilteredList query={query} />
-        </>
+        <FilteredList />
     )
 }
 

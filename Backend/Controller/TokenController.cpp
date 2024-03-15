@@ -19,7 +19,7 @@ std::string TokenController::createToken(int userID, int userType)
                      .set_payload_claim("userID", jwt::claim(std::to_string(userID)))
                      .set_payload_claim("userType", jwt::claim(std::string(userType == 0 ? "admin" : "player")))
                      .sign(jwt::algorithm::hs256{SECRET_KEY});
-    return TokenWebView::getInstance()->token(token);
+    return TokenWebView::getInstance()->token(token, userType == 0 ? "admin" : "player");
 }
 
 bool TokenController::verifyToken(const std::string &token)

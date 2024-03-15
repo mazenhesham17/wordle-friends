@@ -51,6 +51,15 @@ std::string UserController::getLastName(const User &user)
     return user.getLastName();
 }
 
+std::string UserController::info(const User &user)
+{
+
+    return UserWebView::getInstance()->userInfo(user.getUsername(),
+                                                user.getFirstName(),
+                                                user.getLastName(),
+                                                user.getUserType() == 0 ? "admin" : "player");
+}
+
 int UserController::addUser(const User &user)
 {
     return addPlayer(user.getUsername().c_str(),

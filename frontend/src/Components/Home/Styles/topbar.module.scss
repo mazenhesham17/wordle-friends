@@ -1,0 +1,18 @@
+$primary-color: #B1B2FF;
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+
+    h1 {
+        margin: 0;
+        font-weight: 500;
+        color: $primary-color;
+    }
+}

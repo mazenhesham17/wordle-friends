@@ -31,6 +31,11 @@ bool PlayerController::addFriend(const int &playerID, const int &friendID)
     return dbAddFriend(playerID, friendID);
 }
 
+bool PlayerController::isUserIDExist(const int &userID)
+{
+    return isUserExist(userID);
+}
+
 bool PlayerController::isFriend(const int &playerID, const int &friendID)
 {
     return dbIsFriend(playerID, friendID);
@@ -60,12 +65,12 @@ std::string PlayerController::friends(const int &playerID)
 std::string PlayerController::search(const int &playerID, const std::string &partialUsername)
 {
     auto playersID = getPlayersListByPartialUsername(partialUsername);
-    std::vector<std::pair<std::pair<int, int>, std::pair<std::string, std::string>>> players;
+    std::vector<std::tuple<std::string, std::string, std::string, int, int>> players;
     for (auto &friendID : playersID)
     {
         if (friendID == playerID)
             continue;
-        players.push_back(std::make_pair(std::make_pair(friendID, !isFriend(playerID, friendID)), std::make_pair(getFirstNameByUserID(friendID), getLastNameByUserID(friendID))));
+        players.emplace_back(getUsernameByUserID(friendID), getFirstNameByUserID(friendID), getLastNameByUserID(friendID), friendID, isFriend(playerID, friendID));
     }
     return playerWebView->playersSearchView(players);
 }

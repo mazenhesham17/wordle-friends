@@ -79,6 +79,8 @@ add_executable(
         WebView/ChatWebView.h
         Session/ChatSession.cpp
         Session/ChatSession.h
+        WebView/UserWebView.cpp
+        WebView/UserWebView.h
 )
 
 add_executable(

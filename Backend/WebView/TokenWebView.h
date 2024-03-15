@@ -12,7 +12,7 @@ class TokenWebView
 public:
     static TokenWebView *getInstance();
 
-    std::string token(const std::string &token);
+    std::string token(const std::string &token, const std::string &userType);
 };
 
 #endif // BACKEND_TOKENWEBVIEW_H

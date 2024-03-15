@@ -2,6 +2,7 @@
 #define BACKEND_PLAYERCONTROLLER_H
 
 #include <string>
+#include <tuple>
 #include <vector>
 #include "BaseController.h"
 #include "../Database/dml.h"
@@ -34,6 +35,8 @@ public:
     bool addFriend(const int &playerID, const int &friendID);
 
     bool isFriend(const int &playerID, const int &friendID);
+
+    bool isUserIDExist(const int &userID);
 
     bool updatePlayer(const int &playerID, const std::string &field, const std::string &value);
 };

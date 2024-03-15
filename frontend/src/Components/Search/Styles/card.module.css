@@ -1,0 +1,56 @@
+.container {
+  display: flex;
+  background-color: white;
+  margin: 0px 10px 10px 10px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  padding: 10px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+}
+.column h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+.column h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #D9D9D9;
+}
+
+.avatar {
+  color: white;
+  margin: 10px 10px 10px 0;
+}
+
+.button {
+  display: flex;
+  color: white;
+  align-items: center;
+  text-transform: capitalize;
+  background-color: #B1B2FF;
+  width: -moz-fit-content;
+  width: fit-content;
+  border-radius: 6px;
+  padding: 5px;
+}
+.button p {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.add {
+  background-color: #00FF38;
+}
+
+.add:hover {
+  cursor: pointer;
+}/*# sourceMappingURL=card.module.css.map */

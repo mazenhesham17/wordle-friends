@@ -30,10 +30,10 @@ PlayerWebView::friendView(const std::string &firstName, const std::string &lastN
 }
 
 std::string
-PlayerWebView::searchView(const std::string &firstName, const std::string &lastName,
+PlayerWebView::searchView(const std::string &username, const std::string &firstName, const std::string &lastName,
                           const int &playerID, const bool &isFriend)
 {
-    std::string searchView = R"({ "name": ")" + firstName + " " + lastName + R"(", "playerID": )" + std::to_string(playerID) +
+    std::string searchView = R"({ "firstName": ")" + firstName + R"(", "lastName" : ")" + lastName + R"(", "username": ")" + username + R"(", "playerID": )" + std::to_string(playerID) +
                              R"(, "isFriend": )" + std::to_string(isFriend) + R"(})";
     return searchView;
 }
@@ -55,12 +55,12 @@ PlayerWebView::playersFriendView(const std::vector<std::pair<int, std::pair<std:
 }
 
 std::string
-PlayerWebView::playersSearchView(const std::vector<std::pair<std::pair<int, int>, std::pair<std::string, std::string>>> &players)
+PlayerWebView::playersSearchView(const std::vector<std::tuple<std::string, std::string, std::string, int, int>> &players)
 {
     std::string playersView = R"({ "players": [)";
     for (auto &player : players)
     {
-        playersView += searchView(player.second.first, player.second.second, player.first.first, player.first.second) + ",";
+        playersView += searchView(std::get<0>(player), std::get<1>(player), std::get<2>(player), std::get<3>(player), std::get<4>(player)) + ",";
     }
     if (!players.empty())
     {

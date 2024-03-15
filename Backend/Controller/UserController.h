@@ -5,6 +5,7 @@
 #include "../Database/dml.h"
 #include "../Database/dql.h"
 #include "../Model/User.h"
+#include "../WebView/UserWebView.h"
 
 class UserController
 {
@@ -28,6 +29,8 @@ public:
     std::string getLastName(const User &user);
 
     int addUser(const User &user);
+
+    std::string info(const User &user);
 
     bool isUsernameExist(const User &user);
 

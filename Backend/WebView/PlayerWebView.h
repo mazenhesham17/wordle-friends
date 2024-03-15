@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <tuple>
 
 class PlayerWebView
 {
@@ -18,12 +19,12 @@ public:
 
     std::string friendView(const std::string &firstName, const std::string &lastName, const int &playerID);
 
-    std::string searchView(const std::string &firstName, const std::string &lastName,
+    std::string searchView(const std::string &username, const std::string &firstName, const std::string &lastName,
                            const int &playerID, const bool &isFriend);
 
     std::string playersFriendView(const std::vector<std::pair<int, std::pair<std::string, std::string>>> &players);
 
-    std::string playersSearchView(const std::vector<std::pair<std::pair<int, int>, std::pair<std::string, std::string>>> &players);
+    std::string playersSearchView(const std::vector<std::tuple<std::string, std::string, std::string, int, int>> &players);
 };
 
 #endif // BACKEND_PLAYERWEBVIEW_H

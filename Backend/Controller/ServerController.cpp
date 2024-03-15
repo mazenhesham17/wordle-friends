@@ -76,14 +76,18 @@ void ServerController::GetInfo(const httplib::Request &req, httplib::Response &r
 {
     std::cout << "Info request of type GET received on thread : " << std::this_thread::get_id() << std::endl;
     std::string token = req.get_header_value("Authorization");
+    Response response;
     if (!authenticationController->isAuthenticatedUser(token))
     {
+        responseController->setFailure(response, "Unauthorized");
+        res.set_content(responseController->getJson(response), "application/json");
         res.status = 401;
         return;
     }
+    int userID = tokenController->getUserID(token);
+    User user = userController->retrieveUserFromDB(userID);
 
-    int userType = tokenController->getUserType(token);
-    Response response = userAPI->info(userType);
+    response = userAPI->info(user);
     res.set_content(responseController->getJson(response), "application/json");
 }
 
@@ -264,15 +268,18 @@ void ServerController::GetSearch(const httplib::Request &req, httplib::Response 
 {
     std::cout << "Search request of type GET received on thread : " << std::this_thread::get_id() << std::endl;
     std::string token = req.get_header_value("Authorization");
+    Response response;
     if (!authenticationController->isAuthenticatedPlayer(token))
     {
+        responseController->setFailure(response, "Unauthorized");
+        res.set_content(responseController->getJson(response), "application/json");
         res.status = 401;
         return;
     }
 
     int userID = tokenController->getUserID(token);
     std::string query = req.path_params.at("query");
-    Response response = playerAPI->search(userID, query);
+    response = playerAPI->search(userID, query);
     res.set_content(responseController->getJson(response), "application/json");
 }
 
@@ -280,15 +287,23 @@ void ServerController::PostAddFriend(const httplib::Request &req, httplib::Respo
 {
     std::cout << "Add friend request of type POST received on thread : " << std::this_thread::get_id() << std::endl;
     std::string token = req.get_header_value("Authorization");
+    Response response;
     if (!authenticationController->isAuthenticatedPlayer(token))
     {
+        responseController->setFailure(response, "Unauthorized");
+        res.set_content(responseController->getJson(response), "application/json");
         res.status = 401;
         return;
     }
 
     int userID = tokenController->getUserID(token);
     int friendID = std::stoi(req.path_params.at("friendID"));
-    Response response;
+    if (!playerController->isUserIDExist(friendID))
+    {
+        responseController->setFailure(response, "there is no user with this ID");
+        res.set_content(responseController->getJson(response), "application/json");
+        return;
+    }
     if (userID == friendID)
     {
         responseController->setFailure(response, "you can't add yourself as a friend");
@@ -414,7 +429,7 @@ void ServerController::requests(httplib::Server &server)
     server.Post("/api/login", [&](const httplib::Request &req, httplib::Response &res)
                 { PostLogin(req, res); });
 
-    server.Get("/info", [&](const httplib::Request &req, httplib::Response &res)
+    server.Get("/api/info", [&](const httplib::Request &req, httplib::Response &res)
                { GetInfo(req, res); });
 
     server.Get("/dashboard", [&](const httplib::Request &req, httplib::Response &res)
@@ -438,10 +453,10 @@ void ServerController::requests(httplib::Server &server)
     server.Get("/friends", [&](const httplib::Request &req, httplib::Response &res)
                { GetFriends(req, res); });
 
-    server.Get("/search/:query", [&](const httplib::Request &req, httplib::Response &res)
+    server.Get("/api/search/:query", [&](const httplib::Request &req, httplib::Response &res)
                { GetSearch(req, res); });
 
-    server.Post("/add-friend/:friendID", [&](const httplib::Request &req, httplib::Response &res)
+    server.Post("/api/add-friend/:friendID", [&](const httplib::Request &req, httplib::Response &res)
                 { PostAddFriend(req, res); });
 
     // return roomID for the chat

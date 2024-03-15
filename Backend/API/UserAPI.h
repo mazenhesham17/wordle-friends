@@ -27,7 +27,7 @@ public:
 
     Response registerUser(const User &user);
 
-    Response info(const int &userType);
+    Response info(const User &user);
 };
 
 #endif // BACKEND_USERAPI_H

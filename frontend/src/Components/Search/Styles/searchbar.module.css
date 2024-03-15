@@ -1,0 +1,17 @@
+.container {
+  position: relative;
+}
+.container input {
+  width: 400px;
+  background-color: rgba(238, 241, 255, 0.7);
+  border: none;
+  font-size: 20px;
+  line-height: 36px;
+  border-radius: 8px;
+  padding-right: 36px;
+}
+.container .searchIcon {
+  position: absolute;
+  top: 0;
+  right: 0;
+}/*# sourceMappingURL=searchbar.module.css.map */

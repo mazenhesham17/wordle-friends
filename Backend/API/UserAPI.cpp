@@ -99,7 +99,6 @@ Response UserAPI::registerUser(const User &user)
     }
     else
     {
-        UserController *userController = UserController::getInstance();
         int userID = userController->addUser(user);
         int userType = getUserTypeByUserID(userID);
         TokenController *tokenController = TokenController::getInstance();
@@ -108,19 +107,9 @@ Response UserAPI::registerUser(const User &user)
     return response;
 }
 
-Response UserAPI::info(const int &userType)
+Response UserAPI::info(const User &user)
 {
     Response response;
-    std::string userTypeStr = R"({ "userType": ")";
-    if (userType == 0)
-    {
-        userTypeStr += "admin";
-    }
-    else
-    {
-        userTypeStr += "player";
-    }
-    userTypeStr += R"("})";
-    responseController->setSuccess(response, userTypeStr);
+    responseController->setSuccess(response, userController->info(user));
     return response;
 }
