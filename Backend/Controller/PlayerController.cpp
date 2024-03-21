@@ -23,7 +23,13 @@ std::string PlayerController::profile(const User *user)
 {
     Player player = createPlayer(user);
     return playerWebView->profile(player.getUsername(), player.getFirstName(), player.getLastName(),
-                                  player.getEmail(), player.getWins(), player.getGames());
+                                  player.getEmail());
+}
+
+std::string PlayerController::games(const int &playerID)
+{
+    auto gamesDetails = getGamesByUserID(playerID);
+    return playerWebView->games(gamesDetails);
 }
 
 bool PlayerController::addFriend(const int &playerID, const int &friendID)
@@ -46,20 +52,15 @@ bool PlayerController::updatePlayer(const int &playerID, const std::string &fiel
     return updatePlayerField(playerID, field.c_str(), value.c_str());
 }
 
-std::string PlayerController::friendView(const int &playerID)
-{
-    return playerWebView->friendView(getFirstNameByUserID(playerID), getLastNameByUserID(playerID), playerID);
-}
-
-std::string PlayerController::friends(const int &playerID)
+std::string PlayerController::profileFriends(const int &playerID)
 {
     auto friends = getFriendListByUserID(playerID);
-    std::vector<std::pair<int, std::pair<std::string, std::string>>> players;
+    std::vector<std::pair<std::string, std::string>> players;
     for (auto &friendID : friends)
     {
-        players.push_back(std::make_pair(friendID, std::make_pair(getFirstNameByUserID(friendID), getLastNameByUserID(friendID))));
+        players.emplace_back(getFirstNameByUserID(friendID), getLastNameByUserID(friendID));
     }
-    return playerWebView->playersFriendView(players);
+    return playerWebView->playersFriendProfileView(players);
 }
 
 std::string PlayerController::search(const int &playerID, const std::string &partialUsername)

@@ -1,0 +1,31 @@
+.container {
+  background-color: white;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  width: -moz-max-content;
+  width: max-content;
+  min-height: 450px;
+}
+
+h1 {
+  margin: 0;
+  font-weight: 500;
+  color: #B1B2FF;
+}
+
+.chart {
+  margin: 10px;
+  height: 300px;
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  padding: 10px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}/*# sourceMappingURL=chart.module.css.map */

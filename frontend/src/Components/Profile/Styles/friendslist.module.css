@@ -1,0 +1,26 @@
+.container {
+  background-color: white;
+  min-height: 150px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.group {
+  width: 100%;
+  padding: 10px;
+}
+
+.avatar {
+  color: white;
+  border: none;
+}
+
+.row {
+  display: flex;
+  padding: 10px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}/*# sourceMappingURL=friendslist.module.css.map */

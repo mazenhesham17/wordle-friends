@@ -41,6 +41,13 @@
   background-color: #447dff;
 }
 
+.heading {
+  background-color: #EEF1FF;
+  margin: 10px;
+  padding: 5px;
+  border-radius: 4px;
+}
+
 .center {
   display: flex;
   justify-content: center;
@@ -52,4 +59,39 @@
 .row {
   display: flex;
   gap: 10px;
+}
+
+.form_update {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.button {
+  width: calc(100% - 20px);
+  margin: 10px;
+  padding: 10px;
+  border: none;
+  font-size: 20px;
+  border-radius: 8px;
+  background-color: #B1B2FF;
+  color: white;
+  cursor: pointer;
+}
+.button:hover {
+  background-color: #A3A4FF;
+}
+
+.save {
+  background-color: #00FF00;
+}
+.save:hover {
+  background-color: #00CC00;
+}
+
+.cancel {
+  background-color: #FF0000;
+}
+.cancel:hover {
+  background-color: #CC0000;
 }/*# sourceMappingURL=form.module.css.map */

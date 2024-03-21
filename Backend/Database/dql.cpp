@@ -642,6 +642,55 @@ std::vector<int> getPlayersListByPartialUsername(const std::string &partialUsern
     return playersList;
 }
 
+std::vector<std::tuple<std::string, int, int>> getGamesByUserID(int userID)
+{
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( 
+                SELECT 
+                    createDate,
+                    SUM(CASE WHEN winnerID = User.userID THEN 1 ELSE 0 END) AS wins,
+                    SUM(CASE WHEN winnerID IS NULL OR winnerID <> User.userID  THEN 1 ELSE 0 END) AS loses
+                FROM 
+                    Game
+                INNER JOIN 
+                    GamePlayers ON Game.gameID = GamePlayers.gameID
+                INNER JOIN 
+                    User ON GamePlayers.playerID = User.userID
+                WHERE 
+                    User.userID = %d
+                GROUP BY 
+                    createDate; )",
+             userID);
+
+    // prepare statement
+    sqlite3_stmt *stmt;
+    int resultCode = sqlite3_prepare_v2(db, query, -1, &stmt, nullptr);
+    if (resultCode != SQLITE_OK)
+    {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage),
+                 R"(There was an error getting games.\n
+                    Error: %s )",
+                 sqlite3_errmsg(db));
+        throw std::runtime_error(errorMessage);
+    }
+
+    std::vector<std::tuple<std::string, int, int>> games;
+
+    while (sqlite3_step(stmt) == SQLITE_ROW)
+    {
+        std::string dateAndTime = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0));
+        int wins = sqlite3_column_int(stmt, 1);
+        int loses = sqlite3_column_int(stmt, 2);
+        games.push_back(std::make_tuple(dateAndTime, wins, loses));
+    }
+    sqlite3_finalize(stmt);
+
+    return games;
+}
+
 int getGamesCountByUserID(int userID)
 {
     // prepare query

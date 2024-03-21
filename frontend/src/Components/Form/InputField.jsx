@@ -3,10 +3,10 @@ import { useField } from 'formik';
 import styles from './Styles/input.module.css';
 
 
-export const InputField = (props) => {
+export const InputField = ({ isUpdate = false, ...props }) => {
     const [field, meta] = useField(props);
     return (
-        <fieldset className={styles.section}>
+        <fieldset className={`${styles.section} ${isUpdate ? styles.update : ''} `}>
             <label htmlFor={props.id || props.name} >
                 {props.label}
             </label>

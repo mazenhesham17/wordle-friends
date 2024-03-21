@@ -11,21 +11,47 @@ PlayerWebView *PlayerWebView::getInstance()
 
 std::string
 PlayerWebView::profile(const std::string &username, const std::string &firstName, const std::string &lastName,
-                       const std::string &email, const int &wins, const int &games)
+                       const std::string &email)
 {
     std::string profile = R"({
         "username": ")" + username +
                           R"(","firstName": ")" + firstName + R"(","lastName": ")" + lastName + R"(","email": ")" +
-                          email + R"(","wins": )" + std::to_string(wins) + R"(,"games": )" + std::to_string(games) +
-                          R"(, "userType" : "player"})";
+                          email + R"(", "userType" : "player"})";
     return profile;
 }
 
 std::string
-PlayerWebView::friendView(const std::string &firstName, const std::string &lastName, const int &playerID)
+PlayerWebView::games(const std::vector<std::tuple<std::string, int, int>> &gamesDetails)
 {
-    std::string friendView = R"({ "name": ")" + firstName + " " + lastName + R"(", "playerID": )" + std::to_string(playerID) +
+    std::string gamesView = R"({ "games": [)";
+    for (auto &game : gamesDetails)
+    {
+        gamesView += R"({ "Date": ")" + std::get<0>(game) + R"(", "wins": )" + std::to_string(std::get<1>(game)) +
+                     R"(, "loses": )" + std::to_string(std::get<2>(game)) + R"(},)";
+    }
+    if (!gamesDetails.empty())
+    {
+        gamesView.pop_back();
+    }
+    gamesView += "]}";
+    return gamesView;
+}
+
+std::string
+PlayerWebView::friendChatView(const std::string &firstName, const std::string &lastName, const std::string &lastMessage, const int &playerID)
+{
+    std::string friendView = R"({ "firstName": ")" + firstName + R"(", "lastName" : ")" + lastName + R"(", "lastMessage" : )" + lastMessage + R"(, "playerID": )" + std::to_string(playerID) +
                              R"(})";
+    return friendView;
+}
+
+std::string
+PlayerWebView::friendProfileView(const std::string &firstName, const std::string &lastName)
+{
+    std::string label;
+    label += std::toupper(firstName[0]);
+    label += std::toupper(lastName[0]);
+    std::string friendView = R"({ "label": ")" + label + R"("})";
     return friendView;
 }
 
@@ -39,14 +65,14 @@ PlayerWebView::searchView(const std::string &username, const std::string &firstN
 }
 
 std::string
-PlayerWebView::playersFriendView(const std::vector<std::pair<int, std::pair<std::string, std::string>>> &players)
+PlayerWebView::playersFriendProfileView(const std::vector<std::pair<std::string, std::string>> &friends)
 {
-    std::string playersView = R"({ "players": [)";
-    for (auto &player : players)
+    std::string playersView = R"({ "friends": [)";
+    for (auto &player : friends)
     {
-        playersView += friendView(player.second.first, player.second.second, player.first) + ",";
+        playersView += friendProfileView(player.first, player.second) + ",";
     }
-    if (!players.empty())
+    if (!friends.empty())
     {
         playersView.pop_back();
     }

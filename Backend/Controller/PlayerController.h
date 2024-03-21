@@ -24,9 +24,9 @@ public:
 
     std::string profile(const User *user) override;
 
-    std::string friendView(const int &playerID);
+    std::string games(const int &playerID);
 
-    std::string friends(const int &playerID);
+    std::string profileFriends(const int &playerID);
 
     std::string search(const int &playerID, const std::string &partialUsername);
 

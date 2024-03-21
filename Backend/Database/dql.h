@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstring>
 #include <vector>
+#include <tuple>
 #include <sqlite3.h>
 #include "constants.h"
 
@@ -42,6 +43,8 @@ std::vector<int> getChatListByChatID(int chatID);
 std::vector<int> getFriendListByUserID(int userID);
 
 std::vector<int> getPlayersListByPartialUsername(const std::string &partialUsername);
+
+std::vector<std::tuple<std::string, int, int>> getGamesByUserID(int userID);
 
 int getGamesCountByUserID(int userID);
 

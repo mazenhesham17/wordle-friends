@@ -148,3 +148,134 @@ Response Example
 ```json
 { "message": "success" }
 ```
+
+### Update profile info
+
+PUT `/api/profile/personal-info`
+
+The request body needs to be in JSON format and include the following properties:
+
+- `firstName` - String - Optional
+- `lastName` - String - Optional
+- `email` - String - Optional
+- `password` - String - Optional
+
+Example
+
+```
+PUT /api/profile/personal-info
+{
+    "lastName" : "moatasem"
+}
+Authorization : <token>
+```
+
+**Authorization header is required**
+
+Response Example
+
+```json
+{
+  "username": "mazen",
+  "firstName": "mazen",
+  "lastName": "moatasem",
+  "email": "mazen@lgh.com",
+  "userType": "player"
+}
+```
+
+### Get personal info
+
+GET `/api/profile/personal-info`
+
+Example
+
+```
+GET /api/profile/personal-info
+Authorization: <token>
+```
+
+**Authorization header is required**
+
+Response Example
+
+```json
+{
+  "username": "mazen",
+  "firstName": "mazen",
+  "lastName": "hesham",
+  "email": "mazen@lgh.com",
+  "userType": "player"
+}
+```
+
+### Get games info
+
+GET `/api/profile/games-info`
+
+Example
+
+```
+GET /api/profile/games-info
+Authorization: <token>
+```
+
+**Authorization header is required**
+
+Response Example
+
+```json
+{
+  "games": [
+    {
+      "Date": "2024-03-08",
+      "wins": 1,
+      "loses": 1
+    },
+    {
+      "Date": "2024-03-09",
+      "wins": 1,
+      "loses": 4
+    },
+    {
+      "Date": "2024-03-12",
+      "wins": 0,
+      "loses": 3
+    }
+  ]
+}
+```
+
+### Get friends
+
+GET `/api/profile/friends`
+
+Example
+
+```
+GET /api/profile/friends
+Authorization : <token>
+```
+
+**Authorization header is required**
+
+Response Example
+
+```json
+{
+  "friends": [
+    {
+      "label": "HA"
+    },
+    {
+      "label": "SS"
+    },
+    {
+      "label": "AG"
+    },
+    {
+      "label": "MH"
+    }
+  ]
+}
+```

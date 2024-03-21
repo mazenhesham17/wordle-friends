@@ -30,4 +30,19 @@
 }
 .error input {
   border-color: red;
+}
+
+.update {
+  margin: 10px;
+}
+.update label {
+  text-transform: uppercase;
+  font-size: 16px;
+  letter-spacing: 2px;
+  padding-left: 2px;
+  color: #D9D9D9;
+}
+.update input {
+  background: #EEF1FF;
+  color: unset;
 }/*# sourceMappingURL=input.module.css.map */

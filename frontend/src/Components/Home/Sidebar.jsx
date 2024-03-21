@@ -9,7 +9,7 @@ export const Sidebar = () => {
         return null;
     return (
         <aside className={styles.list} >
-            <div>
+            <div className={styles.title} >
                 <h1>Wordle</h1>
                 <h1>Friends</h1>
             </div>

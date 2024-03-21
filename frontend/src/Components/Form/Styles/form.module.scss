@@ -52,6 +52,15 @@ $secondary-color: #AAC4FF;
     }
 }
 
+
+.heading {
+    background-color: #EEF1FF;
+    margin: 10px;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+
 .center {
     display: flex;
     justify-content: center;
@@ -63,4 +72,42 @@ $secondary-color: #AAC4FF;
 .row {
     display: flex;
     gap: 10px;
+}
+
+.form_update {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.button {
+    width: calc(100% - 20px);
+    margin: 10px;
+    padding: 10px;
+    border: none;
+    font-size: 20px;
+    border-radius: 8px;
+    background-color: $primary-color;
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #A3A4FF;
+    }
+}
+
+.save {
+    background-color: #00FF00;
+
+    &:hover {
+        background-color: #00CC00;
+    }
+}
+
+.cancel {
+    background-color: #FF0000;
+
+    &:hover {
+        background-color: #CC0000;
+    }
 }

@@ -199,15 +199,17 @@ void ServerController::GetProfile(const httplib::Request &req, httplib::Response
 {
     std::cout << "Profile request of type GET received on thread : " << std::this_thread::get_id() << std::endl;
     std::string token = req.get_header_value("Authorization");
+    Response response;
     if (!authenticationController->isAuthenticatedUser(token))
     {
+        responseController->setFailure(response, "Unauthorized");
+        res.set_content(responseController->getJson(response), "application/json");
         res.status = 401;
         return;
     }
     int userID = tokenController->getUserID(token);
     int userType = tokenController->getUserType(token);
     User *user;
-    Response response;
     if (userType == 0)
     {
         user = new Admin(userController->retrieveUserFromDB(userID));
@@ -221,19 +223,40 @@ void ServerController::GetProfile(const httplib::Request &req, httplib::Response
     res.set_content(responseController->getJson(response), "application/json");
 }
 
+void ServerController::GetGames(const httplib::Request &req, httplib::Response &res)
+{
+    std::cout << "Game details request of type GET received on thread : " << std::this_thread::get_id() << std::endl;
+    std::string token = req.get_header_value("Authorization");
+    Response response;
+    if (!authenticationController->isAuthenticatedPlayer(token))
+    {
+        responseController->setFailure(response, "Unauthorized");
+        res.set_content(responseController->getJson(response), "application/json");
+        res.status = 401;
+        return;
+    }
+
+    int userID = tokenController->getUserID(token);
+    response = playerAPI->games(userID);
+    res.set_content(responseController->getJson(response), "application/json");
+}
+
 void ServerController::PutProfile(const httplib::Request &req, httplib::Response &res)
 {
     std::cout << "Profile request of type PUT received on thread : " << std::this_thread::get_id() << std::endl;
     std::string token = req.get_header_value("Authorization");
+    Response response;
     if (!authenticationController->isAuthenticatedUser(token))
     {
+        responseController->setFailure(response, "Unauthorized");
+        res.set_content(responseController->getJson(response), "application/json");
         res.status = 401;
         return;
     }
 
     int userID = tokenController->getUserID(token);
     jsoncons::json body = jsoncons::json::parse(req.body);
-    Response response;
+
     for (auto &element : body.object_range())
     {
         std::string key = element.key();
@@ -249,18 +272,21 @@ void ServerController::PutProfile(const httplib::Request &req, httplib::Response
     res.set_content(responseController->getJson(response), "application/json");
 }
 
-void ServerController::GetFriends(const httplib::Request &req, httplib::Response &res)
+void ServerController::GetFriendsProfile(const httplib::Request &req, httplib::Response &res)
 {
     std::cout << "Friends request of type GET received on thread : " << std::this_thread::get_id() << std::endl;
     std::string token = req.get_header_value("Authorization");
+    Response response;
     if (!authenticationController->isAuthenticatedPlayer(token))
     {
+        responseController->setFailure(response, "Unauthorized");
+        res.set_content(responseController->getJson(response), "application/json");
         res.status = 401;
         return;
     }
 
     int userID = tokenController->getUserID(token);
-    Response response = playerAPI->friends(userID);
+    response = playerAPI->profileFriends(userID);
     res.set_content(responseController->getJson(response), "application/json");
 }
 
@@ -319,6 +345,10 @@ void ServerController::PostAddFriend(const httplib::Request &req, httplib::Respo
 
     response = playerAPI->addFriend(userID, friendID);
     res.set_content(responseController->getJson(response), "application/json");
+}
+
+void ServerController::GetFriendsChat(const httplib::Request &req, httplib::Response &res)
+{
 }
 
 void ServerController::GetChat(const httplib::Request &req, httplib::Response &res)
@@ -444,20 +474,26 @@ void ServerController::requests(httplib::Server &server)
     server.Post("/start-game/:roomID", [&](const httplib::Request &req, httplib::Response &res)
                 { PostStartGame(req, res); });
 
-    server.Get("/profile", [&](const httplib::Request &req, httplib::Response &res)
+    server.Get("/api/profile/personal-info", [&](const httplib::Request &req, httplib::Response &res)
                { GetProfile(req, res); });
 
-    server.Put("/profile", [&](const httplib::Request &req, httplib::Response &res)
-               { PutProfile(req, res); });
+    server.Get("/api/profile/friends", [&](const httplib::Request &req, httplib::Response &res)
+               { GetFriendsProfile(req, res); });
 
-    server.Get("/friends", [&](const httplib::Request &req, httplib::Response &res)
-               { GetFriends(req, res); });
+    server.Get("/api/profile/games-info", [&](const httplib::Request &req, httplib::Response &res)
+               { GetGames(req, res); });
+
+    server.Put("/api/profile/personal-info", [&](const httplib::Request &req, httplib::Response &res)
+               { PutProfile(req, res); });
 
     server.Get("/api/search/:query", [&](const httplib::Request &req, httplib::Response &res)
                { GetSearch(req, res); });
 
     server.Post("/api/add-friend/:friendID", [&](const httplib::Request &req, httplib::Response &res)
                 { PostAddFriend(req, res); });
+
+    server.Get("/chat/friends", [&](const httplib::Request &req, httplib::Response &res)
+               { GetFriendsChat(req, res); });
 
     // return roomID for the chat
     server.Get("/chat/:chatID", [&](const httplib::Request &req, httplib::Response &res)

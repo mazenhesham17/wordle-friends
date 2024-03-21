@@ -15,14 +15,18 @@ public:
     static PlayerWebView *getInstance();
 
     std::string profile(const std::string &username, const std::string &firstName, const std::string &lastName,
-                        const std::string &email, const int &wins, const int &games);
+                        const std::string &email);
 
-    std::string friendView(const std::string &firstName, const std::string &lastName, const int &playerID);
+    std::string games(const std::vector<std::tuple<std::string, int, int>> &gamesDetails);
+
+    std::string friendProfileView(const std::string &firstName, const std::string &lastName);
+
+    std::string friendChatView(const std::string &firstName, const std::string &lastName, const std::string &lastMessage, const int &playerID);
 
     std::string searchView(const std::string &username, const std::string &firstName, const std::string &lastName,
                            const int &playerID, const bool &isFriend);
 
-    std::string playersFriendView(const std::vector<std::pair<int, std::pair<std::string, std::string>>> &players);
+    std::string playersFriendProfileView(const std::vector<std::pair<std::string, std::string>> &friends);
 
     std::string playersSearchView(const std::vector<std::tuple<std::string, std::string, std::string, int, int>> &players);
 };

@@ -6,11 +6,15 @@ import Profile from './Pages/ProfilePage';
 import Dashboard from './Pages/Dashboard';
 import ChatPage from './Pages/ChatPage';
 import SearchPage from './Pages/SearchPage';
-import LoginForm from './Components/Registeration/LoginForm';
-import RegistrationForm from './Components/Registeration/RegistrationForm';
+import LoginForm from './Components/Form/LoginForm';
+import RegistrationForm from './Components/Form/RegistrationForm';
 import Sidebar from './Components/Home/Sidebar';
 import Topbar from './Components/Home/Topbar';
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
 import { Toast } from 'primereact/toast';
+
 
 const FunctionContext = createContext();
 

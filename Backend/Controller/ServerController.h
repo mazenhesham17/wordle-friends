@@ -59,13 +59,17 @@ class ServerController
 
     void GetProfile(const httplib::Request &req, httplib::Response &res);
 
+    void GetGames(const httplib::Request &req, httplib::Response &res);
+
     void PutProfile(const httplib::Request &req, httplib::Response &res);
 
-    void GetFriends(const httplib::Request &req, httplib::Response &res);
+    void GetFriendsProfile(const httplib::Request &req, httplib::Response &res);
 
     void GetSearch(const httplib::Request &req, httplib::Response &res);
 
     void PostAddFriend(const httplib::Request &req, httplib::Response &res);
+
+    void GetFriendsChat(const httplib::Request &req, httplib::Response &res);
 
     void GetChat(const httplib::Request &req, httplib::Response &res);
 
