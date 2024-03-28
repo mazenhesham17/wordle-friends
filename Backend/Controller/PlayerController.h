@@ -26,6 +26,8 @@ public:
 
     std::string games(const int &playerID);
 
+    std::string gameView(const int &playerID);
+
     std::string profileFriends(const int &playerID);
 
     std::string search(const int &playerID, const std::string &partialUsername);

@@ -1,0 +1,81 @@
+$primary-color: #B1B2FF;
+
+.main_container {
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.container {
+    padding: 15px 5px;
+    width: fit-content;
+    min-height: fit-content;
+    height: 680px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+
+}
+
+.inner_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.row {
+    display: flex;
+
+
+    button {
+        background-color: $primary-color;
+        border: none;
+        font-weight: bold;
+        padding: 10px;
+        margin: 5px;
+        cursor: pointer;
+        color: white;
+        border-radius: 10px;
+
+        &:hover {
+            background-color: darken($primary-color, 10%);
+        }
+    }
+
+}
+
+
+
+.alert {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #EEF1FF;
+    font-weight: bold;
+    width: fit-content;
+    margin: 5px;
+    padding: 5px;
+    border-radius: 10px;
+
+    p {
+        margin: 0;
+        color: white;
+    }
+}
+
+
+
+div[state=win] {
+    background-color: #B1B2FF;
+}
+
+div[state=lose] {
+    background-color: #6e6fcc;
+}

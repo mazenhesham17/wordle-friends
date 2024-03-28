@@ -1,0 +1,92 @@
+$correct-color: #B1B2FF;
+$partial-correct-color: #6191ff;
+$incorrect-color: #6e6fcc;
+
+.container {
+    margin: 5px 0;
+    display: flex;
+    width: 100%;
+
+    span {
+        height: 60px;
+        width: 60px;
+        border-width: 2px;
+        border-style: solid;
+        color: #393e4c;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 5px;
+        font-size: 28px;
+        font-weight: bold;
+        text-transform: capitalize;
+        border-radius: 100%;
+    }
+
+    span[data-animation=flip] {
+        animation: flip 0.3s ease-in forwards;
+    }
+}
+
+
+.selected {
+    border-color: #a7adc0;
+    animation: select 0.3s ease forwards;
+}
+
+.unselected {
+    border-color: #f1f1f1;
+}
+
+
+.correct {
+    --background-color: #B1B2FF;
+}
+
+.incorrect {
+    --background-color: #6e6fcc;
+}
+
+.paritial_correct {
+    --background-color: #6191ff;
+}
+
+
+
+@keyframes select {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes flip {
+    0% {
+        transform: rotateY(0);
+    }
+
+    45% {
+        transform: rotateY(-90deg);
+    }
+
+    55% {
+        background-color: var(--background-color);
+        color: white;
+        border: unset;
+        transform: rotateY(-90deg);
+    }
+
+    100% {
+        background-color: var(--background-color);
+        color: white;
+        border: unset;
+        transform: rotateY(0);
+    }
+}

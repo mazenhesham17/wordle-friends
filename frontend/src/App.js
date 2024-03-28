@@ -14,6 +14,8 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import { Toast } from 'primereact/toast';
+import GamePage from './Pages/GamePage';
+import GameBoard from './Components/Game/GameBoard';
 
 
 const FunctionContext = createContext();
@@ -40,7 +42,9 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/chat" element={<ChatPage />} />
             <Route path="/search" element={<SearchPage />} />
-            <Route element={<h1>not found</h1>}/>
+            <Route path="/game" element={<GamePage />} />
+            <Route path="/game/:urlRoomID?" element={<GameBoard />} />
+            <Route element={<h1>Page not found</h1>} />
           </Routes>
         </div>
       </FunctionContext.Provider>

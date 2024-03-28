@@ -32,6 +32,11 @@ std::string PlayerController::games(const int &playerID)
     return playerWebView->games(gamesDetails);
 }
 
+std::string PlayerController::gameView(const int &playerID)
+{
+    return playerWebView->gameView(getFirstNameByUserID(playerID), getLastNameByUserID(playerID), getUsernameByUserID(playerID));
+}
+
 bool PlayerController::addFriend(const int &playerID, const int &friendID)
 {
     return dbAddFriend(playerID, friendID);

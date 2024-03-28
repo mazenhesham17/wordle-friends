@@ -66,14 +66,21 @@ void RoomController::addSession(const std::string &roomID, std::shared_ptr<Sessi
     getRoom(roomID).addSession(session, playerID);
 }
 
-void RoomController::broadcast(const std::string &message, const std::string &roomID, const int &playerID)
+void RoomController::broadcast(const std::string &message, const std::string &roomID, const int &playerID, const bool &sync)
 {
     Room &room = getRoom(roomID);
     for (auto &session : room.getSessions())
     {
         if (session->getPlayerID() != playerID)
         {
-            session->asyncSend(message);
+            if (sync)
+            {
+                session->send(message);
+            }
+            else
+            {
+                session->asyncSend(message);
+            }
         }
     }
 }

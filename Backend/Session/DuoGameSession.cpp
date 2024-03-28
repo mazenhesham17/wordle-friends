@@ -2,6 +2,7 @@
 #include "../Controller/GameController.h"
 #include "../Controller/RoomController.h"
 #include "../Controller/SocketController.h"
+#include "../Controller/PlayerController.h"
 
 DuoGameSession::DuoGameSession(tcp::socket &&socket, std::string roomID, int playerID)
     : GameSession(std::move(socket), roomID, playerID)
@@ -112,6 +113,8 @@ void DuoGameSession::launchSession()
         }
 
         gameController->startGame(gameID);
+
+        roomController->broadcast(PlayerController::getInstance()->gameView(playerID), roomID, playerID, true);
 
         send("Game started!");
 

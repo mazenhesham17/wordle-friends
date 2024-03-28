@@ -1,0 +1,40 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 400px;
+  height: 150px;
+  background-color: white;
+  border-radius: 10px;
+  margin: 10px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+.container input {
+  background: #EEF1FF;
+  font-size: 24px;
+  margin: 10px;
+  padding: 5px;
+  line-height: 30px;
+  border: none;
+  border-radius: 6px;
+  margin-bottom: 5px;
+}
+.container button {
+  width: -moz-fit-content;
+  width: fit-content;
+  background-color: #B1B2FF;
+  border: none;
+  font-size: 24px;
+  border-radius: 5px;
+  padding: 10px 50px;
+  margin: 10px;
+  cursor: pointer;
+  color: white;
+}
+.container button:hover {
+  background-color: #A1A2FF;
+}
+
+.right_align {
+  text-align: right;
+}/*# sourceMappingURL=joinbar.module.css.map */

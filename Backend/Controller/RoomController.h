@@ -38,7 +38,7 @@ public:
 
     void addSession(const std::string &roomID, std::shared_ptr<Session> &session, const int &playerID);
 
-    void broadcast(const std::string &message, const std::string &roomID, const int &playerID);
+    void broadcast(const std::string &message, const std::string &roomID, const int &playerID, const bool &sync = false);
 
     void chatBroadcast(const std::string &message, const std::string &roomID);
 

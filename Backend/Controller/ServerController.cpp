@@ -465,13 +465,13 @@ void ServerController::requests(httplib::Server &server)
     server.Get("/dashboard", [&](const httplib::Request &req, httplib::Response &res)
                { GetDashboard(req, res); });
 
-    server.Get("/check-room/:roomID", [&](const httplib::Request &req, httplib::Response &res)
+    server.Get("/api/game/check-room/:roomID", [&](const httplib::Request &req, httplib::Response &res)
                { GetCheckRoom(req, res); });
 
-    server.Post("/new-game/:type", [&](const httplib::Request &req, httplib::Response &res)
+    server.Post("/api/game/new/:type", [&](const httplib::Request &req, httplib::Response &res)
                 { PostNewGame(req, res); });
 
-    server.Post("/start-game/:roomID", [&](const httplib::Request &req, httplib::Response &res)
+    server.Post("/api/game/start/:roomID", [&](const httplib::Request &req, httplib::Response &res)
                 { PostStartGame(req, res); });
 
     server.Get("/api/profile/personal-info", [&](const httplib::Request &req, httplib::Response &res)

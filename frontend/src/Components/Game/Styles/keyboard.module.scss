@@ -1,0 +1,74 @@
+$correct-color: #B1B2FF;
+$partial-correct-color: #6191ff;
+$incorrect-color: #6e6fcc;
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.key {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    min-width: 40px;
+    width: fit-content;
+    padding: 5px;
+    height: 40px;
+    background-color: #EEF1FF;
+    border-radius: 4px;
+    margin: 3px;
+    cursor: pointer;
+    transition: transform 0.5s ease;
+}
+
+.key:not([state=none]) {
+    color: white;
+}
+
+.key[state=correct] {
+    background-color: $correct-color;
+}
+
+.key[state=incorrect] {
+    background-color: $incorrect-color;
+}
+
+.key[state=partial-correct] {
+    background-color: $partial-correct-color;
+}
+
+.key:hover {
+    background-color: #B1B2FF;
+    transform: scale(1.1);
+}
+
+.pressed {
+    animation: press 0.5s ease;
+}
+
+
+@keyframes press {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        background-color: #B1B2FF;
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}

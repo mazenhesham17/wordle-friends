@@ -279,3 +279,66 @@ Response Example
   ]
 }
 ```
+
+### Create new game
+
+POST `/api/game/new/:type`
+
+Example
+
+```
+POST /api/game/new/S
+Authorization : <token>
+```
+
+**Authorization header is required**
+
+Response Example
+
+```json
+{
+  "roomID": "2S11G11"
+}
+```
+
+### Start game
+
+POST `/api/game/start/:roomID`
+
+Example
+
+```
+POST /api/game/start/2D13G13
+Authorization : <token>
+```
+
+**Authorization header is required**
+
+Response Example
+
+```json
+{
+  "message": "success"
+}
+```
+
+### Check room
+
+GET `/api/game/check-room/:roomID`
+
+Example
+
+```
+GET /api/game/check-room/2D13G13
+Authorization: <token>
+```
+
+**Authorization header is required**
+
+Response Example
+
+```json
+{
+  "message": "success"
+}
+```

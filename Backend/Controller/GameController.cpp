@@ -60,7 +60,13 @@ void GameController::winGame(const int &gameId, const int &playerId)
 bool GameController::match(const std::string &guess, const int &gameId)
 {
     std::string word = getWordByGameID(gameId);
-    return word == guess;
+    std::string copyGuess = guess;
+    for (int i = 0; i < word.size(); i++)
+    {
+        word[i] = tolower(word[i]);
+        copyGuess[i] = tolower(copyGuess[i]);
+    }
+    return word == copyGuess;
 }
 
 void GameController::endGame(const int &gameId)

@@ -8,7 +8,6 @@ const authSlice = createSlice({
     reducers: {
         reduxLogin: (state, action) => {
             state.role = action.payload;
-            console.log(state.role);
         },
         reduxLogout: (state) => {
             state.role = null;

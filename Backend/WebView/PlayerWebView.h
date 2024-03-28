@@ -29,6 +29,8 @@ public:
     std::string playersFriendProfileView(const std::vector<std::pair<std::string, std::string>> &friends);
 
     std::string playersSearchView(const std::vector<std::tuple<std::string, std::string, std::string, int, int>> &players);
+
+    std::string gameView(const std::string &firstName, const std::string &lastName, const std::string &username);
 };
 
 #endif // BACKEND_PLAYERWEBVIEW_H

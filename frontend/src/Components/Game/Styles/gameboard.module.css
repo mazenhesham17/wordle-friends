@@ -1,0 +1,72 @@
+.main_container {
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.container {
+  padding: 15px 5px;
+  width: -moz-fit-content;
+  width: fit-content;
+  min-height: -moz-fit-content;
+  min-height: fit-content;
+  height: 680px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.inner_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.row {
+  display: flex;
+}
+.row button {
+  background-color: #B1B2FF;
+  border: none;
+  font-weight: bold;
+  padding: 10px;
+  margin: 5px;
+  cursor: pointer;
+  color: white;
+  border-radius: 10px;
+}
+.row button:hover {
+  background-color: #7e80ff;
+}
+
+.alert {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #EEF1FF;
+  font-weight: bold;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 10px;
+}
+.alert p {
+  margin: 0;
+  color: white;
+}
+
+div[state=win] {
+  background-color: #B1B2FF;
+}
+
+div[state=lose] {
+  background-color: #6e6fcc;
+}/*# sourceMappingURL=gameboard.module.css.map */

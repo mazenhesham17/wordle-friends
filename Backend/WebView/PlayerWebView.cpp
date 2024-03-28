@@ -95,3 +95,10 @@ PlayerWebView::playersSearchView(const std::vector<std::tuple<std::string, std::
     playersView += "]}";
     return playersView;
 }
+
+std::string
+PlayerWebView::gameView(const std::string &firstName, const std::string &lastName, const std::string &username)
+{
+    std::string gameView = R"({ "firstName": ")" + firstName + R"(", "lastName" : ")" + lastName + R"(", "username": ")" + username + R"("})";
+    return gameView;
+}
