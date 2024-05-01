@@ -265,6 +265,32 @@ int addMessageToChat(int senderID, int chatID, const char *content)
     return messageID;
 }
 
+bool dbReadChat(int chatID, int playerID)
+{
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( UPDATE Message SET readStatus = 1 WHERE chatID = %d AND senderID != %d ; )", chatID, playerID);
+
+    // execute query
+    char *sqlError;
+    int resultCode = sqlite3_exec(db, query, nullptr, nullptr, &sqlError);
+    if (resultCode != SQLITE_OK)
+    {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage), "There was an error reading chat #%d.\nError: %s",
+                 chatID, sqlError);
+
+        // free memory
+        sqlite3_free(sqlError);
+        throw std::runtime_error(errorMessage);
+    }
+
+    // free memory
+    sqlite3_free(sqlError);
+    return true;
+}
+
 bool dbWinGame(int playerID, int gameID)
 {
     // prepare query

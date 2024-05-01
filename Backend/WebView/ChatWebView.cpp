@@ -19,7 +19,7 @@ std::string ChatWebView::message(const int &playerID, const std::string &message
 
 std::string ChatWebView::getChat(const std::vector<std::pair<int, std::pair<std::string, std::string>>> &messages)
 {
-    std::string chatView = R"([)";
+    std::string chatView = R"({"messages" : [)";
     for (auto &msg : messages)
     {
         chatView += message(msg.first, msg.second.first, msg.second.second) + ",";
@@ -28,6 +28,6 @@ std::string ChatWebView::getChat(const std::vector<std::pair<int, std::pair<std:
     {
         chatView.pop_back();
     }
-    chatView += "]";
+    chatView += "]}";
     return chatView;
 }

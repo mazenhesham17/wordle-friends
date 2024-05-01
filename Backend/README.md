@@ -342,3 +342,132 @@ Response Example
   "message": "success"
 }
 ```
+
+### Enable Chat Notifications
+
+POST `/api/chat/notifications`
+
+Example
+
+```
+POST /api/chat/notifications
+Authorization: <token>
+```
+
+**Authorization header is required**
+
+Response Example
+
+```json
+{
+  "message": "success"
+}
+```
+
+### Get Friends List for chat
+
+GET `/api/chat/friends`
+
+Example
+
+```
+GET /api/chat/friends
+Authorization: <token>
+```
+
+**Authorization header is required**
+
+Response Example
+
+```json
+{
+  "friends": [
+    {
+      "firstName": "seif",
+      "lastName": "samir",
+      "read": 1,
+      "friendID": 4
+    },
+    {
+      "firstName": "hazem",
+      "lastName": "adel",
+      "read": 0,
+      "friendID": 3
+    }
+  ]
+}
+```
+
+### Get roomID for chat
+
+GET `/api/chat/room/:friendID`
+
+Example
+
+```
+GET /api/chat/room/3
+Authorization: <token>
+```
+
+**Authorization header is required**
+
+Response Example
+
+```json
+{
+  "roomID": "2F3C1"
+}
+```
+
+### Get Chat Messages
+
+GET `/api/chat/:chatID`
+
+Example
+
+```
+GET /api/chat/1
+Authorization: <token>
+```
+
+**Authorization header is required**
+
+Response Example
+
+```json
+{
+  "messages": [
+    {
+      "message": "hello",
+      "playerID": "2",
+      "sendTime": "2024-04-30 00:49:25"
+    },
+    {
+      "message": "welcome",
+      "playerID": "3",
+      "sendTime": "2024-04-30 01:32:13"
+    }
+  ]
+}
+```
+
+### Start Chat session
+
+POST `/api/chat/start/:roomID`
+
+Example
+
+```
+POST /api/chat/start/2F3C1
+Authorization: <token>
+```
+
+**Authorization header is required**
+
+Response Example
+
+```json
+{
+  "message": "success"
+}
+```

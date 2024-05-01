@@ -36,6 +36,9 @@ bool addPlayerToChat(int playerID, int chatID);
 // add message to chat
 int addMessageToChat(int senderID, int chatID, const char *content);
 
+// read chat
+bool dbReadChat(int chatID, int playerID);
+
 // win game
 bool dbWinGame(int playerID, int gameID);
 

@@ -610,6 +610,47 @@ std::vector<int> getFriendListByUserID(int userID)
     return friendList;
 }
 
+std::vector<int> getOrderedFriendListByUserID(int userID)
+{
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( SELECT CASE
+                            WHEN senderID != %d THEN senderID
+                            ELSE acceptorID
+                        END AS friendID 
+                FROM Friends
+                WHERE (senderID == %d OR acceptorID == %d)
+                ORDER BY
+                ( SELECT MAX(dateAndTime)
+                FROM Message
+                WHERE chatID = ( SELECT chatID
+                FROM PlayerChats
+                WHERE playerID == friendID )
+                ) DESC, friendID ASC; )",
+             userID, userID, userID);
+    // prepare statement
+    sqlite3_stmt *stmt;
+    int resultCode = sqlite3_prepare_v2(db, query, -1, &stmt, nullptr);
+    if (resultCode != SQLITE_OK)
+    {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage),
+                 R"(There was an error getting friends list.\n
+                    Error: %s )",
+                 sqlite3_errmsg(db));
+        throw std::runtime_error(errorMessage);
+    }
+
+    std::vector<int> friendsList;
+    while (sqlite3_step(stmt) == SQLITE_ROW)
+    {
+        friendsList.push_back(sqlite3_column_int(stmt, 0));
+    }
+    sqlite3_finalize(stmt);
+    return friendsList;
+}
+
 std::vector<int> getPlayersListByPartialUsername(const std::string &partialUsername)
 {
     // prepare query
@@ -625,7 +666,39 @@ std::vector<int> getPlayersListByPartialUsername(const std::string &partialUsern
     {
         char errorMessage[ERROR_SIZE];
         snprintf(errorMessage, sizeof(errorMessage),
-                 R"(There was an error getting for players list.\n
+                 R"(There was an error getting players list.\n
+                    Error: %s )",
+                 sqlite3_errmsg(db));
+        throw std::runtime_error(errorMessage);
+    }
+
+    std::vector<int> playersList;
+
+    while (sqlite3_step(stmt) == SQLITE_ROW)
+    {
+        playersList.push_back(sqlite3_column_int(stmt, 0));
+    }
+    sqlite3_finalize(stmt);
+
+    return playersList;
+}
+
+std::vector<int> getPlayersListByChatID(int chatID)
+{
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( SELECT playerID FROM PlayerChats WHERE chatID = %d )", chatID);
+
+    // prepare statement
+    sqlite3_stmt *stmt;
+    int resultCode = sqlite3_prepare_v2(db, query, -1, &stmt, nullptr);
+
+    if (resultCode != SQLITE_OK)
+    {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage),
+                 R"(There was an error getting players list.\n
                     Error: %s )",
                  sqlite3_errmsg(db));
         throw std::runtime_error(errorMessage);
@@ -689,6 +762,46 @@ std::vector<std::tuple<std::string, int, int>> getGamesByUserID(int userID)
     sqlite3_finalize(stmt);
 
     return games;
+}
+
+int getLastMessageStatusByUsersID(int playerID, int friendID)
+{
+    int chatID = getChatIDByPlayerID(playerID, friendID);
+    if (chatID == -1)
+    {
+        return -1; // Chat not found
+    }
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( SELECT readStatus FROM Message WHERE chatID = %d AND senderID != %d ORDER BY messageID DESC LIMIT 1 )", chatID, playerID);
+
+    // prepare statement
+    sqlite3_stmt *stmt;
+    int resultCode = sqlite3_prepare_v2(db, query, -1, &stmt, nullptr);
+
+    if (resultCode != SQLITE_OK)
+    {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage),
+                 R"(There was an error getting last message status.\n
+                    Error: %s )",
+                 sqlite3_errmsg(db));
+        throw std::runtime_error(errorMessage);
+    }
+
+    int status = -1;
+    if (sqlite3_step(stmt) == SQLITE_ROW)
+    {
+        status = sqlite3_column_int(stmt, 0);
+    }
+    else if (sqlite3_step(stmt) == SQLITE_DONE)
+    {
+        return -1; // Message not found
+    }
+    sqlite3_finalize(stmt);
+
+    return status;
 }
 
 int getGamesCountByUserID(int userID)

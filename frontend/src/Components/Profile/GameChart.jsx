@@ -3,7 +3,7 @@ import { Chart } from 'primereact/chart';
 import { FunctionContext } from '../../App';
 import styles from './Styles/chart.module.css';
 import { lastNelements } from '../../Util/array';
-import { monthName } from '../../Util/mappingDate';
+import { monthName } from '../../Util/date';
 
 export const GameChart = () => {
     const token = localStorage.getItem('token');

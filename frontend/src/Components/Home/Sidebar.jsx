@@ -2,6 +2,7 @@ import React from 'react'
 import styles from './Styles/sidebar.module.css';
 import SideBarIcon from './SideBarIcon';
 import { useSelector } from 'react-redux';
+import NotificationIcon from './NotificationIcon';
 
 export const Sidebar = () => {
     const userType = useSelector(state => state.auth.role);
@@ -15,7 +16,7 @@ export const Sidebar = () => {
             </div>
             <SideBarIcon name='user' title='profile' />
             <SideBarIcon name='joystick' title='game' />
-            <SideBarIcon name='conversation' title='chat' />
+            <NotificationIcon name='conversation' title='chat' />
             <SideBarIcon name='search' title='search' />
         </aside>
     )

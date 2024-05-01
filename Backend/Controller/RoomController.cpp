@@ -22,6 +22,19 @@ std::string RoomController::createGameRoom(const int &playerID, const int &gameI
     return RoomWebView::getInstance()->room(roomID);
 }
 
+std::string RoomController::createNotificationRoom(const int &playerID)
+{
+    std::string roomID = notificationRoomName(playerID);
+    Room room(roomID, 1);
+    roomContainer.addRoom(room);
+    return RoomWebView::getInstance()->room(roomID);
+}
+
+std::string RoomController::notificationRoomName(const int &playerID)
+{
+    return std::to_string(playerID) + "N";
+}
+
 std::string RoomController::chatRoomName(int playerID, int friendID)
 {
     if (playerID > friendID)
@@ -85,7 +98,7 @@ void RoomController::broadcast(const std::string &message, const std::string &ro
     }
 }
 
-void RoomController::chatBroadcast(const std::string &message, const std::string &roomID)
+void RoomController::chatBroadcast(const std::string &message, const std::string &roomID, const int &playerID)
 {
     Room &room = getRoom(roomID);
     for (auto &session : room.getSessions())
@@ -93,6 +106,29 @@ void RoomController::chatBroadcast(const std::string &message, const std::string
         if (session->isConnected())
         {
             session->asyncSend(message);
+        }
+    }
+}
+
+void RoomController::chatNotify(const int &chatID, const int &playerID)
+{
+    std::vector<int> players = getPlayersListByChatID(chatID);
+    for (auto &ID : players)
+    {
+        if (playerID != ID)
+        {
+            std::string roomName = notificationRoomName(ID);
+            if (isRoomExist(roomName))
+            {
+                for (auto &session : getRoom(roomName).getSessions())
+                {
+                    if (session->isConnected())
+                    {
+                        std::string message = "P : " + std::to_string(playerID);
+                        session->asyncSend(message);
+                    }
+                }
+            }
         }
     }
 }

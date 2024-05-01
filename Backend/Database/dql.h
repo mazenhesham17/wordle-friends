@@ -42,9 +42,15 @@ std::vector<int> getChatListByChatID(int chatID);
 
 std::vector<int> getFriendListByUserID(int userID);
 
+std::vector<int> getOrderedFriendListByUserID(int userID);
+
 std::vector<int> getPlayersListByPartialUsername(const std::string &partialUsername);
 
+std::vector<int> getPlayersListByChatID(int chatID);
+
 std::vector<std::tuple<std::string, int, int>> getGamesByUserID(int userID);
+
+int getLastMessageStatusByUsersID(int playerID, int friendID);
 
 int getGamesCountByUserID(int userID);
 

@@ -25,9 +25,19 @@ void ChatSession::onRead(beast::error_code ec, std::size_t bytes_transferred)
 
     std::string message = beast::buffers_to_string(buffer.data());
 
-    std::string messageView = chatController->addMessage(playerID, chatID, message);
+    if (message == "$M$W%B%")
+    {
+        // seen message
+        chatController->readChat(chatID, playerID);
+    }
+    else
+    {
 
-    roomController->chatBroadcast(messageView, roomID);
+        std::string messageView = chatController->addMessage(playerID, chatID, message);
+
+        roomController->chatBroadcast(messageView, roomID, playerID);
+        roomController->chatNotify(chatID, playerID);
+    }
 
     asyncReceive();
 }

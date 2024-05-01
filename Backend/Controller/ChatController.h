@@ -21,7 +21,8 @@ public:
     bool isChatExist(const int &chatID);
     bool isPlayerInChat(const int &chatID, const int &playerID);
     Message retrieveMessageFromDB(const int &messageID);
-    std::string getChat(const int &chatID);
+    std::string getChat(const int &chatID, const int &playerID);
+    void readChat(const int &chatID, const int &playerID);
     int getChatID(const int &playerID, const int &friendID);
     int getChatID(const std::string &roomID);
     int addChat(const int &playerID, const int &friendID);

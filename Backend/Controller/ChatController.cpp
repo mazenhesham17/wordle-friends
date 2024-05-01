@@ -44,7 +44,7 @@ Message ChatController::retrieveMessageFromDB(const int &messageID)
     return message;
 }
 
-std::string ChatController::getChat(const int &chatID)
+std::string ChatController::getChat(const int &chatID, const int &playerID)
 {
     std::vector<std::pair<int, std::pair<std::string, std::string>>> messages;
     std::vector<int> messageIDs = getChatListByChatID(chatID);
@@ -56,12 +56,18 @@ std::string ChatController::getChat(const int &chatID)
     try
     {
         std::string chat = chatWebView->getChat(messages);
+        readChat(chatID, playerID);
     }
     catch (const std::exception &e)
     {
         std::cerr << "Exception error :" << e.what() << std::endl;
     }
     return ChatWebView::getInstance()->getChat(messages);
+}
+
+void ChatController::readChat(const int &chatID, const int &playerID)
+{
+    dbReadChat(chatID, playerID);
 }
 
 int ChatController::getChatID(const int &playerID, const int &friendID)

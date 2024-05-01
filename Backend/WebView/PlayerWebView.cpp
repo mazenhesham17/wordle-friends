@@ -38,9 +38,9 @@ PlayerWebView::games(const std::vector<std::tuple<std::string, int, int>> &games
 }
 
 std::string
-PlayerWebView::friendChatView(const std::string &firstName, const std::string &lastName, const std::string &lastMessage, const int &playerID)
+PlayerWebView::friendChatView(const std::string &firstName, const std::string &lastName, const int &status, const int &playerID)
 {
-    std::string friendView = R"({ "firstName": ")" + firstName + R"(", "lastName" : ")" + lastName + R"(", "lastMessage" : )" + lastMessage + R"(, "playerID": )" + std::to_string(playerID) +
+    std::string friendView = R"({ "firstName": ")" + firstName + R"(", "lastName" : ")" + lastName + R"(", "read" : )" + std::to_string(status) + R"(, "friendID": )" + std::to_string(playerID) +
                              R"(})";
     return friendView;
 }
@@ -89,6 +89,22 @@ PlayerWebView::playersSearchView(const std::vector<std::tuple<std::string, std::
         playersView += searchView(std::get<0>(player), std::get<1>(player), std::get<2>(player), std::get<3>(player), std::get<4>(player)) + ",";
     }
     if (!players.empty())
+    {
+        playersView.pop_back();
+    }
+    playersView += "]}";
+    return playersView;
+}
+
+std::string
+PlayerWebView::friendsChatView(const std::vector<std::tuple<std::string, std::string, int, int>> &friends)
+{
+    std::string playersView = R"({ "friends": [)";
+    for (auto &player : friends)
+    {
+        playersView += friendChatView(std::get<0>(player), std::get<1>(player), std::get<2>(player), std::get<3>(player)) + ",";
+    }
+    if (!friends.empty())
     {
         playersView.pop_back();
     }

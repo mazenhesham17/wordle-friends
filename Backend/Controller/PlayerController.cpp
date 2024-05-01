@@ -68,6 +68,23 @@ std::string PlayerController::profileFriends(const int &playerID)
     return playerWebView->playersFriendProfileView(players);
 }
 
+std::string PlayerController::chatFriends(const int &playerID)
+{
+    auto friends = getOrderedFriendListByUserID(playerID);
+    std::vector<std::tuple<std::string, std::string, int, int>> players;
+    for (auto &friendID : friends)
+    {
+        int lastMessageStatus = getLastMessageStatusByUsersID(playerID, friendID);
+        if (lastMessageStatus == -1)
+        {
+            // No chat history or last message is sent from the player
+            lastMessageStatus = 1;
+        }
+        players.emplace_back(getFirstNameByUserID(friendID), getLastNameByUserID(friendID), lastMessageStatus, friendID);
+    }
+    return playerWebView->friendsChatView(players);
+}
+
 std::string PlayerController::search(const int &playerID, const std::string &partialUsername)
 {
     auto playersID = getPlayersListByPartialUsername(partialUsername);

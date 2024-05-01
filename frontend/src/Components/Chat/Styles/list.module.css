@@ -1,0 +1,49 @@
+.container {
+  width: 300px;
+  background-color: white;
+  height: 90vh;
+  margin: 0 10px;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.container p {
+  margin: 0;
+  font-size: 20px;
+}
+
+.empty {
+  color: #D9D9D9;
+  padding: 10px;
+}
+
+.title {
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 10px;
+  border-bottom: 2px dashed #D9D9D9;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border-bottom: 2px dashed #D9D9D9;
+}
+
+.card:last-child {
+  border-bottom: none;
+}
+
+.card:hover {
+  cursor: pointer;
+}
+
+.avatar {
+  color: white;
+  margin-right: 10px;
+}
+
+.unread {
+  font-weight: bold;
+}/*# sourceMappingURL=list.module.css.map */

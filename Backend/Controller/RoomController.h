@@ -32,6 +32,10 @@ public:
 
     std::string createChatRoom(const int &playerID, const int &friendID);
 
+    std::string createNotificationRoom(const int &playerID);
+
+    std::string notificationRoomName(const int &playerID);
+
     bool isRoomExist(const std::string &roomID);
 
     bool isRoomFull(const std::string &roomID);
@@ -40,7 +44,9 @@ public:
 
     void broadcast(const std::string &message, const std::string &roomID, const int &playerID, const bool &sync = false);
 
-    void chatBroadcast(const std::string &message, const std::string &roomID);
+    void chatBroadcast(const std::string &message, const std::string &roomID, const int &playerID);
+
+    void chatNotify(const int &chatID, const int &playerID);
 
     void blockRoom(const std::string &roomID);
 

@@ -27,7 +27,7 @@ ServerController *ServerController::getInstance()
     return instance;
 }
 
-void ServerController::connectSocketAndLaunchGameSession(const std::string &roomID, int playerID)
+void ServerController::connectSocketAndLaunchSession(const std::string &roomID, int playerID)
 {
     tcp::socket socket{socketController->getIOContext()};
     socketController->connectSocket(socket);
@@ -46,6 +46,16 @@ void ServerController::connectSocketAndLaunchGameSession(const std::string &room
     {
         // chat room
         session = std::make_shared<ChatSession>(std::move(socket), roomID, playerID);
+    }
+    else if (roomID.find('N') != -1)
+    {
+        // notification room
+        session = std::make_shared<NotificationSession>(std::move(socket), roomID, playerID);
+    }
+    else
+    {
+        // room not found
+        return;
     }
     roomController->addSession(roomID, session, playerID);
     session->launchSession();
@@ -191,7 +201,7 @@ void ServerController::PostStartGame(const httplib::Request &req, httplib::Respo
         res.set_content(responseController->getJson(response), "application/json");
         return;
     }
-    std::thread(&ServerController::connectSocketAndLaunchGameSession, this, roomID, playerID).detach();
+    std::thread(&ServerController::connectSocketAndLaunchSession, this, roomID, playerID).detach();
     res.set_content(responseController->success(), "application/json");
 }
 
@@ -274,7 +284,7 @@ void ServerController::PutProfile(const httplib::Request &req, httplib::Response
 
 void ServerController::GetFriendsProfile(const httplib::Request &req, httplib::Response &res)
 {
-    std::cout << "Friends request of type GET received on thread : " << std::this_thread::get_id() << std::endl;
+    std::cout << "Friends profile request of type GET received on thread : " << std::this_thread::get_id() << std::endl;
     std::string token = req.get_header_value("Authorization");
     Response response;
     if (!authenticationController->isAuthenticatedPlayer(token))
@@ -347,8 +357,45 @@ void ServerController::PostAddFriend(const httplib::Request &req, httplib::Respo
     res.set_content(responseController->getJson(response), "application/json");
 }
 
+void ServerController::PostNotification(const httplib::Request &req, httplib::Response &res)
+{
+    std::cout << "Notification request of type POST received on thread : " << std::this_thread::get_id() << std::endl;
+    std::string token = req.get_header_value("Authorization");
+    Response response;
+    if (!authenticationController->isAuthenticatedPlayer(token))
+    {
+        responseController->setFailure(response, "Unauthorized");
+        res.set_content(responseController->getJson(response), "application/json");
+        res.status = 401;
+        return;
+    }
+
+    int userID = tokenController->getUserID(token);
+
+    std::string roomID = std::to_string(userID) + "N";
+
+    if (!roomController->isRoomExist(roomID))
+    {
+        roomController->createNotificationRoom(userID);
+    }
+
+    std::thread(&ServerController::connectSocketAndLaunchSession, this, roomID, userID).detach();
+    res.set_content(responseController->success(), "application/json");
+}
+
 void ServerController::GetFriendsChat(const httplib::Request &req, httplib::Response &res)
 {
+    std::cout << "Friends chat request of type GET received on thread : " << std::this_thread::get_id() << std::endl;
+    std::string token = req.get_header_value("Authorization");
+    if (!authenticationController->isAuthenticatedPlayer(token))
+    {
+        res.status = 401;
+        return;
+    }
+
+    int playerID = tokenController->getUserID(token);
+    Response response = playerAPI->chatFriends(playerID);
+    res.set_content(responseController->getJson(response), "application/json");
 }
 
 void ServerController::GetChat(const httplib::Request &req, httplib::Response &res)
@@ -380,7 +427,7 @@ void ServerController::GetChat(const httplib::Request &req, httplib::Response &r
         res.status = 401;
         return;
     }
-    responseController->setSuccess(response, chatController->getChat(chatID));
+    responseController->setSuccess(response, chatController->getChat(chatID, playerID));
     res.set_content(responseController->getJson(response), "application/json");
 }
 
@@ -437,7 +484,7 @@ void ServerController::PostStartChat(const httplib::Request &req, httplib::Respo
         res.status = 401;
         return;
     }
-    std::thread(&ServerController::connectSocketAndLaunchGameSession, this, roomID, playerID).detach();
+    std::thread(&ServerController::connectSocketAndLaunchSession, this, roomID, playerID).detach();
     res.set_content(responseController->success(), "application/json");
 }
 
@@ -492,17 +539,20 @@ void ServerController::requests(httplib::Server &server)
     server.Post("/api/add-friend/:friendID", [&](const httplib::Request &req, httplib::Response &res)
                 { PostAddFriend(req, res); });
 
-    server.Get("/chat/friends", [&](const httplib::Request &req, httplib::Response &res)
+    server.Post("/api/chat/notification", [&](const httplib::Request &req, httplib::Response &res)
+                { PostNotification(req, res); });
+
+    server.Get("/api/chat/friends", [&](const httplib::Request &req, httplib::Response &res)
                { GetFriendsChat(req, res); });
 
     // return roomID for the chat
-    server.Get("/chat/:chatID", [&](const httplib::Request &req, httplib::Response &res)
+    server.Get("/api/chat/:chatID", [&](const httplib::Request &req, httplib::Response &res)
                { GetChat(req, res); });
 
-    server.Get("/chat-room/:friendID", [&](const httplib::Request &req, httplib::Response &res)
+    server.Get("/api/chat/room/:friendID", [&](const httplib::Request &req, httplib::Response &res)
                { GetChatRoom(req, res); });
 
-    server.Post("/start-chat/:roomID", [&](const httplib::Request &req, httplib::Response &res)
+    server.Post("/api/chat/start/:roomID", [&](const httplib::Request &req, httplib::Response &res)
                 { PostStartChat(req, res); });
 }
 

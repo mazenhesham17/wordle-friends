@@ -38,6 +38,13 @@ Response PlayerAPI::addFriend(const int &playerID, const int &friendID)
     return response;
 }
 
+Response PlayerAPI::chatFriends(const int &playerID)
+{
+    Response response;
+    responseController->setSuccess(response, playerController->chatFriends(playerID));
+    return response;
+}
+
 Response PlayerAPI::profileFriends(const int &playerID)
 {
     Response response;

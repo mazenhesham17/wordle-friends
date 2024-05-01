@@ -1,28 +1,21 @@
-import React, { useState, useEffect } from 'react'
-import Friends from '../Components/Friends';
-import Chat from '../Components/Chat';
+import React, { useEffect } from 'react';
+import Friends from '../Components/Chat/FriendsList';
+import Chat from '../Components/Chat/Chat';
 import { useDispatch } from 'react-redux';
 import { changePage, chageTitle } from '../State/pageSlice';
 
-export const ChatPage = (props) => {
+export const ChatPage = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(changePage('chat'));
         dispatch(chageTitle('My chat'));
     }, [])
 
-    const [playerID, setPlayerID] = useState('');
-
-    const updatePlayerID = (id) => {
-        setPlayerID(id);
-    }
     return (
-        <>
-            <div style={{ display: "flex" }}>
-                <Friends updateChat={updatePlayerID} />
-                <Chat friendID={playerID} />
-            </div>
-        </>
+        <div style={{ display: "flex" }}>
+            <Friends />
+            <Chat />
+        </div>
     )
 }
 

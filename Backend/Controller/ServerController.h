@@ -24,6 +24,7 @@
 #include "../Session/SingleGameSession.h"
 #include "../Session/DuoGameSession.h"
 #include "../Session/ChatSession.h"
+#include "../Session/NotificationSession.h"
 
 class ServerController
 {
@@ -69,6 +70,8 @@ class ServerController
 
     void PostAddFriend(const httplib::Request &req, httplib::Response &res);
 
+    void PostNotification(const httplib::Request &req, httplib::Response &res);
+
     void GetFriendsChat(const httplib::Request &req, httplib::Response &res);
 
     void GetChat(const httplib::Request &req, httplib::Response &res);
@@ -79,7 +82,7 @@ class ServerController
 
     void requests(httplib::Server &server);
 
-    void connectSocketAndLaunchGameSession(const std::string &roomID, int playerID);
+    void connectSocketAndLaunchSession(const std::string &roomID, int playerID);
 
 public:
     static ServerController *getInstance();

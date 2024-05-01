@@ -28,6 +28,8 @@ public:
 
     Response profileFriends(const int &playerID);
 
+    Response chatFriends(const int &playerID);
+
     Response games(const int &playerID);
 
     Response search(const int &playerID, const std::string &paritialUsername);

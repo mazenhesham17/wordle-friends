@@ -182,6 +182,7 @@ int main()
             senderID INTEGER,
             dateAndTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             chatID INTEGER,
+            readStatus INTEGER DEFAULT 0,
             FOREIGN KEY (senderID) REFERENCES User(userID),
             FOREIGN KEY (chatID) REFERENCES Chat(chatID)
         );

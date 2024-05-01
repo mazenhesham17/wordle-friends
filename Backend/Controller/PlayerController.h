@@ -30,6 +30,8 @@ public:
 
     std::string profileFriends(const int &playerID);
 
+    std::string chatFriends(const int &playerID);
+
     std::string search(const int &playerID, const std::string &partialUsername);
 
     Player createPlayer(const User *user);

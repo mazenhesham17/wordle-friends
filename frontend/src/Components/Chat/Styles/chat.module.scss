@@ -1,0 +1,116 @@
+.container {
+    flex-grow: 1;
+    margin-right: 10px;
+    height: 90vh;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.heading {
+    display: flex;
+    align-items: center;
+
+    padding-bottom: 5px;
+    border-bottom: 2px dashed #D9D9D9;
+
+
+    p {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 500;
+    }
+
+    .avatar {
+        color: white;
+        margin-right: 10px;
+    }
+}
+
+.body {
+    overflow-y: scroll;
+    transition: transform 0.3s ease;
+    height: 85%;
+
+    display: flex;
+    flex-direction: column;
+
+    .label {
+        align-self: center;
+        margin: 10px;
+        width: fit-content;
+        padding: 5px 20px;
+        color: white;
+        background-color: #e7e7e7;
+        border-radius: 10px;
+        font-weight: 500;
+    }
+
+    .message_conatiner {
+
+        display: flex;
+        flex-direction: column;
+        min-width: 60%;
+        margin: 5px;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        color: white;
+
+        .content {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .time {
+            align-self: flex-end;
+            margin: 0;
+            font-size: 12px;
+            font-weight: 500;
+        }
+    }
+
+    .message_conatiner:last-child {
+        margin-bottom: 10px;
+    }
+
+    .sender {
+        align-self: flex-end;
+        background-color: #B1B2FF;
+    }
+
+    .receiver {
+        align-self: flex-start;
+        background-color: #AAC4FF;
+    }
+
+}
+
+.input {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+
+    input {
+        width: 100%;
+        margin-right: 10px;
+        padding: 10px;
+        border: none;
+        border-radius: 10px;
+        background-color: rgba($color: #EEF1FF, $alpha: 0.7);
+        outline: none;
+    }
+
+    button {
+        padding: 8px;
+        border: none;
+        border-radius: 100%;
+        background-color: #B1B2FF;
+        color: white;
+        font-weight: 500;
+        cursor: pointer;
+    }
+}

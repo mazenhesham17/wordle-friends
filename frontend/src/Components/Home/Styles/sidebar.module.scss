@@ -25,8 +25,8 @@ $primary-color: #B1B2FF;
         }
     }
 
-    .title{
-        padding: 30px 5px ;
+    .title {
+        padding: 30px 5px;
     }
 }
 
@@ -70,4 +70,22 @@ $primary-color: #B1B2FF;
     transform: scale(1.2);
     border-radius: 100%;
     border: 2px dashed $primary-color;
+}
+
+.notification {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    height: 22px;
+    width: 22px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transform: scale(0.8);
+}
+
+.notification_container {
+    position: relative;
 }
