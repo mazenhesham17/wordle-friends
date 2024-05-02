@@ -49,7 +49,6 @@ export const GameBoard = () => {
   }
 
   const toggleSendFlag = () => {
-    console.log('toggleSendFlag');
     setSendFlag(!sendFlag);
   }
 
@@ -106,7 +105,6 @@ export const GameBoard = () => {
         } else if (response === 'Time out!') {
           setTimeout(true);
         }
-        console.log(response);
       }
     }
   }
@@ -250,7 +248,7 @@ export const GameBoard = () => {
             <button onClick={navigateBackToGamePage} >New game</button>
           </div>}
         </div>
-        <Keyboard keys={typedKeys} onEnter={toggleSendFlag} len={wordLength} />
+        <Keyboard keys={typedKeys} onEnter={toggleSendFlag} len={wordLength} disabled={waiting || finsihed} />
       </div>
 
     </div>

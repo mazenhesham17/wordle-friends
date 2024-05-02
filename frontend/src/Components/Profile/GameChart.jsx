@@ -27,15 +27,15 @@ export const GameChart = () => {
             datasets: [
                 {
                     type: 'bar',
-                    label: 'Wins',
-                    data: wins,
-                    backgroundColor: '#66BB6A'
-                },
-                {
-                    type: 'bar',
                     label: 'Loses',
                     data: loses,
                     backgroundColor: '#CC3333'
+                },
+                {
+                    type: 'bar',
+                    label: 'Wins',
+                    data: wins,
+                    backgroundColor: '#66BB6A'
                 }
             ]
         });
@@ -79,13 +79,16 @@ export const GameChart = () => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('http://localhost:4000/api/profile/games-info', {
+            const now = new Date();
+            const offset = - now.getTimezoneOffset() / 60;
+            const response = await fetch(`http://localhost:4000/api/profile/games-info/${offset}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': token
                 }
             });
             const responseJSON = await response.json();
+            console.log(responseJSON);
             if (responseJSON.error) {
                 showErrorMessage(responseJSON.error);
             } else {

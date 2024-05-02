@@ -56,7 +56,7 @@ int main()
   	        email TEXT,
   	        password TEXT,
   	        userType INTEGER,
-            joinDate DATE DEFAULT CURRENT_DATE
+            joinTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
     )";
 
@@ -100,7 +100,7 @@ int main()
   	        word TEXT,
             state INTEGER,
   	        winnerID INTEGER,
-            createDate DATE DEFAULT CURRENT_DATE,
+            createTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   	        FOREIGN KEY (winnerID) REFERENCES User(userid)
         );
     )";

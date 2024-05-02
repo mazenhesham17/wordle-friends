@@ -1,0 +1,49 @@
+$primary-color: #B1B2FF;
+$secondary-color: #AAC4FF;
+$win-color: #66BB6A;
+$lose-color: #CC3333;
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 50px 10px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    height: 120px;
+    padding: 10px;
+
+    .row {
+        display: flex;
+        align-self: flex-end;
+        align-items: center;
+    }
+
+    .title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: $primary-color;
+    }
+
+    .value {
+        font-size: 1.2rem;
+        font-weight: 500;
+
+        h3 {
+            margin: 0 0 0 10px;
+            color: $secondary-color;
+            font-weight: 500;
+        }
+
+
+        .win {
+            color: $win-color;
+        }
+
+        .lose {
+            color: $lose-color;
+        }
+    }
+}

@@ -13,12 +13,14 @@ class AdminController : public BaseController
 
     AdminController(){};
 
+    int getMessageCount(const std::vector<std::tuple<std::string, int>> &messages);
+
 public:
     static AdminController *getInstance();
 
     std::string profile(const User *user) override;
 
-    std::string dashboard(const Admin &admin);
+    std::string dashboard(const Admin &admin, const int &offset);
 
     Admin createAdmin(const User *user);
 };

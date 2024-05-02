@@ -74,19 +74,52 @@ void GameController::endGame(const int &gameId)
     dbEndGame(gameId);
 }
 
-std::string GameController::mergeTemplates(const std::string &template1, const std::string &template2)
+std::string GameController::getMergedTemplate(const std::vector<std::string> &history, const int &gameId)
 {
-    std::string result(template1.size(), '_');
-    for (int i = 0; i < template1.size(); i++)
+    std::string word = getWordByGameID(gameId);
+    std::string result(word.size(), '_');
+    std::set<char> matched, unmatched, mismatched;
+    std::set<int> idx;
+    for (int i = 0; i < word.size(); i++)
     {
-        if (template1[i] == '+' || (i < template2.size() && template2[i] == '+'))
+        bool isMatched = false;
+        for (int j = 0; j < history.size(); j++)
+        {
+            if (tolower(history[j][i]) == tolower(word[i]))
+            {
+                isMatched = true;
+                break;
+            }
+        }
+        if (isMatched)
         {
             result[i] = '+';
+            matched.insert(tolower(word[i]));
         }
-        else if (template1[i] == '-' || (i < template2.size() && template2[i] == '-'))
+        else
         {
-            result[i] = '-';
+            unmatched.insert(tolower(word[i]));
+            idx.insert(i);
         }
+    }
+
+    for (int i = 0; i < word.size(); i++)
+    {
+        for (int j = 0; j < history.size(); j++)
+        {
+            if (matched.find(tolower(history[j][i])) == matched.end() && unmatched.find(tolower(history[j][i])) != unmatched.end())
+            {
+                mismatched.insert(tolower(history[j][i]));
+            }
+        }
+    }
+
+    while (!idx.empty() && !mismatched.empty())
+    {
+        int i = *idx.begin();
+        result[i] = '-';
+        idx.erase(i);
+        mismatched.erase(mismatched.begin());
     }
     result = "Opponent's result: " + result;
     return result;

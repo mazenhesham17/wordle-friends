@@ -26,9 +26,9 @@ std::string PlayerController::profile(const User *user)
                                   player.getEmail());
 }
 
-std::string PlayerController::games(const int &playerID)
+std::string PlayerController::games(const int &playerID, const int &offset)
 {
-    auto gamesDetails = getGamesByUserID(playerID);
+    auto gamesDetails = getGamesByUserID(playerID, offset);
     return playerWebView->games(gamesDetails);
 }
 

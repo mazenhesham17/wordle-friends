@@ -5,6 +5,8 @@
 
 class DuoGameSession : public GameSession
 {
+    std::vector<std::string> history;
+
 public:
     DuoGameSession(tcp::socket &&socket, std::string roomID, int playerID);
 

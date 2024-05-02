@@ -2,6 +2,8 @@
 #define BACKEND_GAMECONTROLLER_H
 
 #include <string>
+#include <vector>
+#include <set>
 #include "../Database/dml.h"
 #include "../Database/dql.h"
 
@@ -32,7 +34,7 @@ public:
 
     void deleteGame(const int &gameId);
 
-    std::string mergeTemplates(const std::string &template1, const std::string &template2);
+    std::string getMergedTemplate(const std::vector<std::string> &history, const int &gameId);
 };
 
 #endif // BACKEND_GAMECONTROLLER_H

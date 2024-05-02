@@ -114,7 +114,8 @@ void ServerController::GetDashboard(const httplib::Request &req, httplib::Respon
     int userID = tokenController->getUserID(token);
     User *user = new Admin(userController->retrieveUserFromDB(userID));
     Admin admin = AdminController::getInstance()->createAdmin(user);
-    Response response = adminAPI->dashboard(admin);
+    int offset = std::stoi(req.path_params.at("offset"));
+    Response response = adminAPI->dashboard(admin, offset);
     res.set_content(responseController->getJson(response), "application/json");
 }
 
@@ -247,7 +248,8 @@ void ServerController::GetGames(const httplib::Request &req, httplib::Response &
     }
 
     int userID = tokenController->getUserID(token);
-    response = playerAPI->games(userID);
+    int offset = std::stoi(req.path_params.at("offset"));
+    response = playerAPI->games(userID, offset);
     res.set_content(responseController->getJson(response), "application/json");
 }
 
@@ -509,7 +511,7 @@ void ServerController::requests(httplib::Server &server)
     server.Get("/api/info", [&](const httplib::Request &req, httplib::Response &res)
                { GetInfo(req, res); });
 
-    server.Get("/dashboard", [&](const httplib::Request &req, httplib::Response &res)
+    server.Get("/api/admin/dashboard/:offset", [&](const httplib::Request &req, httplib::Response &res)
                { GetDashboard(req, res); });
 
     server.Get("/api/game/check-room/:roomID", [&](const httplib::Request &req, httplib::Response &res)
@@ -527,7 +529,7 @@ void ServerController::requests(httplib::Server &server)
     server.Get("/api/profile/friends", [&](const httplib::Request &req, httplib::Response &res)
                { GetFriendsProfile(req, res); });
 
-    server.Get("/api/profile/games-info", [&](const httplib::Request &req, httplib::Response &res)
+    server.Get("/api/profile/games-info/:offset", [&](const httplib::Request &req, httplib::Response &res)
                { GetGames(req, res); });
 
     server.Put("/api/profile/personal-info", [&](const httplib::Request &req, httplib::Response &res)

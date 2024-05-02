@@ -34,9 +34,9 @@ void DuoGameSession::onRead(beast::error_code ec, std::size_t bytes_transferred)
 
     asyncSend(result);
 
-    std::string currentTemplate = result.substr(result.find(':') + 2);
+    history.emplace_back(message);
 
-    std::string opponentResult = gameController->mergeTemplates(currentTemplate, oldTemplate);
+    std::string opponentResult = gameController->getMergedTemplate(history, gameID);
 
     // broadcast to the other user
     roomController->broadcast(opponentResult, roomID, playerID);
@@ -50,8 +50,6 @@ void DuoGameSession::onRead(beast::error_code ec, std::size_t bytes_transferred)
         roomController->endAllSessions(roomID);
         return;
     }
-
-    oldTemplate = opponentResult.substr(opponentResult.find(':') + 2);
 
     turnsLeft--;
 

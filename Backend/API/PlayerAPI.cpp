@@ -52,10 +52,10 @@ Response PlayerAPI::profileFriends(const int &playerID)
     return response;
 }
 
-Response PlayerAPI::games(const int &playerID)
+Response PlayerAPI::games(const int &playerID, const int &offset)
 {
     Response response;
-    responseController->setSuccess(response, playerController->games(playerID));
+    responseController->setSuccess(response, playerController->games(playerID, offset));
     return response;
 }
 

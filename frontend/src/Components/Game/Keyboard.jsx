@@ -18,6 +18,7 @@ export const Keyboard = (props) => {
     ]
 
     const onKeyPress = (e) => {
+        if (props.disabled) return;
         if (e.key !== "Enter" && e.key !== "Backspace" && e.key.length !== 1) {
             return;
         }
@@ -27,6 +28,7 @@ export const Keyboard = (props) => {
 
 
     const press = (val) => {
+        if (props.disabled) return;
         setInput((prev) => {
             if (val === "Backspace") {
                 return prev.slice(0, -1);
@@ -60,7 +62,7 @@ export const Keyboard = (props) => {
         return () => {
             document.removeEventListener('keydown', onKeyPress);
         }
-    }, []);
+    }, [props.disabled]);
 
     return (
         <div className={styles.container} >
@@ -72,6 +74,7 @@ export const Keyboard = (props) => {
                                 <div key={idx}
                                     className={`${styles.key} ${pressedKey.toLowerCase() === keyName.toLowerCase() && styles.pressed}`}
                                     state={props.keys.has(keyName.toLowerCase()) ? props.keys.get(keyName.toLowerCase()) : 'none'}
+                                    keyenabled={props.disabled}
                                     onClick={() => press(keyName)} >{
                                         keyName.length === 1 ? keyName : keyName === "Backspace" ?
                                             <HiOutlineBackspace size={24} /> : <AiOutlineEnter size={24} />

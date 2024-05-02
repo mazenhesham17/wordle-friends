@@ -548,7 +548,7 @@ std::vector<int> getChatListByChatID(int chatID)
     // prepare query
     char query[QUERY_SIZE];
     snprintf(query, sizeof(query),
-             R"( SELECT messageID FROM Message WHERE chatID = %d )", chatID);
+             R"( SELECT messageID FROM Message WHERE chatID = %d ORDER BY dateAndTime ; )", chatID);
 
     // prepare statement
     sqlite3_stmt *stmt;
@@ -715,16 +715,16 @@ std::vector<int> getPlayersListByChatID(int chatID)
     return playersList;
 }
 
-std::vector<std::tuple<std::string, int, int>> getGamesByUserID(int userID)
+std::vector<std::tuple<std::string, int, int>> getGamesByUserID(int userID, int offset)
 {
     // prepare query
     char query[QUERY_SIZE];
     snprintf(query, sizeof(query),
              R"( 
                 SELECT 
-                    createDate,
+                    date(createTime, '%d hours') AS createDate,
                     SUM(CASE WHEN winnerID = User.userID THEN 1 ELSE 0 END) AS wins,
-                    SUM(CASE WHEN winnerID IS NULL OR winnerID <> User.userID  THEN 1 ELSE 0 END) AS loses
+                    SUM(CASE WHEN winnerID = User.userID THEN 0 ELSE 1 END) AS loses
                 FROM 
                     Game
                 INNER JOIN 
@@ -735,7 +735,7 @@ std::vector<std::tuple<std::string, int, int>> getGamesByUserID(int userID)
                     User.userID = %d
                 GROUP BY 
                     createDate; )",
-             userID);
+             offset, userID);
 
     // prepare statement
     sqlite3_stmt *stmt;
@@ -754,14 +754,149 @@ std::vector<std::tuple<std::string, int, int>> getGamesByUserID(int userID)
 
     while (sqlite3_step(stmt) == SQLITE_ROW)
     {
-        std::string dateAndTime = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0));
+        std::string date = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0));
         int wins = sqlite3_column_int(stmt, 1);
         int loses = sqlite3_column_int(stmt, 2);
-        games.push_back(std::make_tuple(dateAndTime, wins, loses));
+        games.push_back(std::make_tuple(date, wins, loses));
     }
     sqlite3_finalize(stmt);
 
     return games;
+}
+
+std::vector<std::tuple<std::string, int, int>> getAllGames(int offset)
+{
+    // prepare query
+    char query[QUERY_SIZE];
+    snprintf(query, sizeof(query),
+             R"( 
+                SELECT 
+                    date(createTime, '%d hours') AS createDate,
+                    SUM(CASE WHEN winnerID IS NULL THEN 0 ELSE 1 END) AS wins,
+                    SUM(CASE WHEN winnerID IS NULL THEN 1 ELSE 0 END) AS loses
+                FROM 
+                    Game
+                GROUP BY 
+                    createDate
+                ORDER BY 
+                    createDate ; )",
+             offset);
+
+    // prepare statement
+    sqlite3_stmt *stmt;
+    int resultCode = sqlite3_prepare_v2(db, query, -1, &stmt, nullptr);
+    if (resultCode != SQLITE_OK)
+    {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage),
+                 R"(There was an error getting all games.\n
+                    Error: %s )",
+                 sqlite3_errmsg(db));
+        throw std::runtime_error(errorMessage);
+    }
+
+    std::vector<std::tuple<std::string, int, int>> games;
+
+    while (sqlite3_step(stmt) == SQLITE_ROW)
+    {
+        std::string date = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0));
+        int wins = sqlite3_column_int(stmt, 1);
+        int loses = sqlite3_column_int(stmt, 2);
+        games.push_back(std::make_tuple(date, wins, loses));
+    }
+    sqlite3_finalize(stmt);
+
+    return games;
+}
+
+std::vector<std::tuple<std::string, int>> getAllMessages(int offset)
+{
+    // prepare query
+    char query[QUERY_SIZE];
+    // messages
+    snprintf(query, sizeof(query),
+             R"( 
+                SELECT 
+                    date(dateAndTime, '%d hours') AS sendDate,
+                    COUNT(*)
+                FROM
+                    Message
+                GROUP BY 
+                    sendDate
+                ORDER BY 
+                    sendDate ; )",
+             offset);
+
+    // prepare statement
+    sqlite3_stmt *stmt;
+    int resultCode = sqlite3_prepare_v2(db, query, -1, &stmt, nullptr);
+    if (resultCode != SQLITE_OK)
+    {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage),
+                 R"(There was an error getting all messages.\n
+                    Error: %s )",
+                 sqlite3_errmsg(db));
+        throw std::runtime_error(errorMessage);
+    }
+
+    std::vector<std::tuple<std::string, int>> messages;
+
+    while (sqlite3_step(stmt) == SQLITE_ROW)
+    {
+        std::string date = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0));
+        int count = sqlite3_column_int(stmt, 1);
+        messages.push_back(std::make_tuple(date, count));
+    }
+    sqlite3_finalize(stmt);
+
+    return messages;
+}
+
+std::vector<std::tuple<std::string, int>> getAllPlayers(int offset)
+{
+    // prepare query
+    char query[QUERY_SIZE];
+    // users
+    snprintf(query, sizeof(query),
+             R"( 
+                SELECT 
+                    date(joinTime, '%d hours') AS joinDate,
+                    COUNT(*)
+                FROM
+                    User
+                WHERE
+                    userType = 1
+                GROUP BY 
+                    joinDate
+                ORDER BY 
+                    joinDate ; )",
+             offset);
+
+    // prepare statement
+    sqlite3_stmt *stmt;
+    int resultCode = sqlite3_prepare_v2(db, query, -1, &stmt, nullptr);
+    if (resultCode != SQLITE_OK)
+    {
+        char errorMessage[ERROR_SIZE];
+        snprintf(errorMessage, sizeof(errorMessage),
+                 R"(There was an error getting all players.\n
+                    Error: %s )",
+                 sqlite3_errmsg(db));
+        throw std::runtime_error(errorMessage);
+    }
+
+    std::vector<std::tuple<std::string, int>> players;
+
+    while (sqlite3_step(stmt) == SQLITE_ROW)
+    {
+        std::string date = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0));
+        int count = sqlite3_column_int(stmt, 1);
+        players.push_back(std::make_tuple(date, count));
+    }
+    sqlite3_finalize(stmt);
+
+    return players;
 }
 
 int getLastMessageStatusByUsersID(int playerID, int friendID)

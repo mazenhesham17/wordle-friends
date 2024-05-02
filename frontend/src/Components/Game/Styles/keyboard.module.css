@@ -25,8 +25,16 @@
   background-color: #EEF1FF;
   border-radius: 4px;
   margin: 3px;
-  cursor: pointer;
   transition: transform 0.5s ease;
+}
+
+.key[keyenabled=true] {
+  cursor: pointer;
+}
+
+.key[keyenabled=true]:hover {
+  background-color: #B1B2FF;
+  transform: scale(1.1);
 }
 
 .key:not([state=none]) {
@@ -43,11 +51,6 @@
 
 .key[state=partial-correct] {
   background-color: #6191ff;
-}
-
-.key:hover {
-  background-color: #B1B2FF;
-  transform: scale(1.1);
 }
 
 .pressed {

@@ -21,7 +21,7 @@ public:
 
     Response profile(const User *admin);
 
-    Response dashboard(const Admin &admin);
+    Response dashboard(const Admin &admin, const int &offset);
 };
 
 #endif // BACKEND_ADMINAPI_H

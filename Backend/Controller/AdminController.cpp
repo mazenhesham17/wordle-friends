@@ -11,6 +11,16 @@ AdminController *AdminController::getInstance()
     return instance;
 }
 
+int AdminController::getMessageCount(const std::vector<std::tuple<std::string, int>> &messages)
+{
+    int cnt = 0;
+    for (auto message : messages)
+    {
+        cnt += std::get<1>(message);
+    }
+    return cnt;
+}
+
 Admin AdminController::createAdmin(const User *user)
 {
     Admin admin(*user);
@@ -26,7 +36,12 @@ std::string AdminController::profile(const User *user)
     return AdminWebView::getInstance()->profile(user->getUsername(), user->getEmail());
 }
 
-std::string AdminController::dashboard(const Admin &admin)
+std::string AdminController::dashboard(const Admin &admin, const int &offset)
 {
-    return AdminWebView::getInstance()->dashboard(admin.getUserCounts(), admin.getGames(), admin.getWins());
+    auto games = getAllGames(offset);
+    auto messages = getAllMessages(offset);
+    auto players = getAllPlayers(offset);
+    auto messageCount = getMessageCount(messages);
+
+    return AdminWebView::getInstance()->dashboard(admin.getUserCounts(), admin.getGames(), admin.getWins(), messageCount, games, messages, players);
 }

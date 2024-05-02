@@ -23,9 +23,9 @@ Response AdminAPI::profile(const User *admin)
     return response;
 }
 
-Response AdminAPI::dashboard(const Admin &admin)
+Response AdminAPI::dashboard(const Admin &admin, const int &offset)
 {
     Response response;
-    responseController->setSuccess(response, AdminController::getInstance()->dashboard(admin));
+    responseController->setSuccess(response, AdminController::getInstance()->dashboard(admin, offset));
     return response;
 }

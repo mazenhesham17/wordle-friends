@@ -11,7 +11,6 @@ protected:
     GameController *gameController;
 
     int gameID;
-    std::string oldTemplate;
     int turnsLeft = 6;
 
 public:

@@ -63,8 +63,8 @@ export const InformationCard = () => {
                         <Avatar label={data.username[0].toUpperCase()} shape="circle" size="normal" className={styles.avatar} />
                         <div>
                             <div className={styles.row} >
-                                <h1> {data.firstName + " " + data.lastName} </h1>
-                                <div onClick={toggleMenu} >
+                                <h1> {data.firstName.length > 0 ? data.firstName + " " + data.lastName : data.username} </h1>
+                                <div onClick={toggleMenu} style={{ alignSelf: "flex-end" }} >
                                     <box-icon name='chevron-down' size="sm" color='#B1B2FF'></box-icon>
                                 </div>
                             </div>

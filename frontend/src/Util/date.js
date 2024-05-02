@@ -57,10 +57,8 @@ function getDateLabel(date) {
 
     if (days === 1) {
         return "Yesterday";
-    } else {
-        return "Today";
     }
-
+    return "Today";
 }
 
 function formatTime(date) {

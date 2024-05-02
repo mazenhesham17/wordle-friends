@@ -139,7 +139,8 @@ export const Chat = () => {
         toggleFlag();
     }
 
-    const sendMessage = () => {
+    const sendMessage = (e) => {
+        e.preventDefault();
         WS.send(sentMessage);
         setSentMessage('');
     }
@@ -207,12 +208,12 @@ export const Chat = () => {
                             <p > {chatDetails.firstName + ' ' + chatDetails.lastName} </p>
                         </div>
                         {messages.length > 0 && <MessageList messages={messages} friendID={chatDetails.friendID} />}
-                        <div className={styles.input} >
+                        <form className={styles.input} onSubmit={sendMessage} >
                             <input type="text" value={sentMessage} placeholder="Type a message" onChange={updateMessage} />
-                            <button onClick={sendMessage} disabled={loading || sentMessage.length === 0}>
+                            <button type='submit' disabled={loading || sentMessage.length === 0}>
                                 <box-icon name='send' color='white'></box-icon>
                             </button>
-                        </div>
+                        </form>
                     </>
             }
         </div>

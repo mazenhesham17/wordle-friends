@@ -24,7 +24,7 @@ public:
 
     std::string profile(const User *user) override;
 
-    std::string games(const int &playerID);
+    std::string games(const int &playerID, const int &offset);
 
     std::string gameView(const int &playerID);
 

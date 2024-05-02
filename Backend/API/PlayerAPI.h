@@ -30,7 +30,7 @@ public:
 
     Response chatFriends(const int &playerID);
 
-    Response games(const int &playerID);
+    Response games(const int &playerID, const int &offset);
 
     Response search(const int &playerID, const std::string &paritialUsername);
 

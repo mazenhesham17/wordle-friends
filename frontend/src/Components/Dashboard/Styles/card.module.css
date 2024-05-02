@@ -1,0 +1,37 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 50px 10px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  height: 120px;
+  padding: 10px;
+}
+.container .row {
+  display: flex;
+  align-self: flex-end;
+  align-items: center;
+}
+.container .title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #B1B2FF;
+}
+.container .value {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+.container .value h3 {
+  margin: 0 0 0 10px;
+  color: #AAC4FF;
+  font-weight: 500;
+}
+.container .value .win {
+  color: #66BB6A;
+}
+.container .value .lose {
+  color: #CC3333;
+}/*# sourceMappingURL=card.module.css.map */

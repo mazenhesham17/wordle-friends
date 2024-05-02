@@ -48,7 +48,13 @@ std::vector<int> getPlayersListByPartialUsername(const std::string &partialUsern
 
 std::vector<int> getPlayersListByChatID(int chatID);
 
-std::vector<std::tuple<std::string, int, int>> getGamesByUserID(int userID);
+std::vector<std::tuple<std::string, int, int>> getGamesByUserID(int userID, int offset);
+
+std::vector<std::tuple<std::string, int, int>> getAllGames(int offset);
+
+std::vector<std::tuple<std::string, int>> getAllMessages(int offset);
+
+std::vector<std::tuple<std::string, int>> getAllPlayers(int offset);
 
 int getLastMessageStatusByUsersID(int playerID, int friendID);
 
