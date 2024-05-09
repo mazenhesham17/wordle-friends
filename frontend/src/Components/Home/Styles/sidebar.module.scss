@@ -1,5 +1,9 @@
 $primary-color: #B1B2FF;
+$secondary-color: #AAC4FF;
 
+a {
+    text-decoration: none;
+}
 
 .list {
     padding: 0;
@@ -9,8 +13,16 @@ $primary-color: #B1B2FF;
     height: 100vh;
     text-align: center;
 
-    div {
+    .item {
         padding: 5px;
+
+        @media screen and (max-width: 480px) {
+            padding: 10px;
+        }
+    }
+
+    .title {
+        padding: 30px 5px;
 
         h1 {
             color: $primary-color;
@@ -18,15 +30,34 @@ $primary-color: #B1B2FF;
             font-size: 0.9rem;
             letter-spacing: 2px;
             margin: 0;
+
+            @media screen and (max-width: 480px) {
+                font-size: 20px;
+            }
         }
 
         h1:last-child {
             padding-left: 5px;
         }
+
+        @media screen and (max-width: 480px) {
+            display: flex;
+            padding: 20px;
+            font-size: 20px;
+        }
+
+        @media screen and (max-width: 481px) and (min-width: 768px) {
+            padding: 28px 2px;
+        }
     }
 
-    .title {
-        padding: 30px 5px;
+    @media screen and (max-width: 480px) {
+        position: fixed;
+        left: -100%;
+        width: 100%;
+        transition: 0.5s ease-out;
+        z-index: 10;
+
     }
 }
 
@@ -36,6 +67,8 @@ $primary-color: #B1B2FF;
     position: relative;
     display: inline-block;
     border-radius: 6px;
+    transform: scale(1);
+    transition: transform 0.5s ease;
 
     h2 {
         display: none;
@@ -47,29 +80,65 @@ $primary-color: #B1B2FF;
         font-size: 0.8rem;
         color: $primary-color;
         background-color: white;
-        padding: 5px;
+        padding: 5px 10px;
         border-radius: 6px;
+
+        @media screen and (max-width: 480px) {
+            display: unset;
+            position: unset;
+            background-color: unset;
+            font-size: 20px;
+            font-weight: 500;
+        }
     }
 
-    transform: scale(1);
-    transition: transform 0.5s ease;
-}
+    &:hover {
+        cursor: pointer;
+        transform: scale(1.2);
+        border-radius: 100%;
+        border: 2px dashed $primary-color;
 
-.container:hover {
-    cursor: pointer;
-    transform: scale(1.2);
-    border-radius: 100%;
-    border: 2px dashed $primary-color;
+        h2 {
+            display: block;
 
-    h2 {
-        display: block;
+            @media screen and (max-width: 480px) {
+                display: unset;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            background-color: rgba($color: $secondary-color, $alpha: 0.3);
+            transform: scale(1);
+            border-radius: 6px;
+            border: unset;
+        }
     }
+
+    @media screen and (max-width: 480px) {
+        display: flex;
+        width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+
+
+    }
+
+
+
 }
 
 .active {
     transform: scale(1.2);
     border-radius: 100%;
     border: 2px dashed $primary-color;
+
+    @media screen and (max-width: 480px) {
+        background-color: rgba($color: $secondary-color, $alpha: 0.3);
+        transform: scale(1);
+        border-radius: 6px;
+        border: unset;
+
+    }
 }
 
 .notification {
@@ -81,11 +150,42 @@ $primary-color: #B1B2FF;
     background-color: red;
     color: white;
     border-radius: 50%;
-    font-size: 0.8rem;
+    font-size: 1rem;
     font-weight: 600;
     transform: scale(0.8);
+
+    @media screen and (max-width: 480px) {
+        right: -10px;
+        top: -10px;
+    }
 }
 
 .notification_container {
     position: relative;
+}
+
+.row {
+    @media screen and (max-width: 480px) {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+.button {
+    display: none;
+    border: none;
+    background-color: unset;
+    margin-right: 10px;
+    cursor: pointer;
+
+    @media screen and (max-width: 480px) {
+        display: block;
+    }
+}
+
+.visible {
+    @media screen and (max-width: 480px) {
+        display: block;
+        left: 0%;
+    }
 }

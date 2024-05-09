@@ -1,3 +1,7 @@
+a {
+  text-decoration: none;
+}
+
 .list {
   padding: 0;
   margin: 0;
@@ -7,21 +11,52 @@
   height: 100vh;
   text-align: center;
 }
-.list div {
+.list .item {
   padding: 5px;
 }
-.list div h1 {
+@media screen and (max-width: 480px) {
+  .list .item {
+    padding: 10px;
+  }
+}
+.list .title {
+  padding: 30px 5px;
+}
+.list .title h1 {
   color: #B1B2FF;
   text-transform: uppercase;
   font-size: 0.9rem;
   letter-spacing: 2px;
   margin: 0;
 }
-.list div h1:last-child {
+@media screen and (max-width: 480px) {
+  .list .title h1 {
+    font-size: 20px;
+  }
+}
+.list .title h1:last-child {
   padding-left: 5px;
 }
-.list .title {
-  padding: 30px 5px;
+@media screen and (max-width: 480px) {
+  .list .title {
+    display: flex;
+    padding: 20px;
+    font-size: 20px;
+  }
+}
+@media screen and (max-width: 481px) and (min-width: 768px) {
+  .list .title {
+    padding: 28px 2px;
+  }
+}
+@media screen and (max-width: 480px) {
+  .list {
+    position: fixed;
+    left: -100%;
+    width: 100%;
+    transition: 0.5s ease-out;
+    z-index: 10;
+  }
 }
 
 .container {
@@ -44,10 +79,18 @@
   font-size: 0.8rem;
   color: #B1B2FF;
   background-color: white;
-  padding: 5px;
+  padding: 5px 10px;
   border-radius: 6px;
 }
-
+@media screen and (max-width: 480px) {
+  .container h2 {
+    display: unset;
+    position: unset;
+    background-color: unset;
+    font-size: 20px;
+    font-weight: 500;
+  }
+}
 .container:hover {
   cursor: pointer;
   transform: scale(1.2);
@@ -57,11 +100,40 @@
 .container:hover h2 {
   display: block;
 }
+@media screen and (max-width: 480px) {
+  .container:hover h2 {
+    display: unset;
+  }
+}
+@media screen and (max-width: 480px) {
+  .container:hover {
+    background-color: rgba(170, 196, 255, 0.3);
+    transform: scale(1);
+    border-radius: 6px;
+    border: unset;
+  }
+}
+@media screen and (max-width: 480px) {
+  .container {
+    display: flex;
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+  }
+}
 
 .active {
   transform: scale(1.2);
   border-radius: 100%;
   border: 2px dashed #B1B2FF;
+}
+@media screen and (max-width: 480px) {
+  .active {
+    background-color: rgba(170, 196, 255, 0.3);
+    transform: scale(1);
+    border-radius: 6px;
+    border: unset;
+  }
 }
 
 .notification {
@@ -73,11 +145,44 @@
   background-color: red;
   color: white;
   border-radius: 50%;
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-weight: 600;
   transform: scale(0.8);
+}
+@media screen and (max-width: 480px) {
+  .notification {
+    right: -10px;
+    top: -10px;
+  }
 }
 
 .notification_container {
   position: relative;
+}
+
+@media screen and (max-width: 480px) {
+  .row {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.button {
+  display: none;
+  border: none;
+  background-color: unset;
+  margin-right: 10px;
+  cursor: pointer;
+}
+@media screen and (max-width: 480px) {
+  .button {
+    display: block;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .visible {
+    display: block;
+    left: 0%;
+  }
 }/*# sourceMappingURL=sidebar.module.css.map */

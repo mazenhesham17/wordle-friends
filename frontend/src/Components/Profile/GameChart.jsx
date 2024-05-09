@@ -88,7 +88,6 @@ export const GameChart = () => {
                 }
             });
             const responseJSON = await response.json();
-            console.log(responseJSON);
             if (responseJSON.error) {
                 showErrorMessage(responseJSON.error);
             } else {

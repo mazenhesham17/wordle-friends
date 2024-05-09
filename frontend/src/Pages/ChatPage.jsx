@@ -13,8 +13,13 @@ export const ChatPage = () => {
 
     return (
         <div style={{ display: "flex" }}>
+            <div>
             <Friends />
+            </div>
+            <div>
             <Chat />
+            </div>
+           
         </div>
     )
 }

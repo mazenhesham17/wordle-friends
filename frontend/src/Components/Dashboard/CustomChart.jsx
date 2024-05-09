@@ -34,7 +34,6 @@ export const CustomChart = (props) => {
             labels: dates,
             datasets: datasets
         });
-        console.log(formattedData);
     }, [props.data]);
 
     const chartOptions = {

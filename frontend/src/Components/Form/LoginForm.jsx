@@ -1,18 +1,20 @@
 import React, { useContext } from 'react'
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import InputField from './InputField';
-import { hashPassword } from '../../Util/encryption';
 import { Link, useNavigate } from 'react-router-dom';
-import styles from './Styles/form.module.css';
-import { FunctionContext } from '../../App';
 import { useDispatch } from 'react-redux';
 import { reduxLogin } from '../../State/authSlice';
+import { FunctionContext } from '../../App';
+import { hashPassword } from '../../Util/encryption';
+import InputField from './InputField';
+import styles from './Styles/form.module.css';
+
 
 export const LoginForm = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const showErrorMessage = useContext(FunctionContext);
+
     const validationSchema = Yup.object({
         identifier: Yup.string()
             .required('This field is required')
@@ -32,7 +34,8 @@ export const LoginForm = () => {
         password: Yup.string()
             .required('This field is required')
             .min(5, 'Password must be at least 5 characters long')
-    })
+    });
+
     const submit = async (data) => {
         try {
             const hashedPassword = await hashPassword(data.password);
@@ -55,7 +58,8 @@ export const LoginForm = () => {
         } catch ({ name, message }) {
             showErrorMessage(message);
         }
-    }
+    };
+
     return (
         <div className={styles.center}>
             <div className={styles.section}>

@@ -8,12 +8,12 @@ import { FunctionContext } from '../../App';
 
 export const NotificationIcon = (props) => {
     const token = localStorage.getItem('token');
-    const showErrorMessage = useContext(FunctionContext);
     const dispatch = useDispatch();
+    const showErrorMessage = useContext(FunctionContext);
     const pageName = useSelector(state => state.page.name);
+    const unseenChats = useSelector(state => state.chat.unseenChats);
     const [ID, setID] = useState(null);
     const [flag, setFlag] = useState(false);
-    const unseenChats = useSelector(state => state.chat.unseenChats);
     const [completed, setCompleted] = useState(false);
     const [ws, updateWS] = useState(null);
 
@@ -98,18 +98,16 @@ export const NotificationIcon = (props) => {
 
 
     return (
-        <div className={`${styles.container} ${pageName === props.title ? styles.active : ''} `} >
-            <Link to={`/${props.title}`} >
-                <div className={styles.notification_container} >
-                    {unseenChats.length > 0 &&
-                        <div className={styles.notification} >
-                            {unseenChats.length < 10 ? unseenChats.length : '9+'}
-                        </div>}
-                    <box-icon name={props.name} size="md" color='#B1B2FF' ></box-icon>
-                </div>
-            </Link>
+        <Link to={`/${props.title}`} className={`${styles.container} ${styles.item} ${pageName === props.title ? styles.active : ''}`} >
+            <div className={styles.notification_container} >
+                {unseenChats.length > 0 &&
+                    <div className={styles.notification} >
+                        {unseenChats.length < 10 ? unseenChats.length : '9+'}
+                    </div>}
+                <box-icon name={props.name} size="md" color='#B1B2FF' ></box-icon>
+            </div>
             <h2>{props.title}</h2>
-        </div>
+        </Link>
     )
 }
 

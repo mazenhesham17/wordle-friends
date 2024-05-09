@@ -114,3 +114,9 @@
         cursor: pointer;
     }
 }
+
+.show{
+    @media screen and (max-width: 768px) {
+        transform: translateY(0);
+    }
+}

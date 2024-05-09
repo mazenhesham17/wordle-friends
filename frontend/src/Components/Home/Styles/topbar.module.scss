@@ -4,10 +4,11 @@ $primary-color: #B1B2FF;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: calc(100% - 20px);
     padding: 10px;
     margin: 10px;
     border-radius: 8px;
-    background-color: #fff;
+    background-color: white;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
 
     h1 {
@@ -15,4 +16,35 @@ $primary-color: #B1B2FF;
         font-weight: 500;
         color: $primary-color;
     }
+
+    @media screen and (max-width: 480px) {
+        margin: 0px;
+        width: 100%;
+        border-radius: 0px;
+
+    }
+}
+
+.row {
+    display: flex;
+}
+
+.button {
+    display: none;
+    border: none;
+    background-color: unset;
+    margin-right: 10px;
+    cursor: pointer;
+
+    @media screen and (max-width: 480px) {
+        display: block;
+    }
+}
+
+.title {
+    @media screen and (max-width: 768px) {
+        font-size: 24px;
+        padding: 0 10px;
+    }
+
 }

@@ -7,16 +7,31 @@
   font-size: 18px;
   font-weight: 500;
 }
+@media screen and (max-width: 768px) {
+  .container h1 {
+    font-size: 16px;
+  }
+}
+@media screen and (max-width: 480px) {
+  .container h1 {
+    display: none;
+  }
+}
 .container h2 {
   margin: 0;
   font-size: 14px;
   font-weight: 500;
   color: #D9D9D9;
 }
+@media screen and (max-width: 480px) {
+  .container h2 {
+    display: none;
+  }
+}
 
 .avatar {
   color: white;
-  margin: 10px;
+  margin: 5px 10px;
   background-color: #B1B2FF;
 }
 
@@ -33,7 +48,7 @@
   border-radius: 0 0 10px 10px;
   padding: 0px;
   margin-top: 11px;
-  width: 210px;
+  width: 100%;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
 }
 .menu ul {
@@ -45,6 +60,12 @@
 }
 .menu ul li:hover {
   cursor: pointer;
+}
+@media screen and (max-width: 480px) {
+  .menu {
+    width: -moz-max-content;
+    width: max-content;
+  }
 }
 
 .menu.open {

@@ -1,22 +1,21 @@
-import './App.css';
 import React, { createContext, useRef } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { Toast } from 'primereact/toast';
 import HomePage from './Pages/HomePage';
 import Profile from './Pages/ProfilePage';
 import Dashboard from './Pages/Dashboard';
 import ChatPage from './Pages/ChatPage';
 import SearchPage from './Pages/SearchPage';
+import GamePage from './Pages/GamePage';
 import LoginForm from './Components/Form/LoginForm';
 import RegistrationForm from './Components/Form/RegistrationForm';
 import Sidebar from './Components/Home/Sidebar';
 import Topbar from './Components/Home/Topbar';
+import GameBoard from './Components/Game/GameBoard';
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
-import { Toast } from 'primereact/toast';
-import GamePage from './Pages/GamePage';
-import GameBoard from './Components/Game/GameBoard';
-
+import './App.css';
 
 const FunctionContext = createContext();
 

@@ -8,6 +8,14 @@ $primary-color: #B1B2FF;
         margin: 0;
         font-size: 18px;
         font-weight: 500;
+
+        @media screen and (max-width: 768px) {
+            font-size: 16px;
+        }
+
+        @media screen and (max-width: 480px) {
+            display: none;
+        }
     }
 
     h2 {
@@ -15,13 +23,17 @@ $primary-color: #B1B2FF;
         font-size: 14px;
         font-weight: 500;
         color: #D9D9D9;
+
+        @media screen and (max-width: 480px) {
+            display: none;
+        }
     }
 }
 
 
 .avatar {
     color: white;
-    margin: 10px;
+    margin: 5px 10px;
     background-color: $primary-color;
 }
 
@@ -38,7 +50,7 @@ $primary-color: #B1B2FF;
     border-radius: 0 0 10px 10px;
     padding: 0px;
     margin-top: 11px;
-    width: 210px;
+    width: 100%;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
 
     ul {
@@ -51,6 +63,10 @@ $primary-color: #B1B2FF;
         li:hover {
             cursor: pointer;
         }
+    }
+
+    @media screen and (max-width: 480px) {
+        width: max-content;
     }
 
 }

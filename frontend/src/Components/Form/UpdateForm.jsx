@@ -1,20 +1,15 @@
-import React, { useContext, useRef } from 'react'
+import React, { useContext, useRef } from 'react';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
+import { FunctionContext } from '../../App';
 import InputField from './InputField';
 import styles from './Styles/form.module.css';
-import { FunctionContext } from '../../App';
 
 export const UpdateForm = (props) => {
     const token = localStorage.getItem('token');
     const showErrorMessage = useContext(FunctionContext);
     const formikRef = useRef(null);
 
-    const submitForm = () => {
-        if (formikRef.current) {
-            formikRef.current.submitForm();
-        }
-    };
     const validationSchema = Yup.object({
         firstName: Yup.string()
             .required('This field is required')
@@ -25,7 +20,13 @@ export const UpdateForm = (props) => {
         email: Yup.string()
             .required('This field is required')
             .matches(/^[\w._-]+@[\w.]+\.[\w]{2,4}$/, 'Invalid email address'),
-    })
+    });
+
+    const submitForm = () => {
+        if (formikRef.current) {
+            formikRef.current.submitForm();
+        }
+    };
 
     const submit = async (data) => {
         try {
@@ -46,7 +47,7 @@ export const UpdateForm = (props) => {
         } catch ({ name, message }) {
             showErrorMessage(message);
         }
-    }
+    };
 
     return (
         <>
@@ -71,7 +72,7 @@ export const UpdateForm = (props) => {
                 </Formik>
             </div>
             <div>
-                <button className={`${styles.button} ${styles.cancel} `} onClick={() => { props.back() }} > Cancel </button>
+                <button className={`${styles.button} ${styles.cancel}`} onClick={() => { props.back() }} > Cancel </button>
                 <button className={styles.button} onClick={() => { props.changePassword() }} > Change Password </button>
                 <button className={`${styles.button} ${styles.save}`} onClick={submitForm} >Save changes</button>
             </div>

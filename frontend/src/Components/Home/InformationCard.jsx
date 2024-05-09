@@ -1,16 +1,17 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { Avatar } from 'primereact/avatar';
-import styles from './Styles/informationcard.module.css';
 import { useDispatch } from 'react-redux';
 import { reduxLogout } from '../../State/authSlice';
 import { FunctionContext } from '../../App';
+import { Avatar } from 'primereact/avatar';
+import styles from './Styles/informationcard.module.css';
+
 
 export const InformationCard = () => {
+    const token = localStorage.getItem('token');
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const showErrorMessage = useContext(FunctionContext);
-    const token = localStorage.getItem('token');
     const [showMenu, setShowMenu] = useState(false);
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState({});
