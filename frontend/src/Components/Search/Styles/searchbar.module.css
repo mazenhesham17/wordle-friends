@@ -10,6 +10,11 @@
   border-radius: 8px;
   padding-right: 36px;
 }
+@media screen and (max-width: 768px) {
+  .container input {
+    width: 100%;
+  }
+}
 .container .searchIcon {
   position: absolute;
   top: 0;

@@ -5,8 +5,15 @@ $primary-color: #B1B2FF;
     border-radius: 12px;
     margin-bottom: 10px;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-    width: max-content;
-    min-height: 450px;
+    width: calc(70% - 10px);
+
+    @media screen and (max-width: 1200px) {
+        width: calc(100% - 10px);
+    }
+
+    @media screen and (max-width: 768px) {
+        width: 100%;
+    }
 }
 
 h1 {
@@ -18,7 +25,6 @@ h1 {
 .chart {
     margin: 10px;
     height: 300px;
-    width: 100%;
 }
 
 .row {

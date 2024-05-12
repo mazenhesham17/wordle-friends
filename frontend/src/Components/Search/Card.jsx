@@ -45,17 +45,18 @@ export const Card = (props) => {
       <div className={styles.column} >
         <h1> {props.firstName + ' ' + props.lastName} </h1>
         <h2> {props.username} </h2>
-        <div style={{ display: 'flex', justifyContent: 'end' }} >
+        <div className={styles.end}>
           <div className={`${styles.button} ${isFriend ? '' : styles.add} `}
             onClick={() => {
               if (!isFriend) {
                 addFriend()
               }
             }} >
-            {isFriend ? <>
-              <box-icon name='user-check' size="sm" color='white'></box-icon>
-              <p>friend</p>
-            </> :
+            {isFriend ?
+              <>
+                <box-icon name='user-check' size="sm" color='white'></box-icon>
+                <p>friend</p>
+              </> :
               <>
                 <box-icon name='user-plus' size="sm" color='white' ></box-icon>
                 <p>add friend</p>

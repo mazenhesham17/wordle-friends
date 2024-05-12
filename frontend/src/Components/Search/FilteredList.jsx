@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react'
-import Card from './Card';
 import { useSelector } from 'react-redux';
 import { FunctionContext } from '../../App';
 import { getRandomColor } from '../../Util/random';
+import Card from './Card';
+import styles from './Styles/card.module.css';
 
 export const FilteredList = () => {
     const token = localStorage.getItem('token');
@@ -41,7 +42,7 @@ export const FilteredList = () => {
 
     return (
         <>
-            <div style={{ display: "flex", flexDirection: "column", width: "max-content" }}>
+            <div className={styles.list} >
                 {
                     players.length ?
                         players.map((player, index) => {

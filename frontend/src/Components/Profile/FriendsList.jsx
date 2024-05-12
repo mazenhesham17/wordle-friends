@@ -2,8 +2,9 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Avatar } from 'primereact/avatar';
 import { AvatarGroup } from 'primereact/avatargroup';
 import { FunctionContext } from '../../App';
-import styles from './Styles/friendslist.module.css';
 import { getRandomColor } from '../../Util/random';
+import styles from './Styles/friendslist.module.css';
+
 
 export const FriendsList = () => {
     const token = localStorage.getItem('token');
@@ -40,11 +41,26 @@ export const FriendsList = () => {
                 <h1>Friends</h1>
             </div>
             <AvatarGroup className={styles.group} >
-                {friends.map((friend, index) => {
-                    return <Avatar key={index} label={friend.label} size='xlarge'
-                        shape='circle' className={styles.avatar}
-                        style={{ backgroundColor: getRandomColor() }} />
-                })}
+                {friends.slice(0, 5).map((friend, index) => (
+                    <Avatar
+                        key={index}
+                        label={friend.label}
+                        size="xlarge"
+                        shape="circle"
+                        className={styles.avatar}
+                        style={{ backgroundColor: getRandomColor() }}
+                    />
+                ))}
+                {friends.length > 5 && (
+                    <Avatar
+                        key="more"
+                        label="+"
+                        size="xlarge"
+                        shape="circle"
+                        className={styles.avatar}
+                        style={{ backgroundColor: getRandomColor() }}
+                    />
+                )}
             </AvatarGroup>
         </div>
     )

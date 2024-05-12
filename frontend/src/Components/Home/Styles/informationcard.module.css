@@ -17,6 +17,11 @@
     display: none;
   }
 }
+@media screen and (max-width: 768px) {
+  .container .hide {
+    display: none;
+  }
+}
 .container h2 {
   margin: 0;
   font-size: 14px;

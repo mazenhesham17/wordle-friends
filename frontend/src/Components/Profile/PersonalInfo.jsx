@@ -1,18 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { FunctionContext } from '../../App';
 import { Avatar } from 'primereact/avatar';
+import { FunctionContext } from '../../App';
 import { Field } from './Field';
-import styles from './Styles/personalinfo.module.css';
 import UpdateForm from '../Form/UpdateForm';
 import PasswordUpdate from '../Form/PasswordUpdate';
+import styles from './Styles/personalinfo.module.css';
 
 
 export const PersonalInfo = () => {
   const token = localStorage.getItem('token');
   const showErrorMessage = useContext(FunctionContext);
+  const [selector, setSelector] = useState('personal-info');
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
-  const [selector, setSelector] = useState('personal-info');
+
   const fetchData = async () => {
     try {
       const response = await fetch('http://localhost:4000/api/profile/personal-info', {

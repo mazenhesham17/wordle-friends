@@ -7,6 +7,29 @@
   width: 400px;
   padding: 10px;
 }
+@media screen and (max-width: 520px) {
+  .container {
+    width: calc(100% - 20px);
+  }
+}
+@media screen and (max-width: 480px) {
+  .container {
+    margin: 10px;
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  width: -moz-max-content;
+  width: max-content;
+  overflow-y: auto;
+}
+@media screen and (max-width: 520px) {
+  .list {
+    width: 100%;
+  }
+}
 
 .column {
   display: flex;
@@ -23,6 +46,10 @@
   font-size: 16px;
   font-weight: 500;
   color: #D9D9D9;
+}
+.column .end {
+  display: flex;
+  justify-content: end;
 }
 
 .avatar {

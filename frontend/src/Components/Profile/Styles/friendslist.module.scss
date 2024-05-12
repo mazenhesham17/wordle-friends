@@ -5,6 +5,16 @@ $primary-color: #B1B2FF;
     min-height: 150px;
     border-radius: 12px;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    width: calc(70% - 10px);
+    margin-bottom: 10px;
+
+    @media screen and (max-width: 1200px) {
+        width: calc(100% - 10px);
+    }
+
+    @media screen and (max-width: 768px) {
+        width: 100%;
+    }
 }
 
 .group {

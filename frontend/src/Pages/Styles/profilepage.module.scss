@@ -1,0 +1,20 @@
+.row {
+    display: flex;
+
+    @media screen and (max-width: 768px) {
+        flex-direction: column;
+        overflow-y: auto;
+        width: calc(100% - 10px);
+    }
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+    @media screen and (max-width: 768px) {
+        display: unset;
+        margin: 10px 0 0 10px;
+    }
+}

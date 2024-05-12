@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Chart } from 'primereact/chart';
 import { FunctionContext } from '../../App';
-import styles from './Styles/chart.module.css';
 import { lastNelements } from '../../Util/array';
 import { monthName } from '../../Util/date';
+import styles from './Styles/chart.module.css';
 
 export const GameChart = () => {
     const token = localStorage.getItem('token');
@@ -65,15 +65,10 @@ export const GameChart = () => {
                 stacked: true,
             }
         },
-        layout: {
-            padding: {
-                left: 50,
-                right: 20,
-                top: 50,
-                bottom: 0
-            }
-        },
-        barThickness: 20,
+        barPercentage: 0.5,
+        categoryPercentage: 0.4,
+        maxBarThickness: 20,
+        maintainAspectRatio: false,
         responsive: true
     }
 

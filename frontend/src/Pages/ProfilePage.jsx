@@ -4,7 +4,7 @@ import { chageTitle, changePage } from '../State/pageSlice';
 import PersonalInfo from '../Components/Profile/PersonalInfo';
 import GameChart from '../Components/Profile/GameChart';
 import FriendsList from '../Components/Profile/FriendsList';
-import styles from './Styles/layout.module.css';
+import styles from './Styles/profilepage.module.css';
 
 export const Profile = () => {
     const dispatch = useDispatch();

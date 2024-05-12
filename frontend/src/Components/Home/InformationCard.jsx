@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { reduxLogout } from '../../State/authSlice';
 import { FunctionContext } from '../../App';
 import { Avatar } from 'primereact/avatar';
@@ -12,6 +12,7 @@ export const InformationCard = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const showErrorMessage = useContext(FunctionContext);
+    const pageName = useSelector(state => state.page.name);
     const [showMenu, setShowMenu] = useState(false);
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState({});
@@ -64,12 +65,12 @@ export const InformationCard = () => {
                         <Avatar label={data.username[0].toUpperCase()} shape="circle" size="normal" className={styles.avatar} />
                         <div>
                             <div className={styles.row} >
-                                <h1> {data.firstName.length > 0 ? data.firstName + " " + data.lastName : data.username} </h1>
+                                <h1 className={pageName === 'search' ? styles.hide : null} > {data.firstName.length > 0 ? data.firstName + " " + data.lastName : data.username} </h1>
                                 <div onClick={toggleMenu} style={{ alignSelf: "flex-end" }} >
                                     <box-icon name='chevron-down' size="sm" color='#B1B2FF'></box-icon>
                                 </div>
                             </div>
-                            <h2> {data.username} </h2>
+                            <h2 className={pageName === 'search' ? styles.hide : null} > {data.username} </h2>
                         </div>
                     </div>
                     <div className={styles.menuContainer} >

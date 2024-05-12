@@ -10,6 +10,10 @@
         line-height: 36px;
         border-radius: 8px;
         padding-right: 36px;
+
+        @media screen and (max-width: 768px) {
+            width: 100%;
+        }
     }
 
     .searchIcon {

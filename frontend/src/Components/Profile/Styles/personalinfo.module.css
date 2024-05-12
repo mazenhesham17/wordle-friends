@@ -8,6 +8,24 @@
   flex-direction: column;
   justify-content: space-between;
 }
+@media screen and (max-width: 1200px) {
+  .container {
+    width: calc(30% - 20px);
+    min-width: 250px;
+    min-height: -moz-fit-content;
+    min-height: fit-content;
+  }
+}
+@media screen and (max-width: 768px) {
+  .container {
+    width: calc(100% - 10px);
+  }
+}
+@media screen and (max-width: 480px) {
+  .container {
+    margin-top: 10px;
+  }
+}
 
 .heading {
   background-color: #EEF1FF;

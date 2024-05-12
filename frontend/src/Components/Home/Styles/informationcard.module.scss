@@ -18,6 +18,12 @@ $primary-color: #B1B2FF;
         }
     }
 
+    .hide {
+        @media screen and (max-width: 768px) {
+            display: none;
+        }
+    }
+
     h2 {
         margin: 0;
         font-size: 14px;
