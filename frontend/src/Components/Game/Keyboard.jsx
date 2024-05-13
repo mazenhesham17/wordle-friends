@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { changeInput, toggleClear } from '../../State/gameSlice';
 import { AiOutlineEnter } from "react-icons/ai";
 import { HiOutlineBackspace } from "react-icons/hi";
 import styles from './Styles/keyboard.module.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { changeInput, toggleClear } from '../../State/gameSlice';
-
 
 export const Keyboard = (props) => {
     const dispatch = useDispatch();
@@ -72,9 +71,9 @@ export const Keyboard = (props) => {
                         {
                             row.split(' ').map((keyName, idx) => (
                                 <div key={idx}
-                                    className={`${styles.key} ${pressedKey.toLowerCase() === keyName.toLowerCase() && styles.pressed}`}
+                                    className={`${styles.key} ${pressedKey.toLowerCase() === keyName.toLowerCase()? styles.pressed : '' }`}
                                     state={props.keys.has(keyName.toLowerCase()) ? props.keys.get(keyName.toLowerCase()) : 'none'}
-                                    keyenabled={props.disabled}
+                                    keyenabled={(!props.disabled).toString()}
                                     onClick={() => press(keyName)} >{
                                         keyName.length === 1 ? keyName : keyName === "Backspace" ?
                                             <HiOutlineBackspace size={24} /> : <AiOutlineEnter size={24} />

@@ -7,13 +7,16 @@ $incorrect-color: #6e6fcc;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    width: 100%;
+
+    margin: 0 10px;
+    width: calc(100% - 20px);
 }
 
 .row {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100%;
 }
 
 .key {
@@ -22,13 +25,24 @@ $incorrect-color: #6e6fcc;
     align-items: center;
     font-weight: bold;
     min-width: 40px;
-    width: fit-content;
     padding: 5px;
     height: 40px;
     background-color: #EEF1FF;
     border-radius: 4px;
     margin: 3px;
     transition: transform 0.5s ease;
+
+    @media screen and (max-width: 768px) {
+        min-width: 28px;
+    }
+
+    @media screen and (max-width: 480px) {
+        font-size: 14px;
+        width: 20%;
+        min-width: unset;
+        height: unset;
+        padding: 10px;
+    }
 }
 
 .key[keyenabled=true] {
@@ -55,8 +69,6 @@ $incorrect-color: #6e6fcc;
 .key[state=partial-correct] {
     background-color: $partial-correct-color;
 }
-
-.key:hover {}
 
 .pressed {
     animation: press 0.5s ease;

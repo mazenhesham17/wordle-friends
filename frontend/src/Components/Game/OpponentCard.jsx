@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react'
-import styles from './Styles/opponentcard.module.css';
 import { Avatar } from 'primereact/avatar';
 import { getRandomColor } from '../../Util/random';
 import { countOccurrences } from '../../Util/array';
+import styles from './Styles/opponentcard.module.css';
 
 export const OpponentCard = (props) => {
     const color = useMemo(() => getRandomColor(), []);
@@ -24,13 +24,13 @@ export const OpponentCard = (props) => {
         )
     }
 
-    const label = props.firstName[0].toUpperCase() + props.lastName[0].toUpperCase();
+    const label = props.firstName[0]?.toUpperCase() + props.lastName[0]?.toUpperCase();
 
     return (
         <div className={styles.container} >
             <h1 className={styles.title} > Opponent </h1>
             <div className={styles.left_row} >
-                <Avatar label={label} size='xlarge'
+                <Avatar label={label} size='large'
                     shape='circle' className={styles.avatar}
                     style={{ backgroundColor: color }} />
                 <div className={styles.column} >

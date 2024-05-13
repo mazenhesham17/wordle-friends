@@ -1,15 +1,15 @@
 import React, { useEffect, useContext, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { chageTitle, changePage } from '../State/pageSlice';
-import { useNavigate } from 'react-router-dom';
-import styles from './Styles/gamepage.module.css';
 import { FunctionContext } from '../App';
 import JoinBar from '../Components/Game/JoinBar';
+import styles from './Styles/gamepage.module.css';
 
 export const GamePage = () => {
     const token = localStorage.getItem('token');
-    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const showErrorMessage = useContext(FunctionContext);
     const title = useSelector(state => state.page.title);
     const [roomID, setRoomID] = useState('');

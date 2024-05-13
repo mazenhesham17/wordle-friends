@@ -1,14 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { FunctionContext } from '../../App';
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { FunctionContext } from '../../App';
 import styles from './Styles/joinbar.module.css';
 
 export const JoinBar = () => {
-    const navigate = useNavigate();
     const token = localStorage.getItem('token');
+    const navigate = useNavigate();
     const showErrorMessage = useContext(FunctionContext);
     const [roomID, setRoomID] = useState('');
-    const [correct, setCorrect] = useState(false);
 
     const updateRoomID = (e) => {
         setRoomID(e.target.value);
@@ -26,7 +25,7 @@ export const JoinBar = () => {
             if (responseJSON.error) {
                 showErrorMessage(responseJSON.error);
             } else {
-                setCorrect(true);
+                navigate(`/game/${roomID}`);
             }
         } catch ({ name, message }) {
             showErrorMessage(message);
@@ -34,12 +33,6 @@ export const JoinBar = () => {
 
 
     }
-
-    useEffect(() => {
-        if (correct) {
-            navigate(`/game/${roomID}`);
-        }
-    }, [correct]);
 
     return (
         <div className={styles.container} >
