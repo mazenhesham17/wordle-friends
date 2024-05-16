@@ -1,473 +1,789 @@
-# API
+# API Endpoints Documentation
+
+## Table of Contents
+
+- [User](#user)
+  - [User Login](#user-login)
+  - [Register User](#register-user)
+  - [Get User Info](#get-user-info)
+- [Admin](#admin)
+  - [Get Dashboard](#get-dashboard)
+- [Player](#player)
+  - [Profile](#profile)
+    - [Get Personal Profile](#get-personal-profile)
+    - [Update Personal Profile](#update-personal-profile)
+    - [Get Games Info](#get-games-info)
+    - [Get Friends](#get-friends)
+  - [Game](#game)
+    - [Check Room Availability](#check-room-availability)
+    - [Create New Game](#create-new-game)
+    - [Start Game in Room](#start-game-in-room)
+  - [Chat](#chat)
+    - [Enable Chat Notifications](#enable-chat-notifications)
+    - [Get Friends Chat](#get-friends-chat)
+    - [Get Chat Room](#get-chat-room)
+    - [Get Chat Messages](#get-chat-messages)
+    - [Start Chat Session](#start-chat-session)
+  - [Search](#search)
+    - [Search by Username](#search-by-username)
+    - [Add Friend](#add-friend)
 
 ## User
 
-### Login
+### User Login
 
-POST `/api/login`
+Logs in a user.
 
-The request body needs to be in JSON format and include the following properties:
+- URL: `/api/login`
+- Method: `POST`
+- URL Params: None
+- Request Body: JSON
+  - `identifier` - (string) - username or email of the user
+  - `password` - (string) - password of the user
+    **Note:** the password should be hashed
+- Example:
+  ```
+  POST /api/login
+  {
+    "identifier" : "example",
+    "password" : "<hashed_password>"
+  }
+  ```
+- Response:
+  - Success:
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "token": "<authentication_token>",
+      "userType": "player"
+    }
+    ```
+  - Error:
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "error": "Invalid email or username"
+    }
+    ```
 
-- `identifier` - String - Required
-- `password` - String - Required
+### Register User
 
-Example
+Registers a new user.
 
-```
-POST /api/login
-{
-    "identifier" : "admin@wordle.com",
-    "password" : "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"
-}
-```
+- URL: `/api/register`
+- Method: `POST`
+- URL Params: None
+- Request Body: JSON
+  - `username` - (string) - username of the user
+  - `firstName` - (string) - first name of the user
+  - `lastName` - (string) - last name of the user
+  - `email` - (string) - email of the user
+  - `password` - (string) - password of the user
+    **Note:** the password should be hashed
+- Example:
+  ```
+  POST /api/register
+  {
+    "username" : "example",
+    "firstName" : "example",
+    "lastName" : "example",
+    "email" : "example@example.com",
+    "password" : "<hashed_password>"
+  }
+  ```
+- Response:
+  - Success:
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "token": "<authentication_token>",
+      "userType": "player"
+    }
+    ```
+  - Error:
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "error": "Username already exists"
+    }
+    ```
 
-**Note:** the password should be hashed
+### Get User Info
 
-Response Example
+Retrieves information about the authenticated user.
 
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJpc3MiOiJzZXJ2ZXIiLCJ1c2VySUQiOiIxIiwidXNlclR5cGUiOiJhZG1pbiJ9.qPwyN_FJ06KBq0fF0e8ocsCy7vHEF9LhS1kpwHnObgw",
-  "userType": "admin"
-}
-```
+- URL: `/api/info`
+- Method: `GET`
+- Headers:
+  - `Authorization` - (string) - authentication token
+- Example:
+  ```
+  GET /api/info
+  Authorization: <authentication_token>
+  ```
+- Response:
+  - Success:
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "username": "example",
+      "firstName": "example",
+      "lastName": "example",
+      "userType": "player"
+    }
+    ```
+  - Error:
+    - Code: 401
+    - Content:
+    ```json
+    {
+      "error": "Unauthorized"
+    }
+    ```
 
-### Register
+## Admin
 
-POST `/api/register`
+### Get Dashboard
 
-The request body needs to be in JSON format and include the following properties:
+Retrieves the dashboard for an admin user.
 
-- `username` - String - Required
-- `firstName` - String - Required
-- `lastName` - String - Required
-- `email` - String - Required
-- `password` - String - Required
-
-Example
-
-```
-POST /api/register
-{
-    "username" : "mazen",
-    "firstName" : "mazen",
-    "lastName" : "hesham",
-    "email" : "mazen@lgh.com",
-    "password" : "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5"
-}
-```
-
-**Note:** the password should be hashed
-
-Response Example
-
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJpc3MiOiJzZXJ2ZXIiLCJ1c2VySUQiOiIxIiwidXNlclR5cGUiOiJhZG1pbiJ9.qPwyN_FJ06KBq0fF0e8ocsCy7vHEF9LhS1kpwHnObgw",
-  "userType": "player"
-}
-```
-
-### User info
-
-GET `/api/info`
-
-Example
-
-```
-GET /api/info
-Authorization: <token>
-```
-
-**Authorization header is required**
-
-Response Example
-
-```json
-{
-  "username": "mazen",
-  "firstName": "Mazen",
-  "lastName": "Hesham",
-  "userType": "Player"
-}
-```
+- URL: `/api/admin/dashboard/:offset`
+- Method: `GET`
+- URL Params:
+  - `offset` - (int) - offset for the time zone
+- Headers:
+  - `Authorization` - (string) - authentication token
+- Example:
+  ```
+  GET /api/admin/dashboard/2
+  Authorization: <authentication_token>
+  ```
+- Response:
+  - Success:
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "totalPlayers": 0,
+      "totalGames": 0,
+      "totalWins": 0,
+      "totalMessages": 0,
+      "games": [],
+      "messages": [],
+      "players": []
+    }
+    ```
+  - Error:
+    - Code: 401
 
 ## Player
 
-### Search by username
+### Profile
 
-GET `/api/search/:query`
+#### Get Personal Profile
 
-Example
+Retrieves the personal profile of the authenticated user.
 
-```
-GET /api/search/a
-Authorization: <token>
-```
-
-**Authorization header is required**
-
-Response Example
-
-```json
-{
-  "players": [
+- URL: `/api/profile/personal-info`
+- Method: `GET`
+- Headers:
+  - `Authorization` - (string) - authentication token
+- Example:
+  ```
+  GET /api/profile/personal-info
+  Authorization: <authentication_token>
+  ```
+- Response:
+  - Success:
+    - Code: 200
+    - Content:
+    ```json
     {
-      "firstName": "hazem",
-      "lastName": "adel",
-      "username": "hazem",
-      "playerID": 3,
-      "isFriend": 1
-    },
-    {
-      "firstName": "abdelrahman",
-      "lastName": "gamal",
-      "username": "gamal",
-      "playerID": 5,
-      "isFriend": 1
+      "username": "example",
+      "firstName": "example",
+      "lastName": "example",
+      "email": "example@example.com",
+      "userType": "player"
     }
-  ]
-}
-```
-
-### Add friend
-
-POST `api/add-friend/:friendID`
-
-Example
-
-```
-POST /api/add-friend/5
-Authorization: <token>
-```
-
-**Authorization header is required**
-
-Response Example
-
-```json
-{ "message": "success" }
-```
-
-### Update profile info
-
-PUT `/api/profile/personal-info`
-
-The request body needs to be in JSON format and include the following properties:
-
-- `firstName` - String - Optional
-- `lastName` - String - Optional
-- `email` - String - Optional
-- `password` - String - Optional
-
-Example
-
-```
-PUT /api/profile/personal-info
-{
-    "lastName" : "moatasem"
-}
-Authorization : <token>
-```
-
-**Authorization header is required**
-
-Response Example
-
-```json
-{
-  "username": "mazen",
-  "firstName": "mazen",
-  "lastName": "moatasem",
-  "email": "mazen@lgh.com",
-  "userType": "player"
-}
-```
-
-### Get personal info
-
-GET `/api/profile/personal-info`
-
-Example
-
-```
-GET /api/profile/personal-info
-Authorization: <token>
-```
-
-**Authorization header is required**
-
-Response Example
-
-```json
-{
-  "username": "mazen",
-  "firstName": "mazen",
-  "lastName": "hesham",
-  "email": "mazen@lgh.com",
-  "userType": "player"
-}
-```
-
-### Get games info
-
-GET `/api/profile/games-info`
-
-Example
-
-```
-GET /api/profile/games-info
-Authorization: <token>
-```
-
-**Authorization header is required**
-
-Response Example
-
-```json
-{
-  "games": [
+    ```
+  - Error:
+    - Code: 401
+    - Content:
+    ```json
     {
-      "Date": "2024-03-08",
-      "wins": 1,
-      "loses": 1
-    },
-    {
-      "Date": "2024-03-09",
-      "wins": 1,
-      "loses": 4
-    },
-    {
-      "Date": "2024-03-12",
-      "wins": 0,
-      "loses": 3
+      "error": "Unauthorized"
     }
-  ]
-}
-```
+    ```
 
-### Get friends
+#### Update Personal Profile
 
-GET `/api/profile/friends`
+Updates the personal profile of the authenticated user.
 
-Example
-
-```
-GET /api/profile/friends
-Authorization : <token>
-```
-
-**Authorization header is required**
-
-Response Example
-
-```json
-{
-  "friends": [
+- URL: `/api/profile/personal-info`
+- Method: `PUT`
+- Headers:
+  - `Authorization` - (string) - authentication token
+- Request Body: JSON
+  Fields to be updated (e.g., firstname, username, password)
+  **Note:** the password should be hashed
+- Example:
+  ```
+  PUT /api/profile/personal-info
+  {
+    "firstName" : "example"
+  }
+  Authorization: <authentication_token>
+  ```
+- Response:
+  - Success:
+    - Code: 200
+    - Content:
+    ```json
     {
-      "label": "HA"
-    },
-    {
-      "label": "SS"
-    },
-    {
-      "label": "AG"
-    },
-    {
-      "label": "MH"
+      "username": "example",
+      "firstName": "example",
+      "lastName": "example",
+      "email": "example@example.com",
+      "userType": "player"
     }
-  ]
-}
-```
-
-### Create new game
-
-POST `/api/game/new/:type`
-
-Example
-
-```
-POST /api/game/new/S
-Authorization : <token>
-```
-
-**Authorization header is required**
-
-Response Example
-
-```json
-{
-  "roomID": "2S11G11"
-}
-```
-
-### Start game
-
-POST `/api/game/start/:roomID`
-
-Example
-
-```
-POST /api/game/start/2D13G13
-Authorization : <token>
-```
-
-**Authorization header is required**
-
-Response Example
-
-```json
-{
-  "message": "success"
-}
-```
-
-### Check room
-
-GET `/api/game/check-room/:roomID`
-
-Example
-
-```
-GET /api/game/check-room/2D13G13
-Authorization: <token>
-```
-
-**Authorization header is required**
-
-Response Example
-
-```json
-{
-  "message": "success"
-}
-```
-
-### Enable Chat Notifications
-
-POST `/api/chat/notifications`
-
-Example
-
-```
-POST /api/chat/notifications
-Authorization: <token>
-```
-
-**Authorization header is required**
-
-Response Example
-
-```json
-{
-  "message": "success"
-}
-```
-
-### Get Friends List for chat
-
-GET `/api/chat/friends`
-
-Example
-
-```
-GET /api/chat/friends
-Authorization: <token>
-```
-
-**Authorization header is required**
-
-Response Example
-
-```json
-{
-  "friends": [
+    ```
+  - Error:
+    - Code: 200
+    - Content:
+    ```json
     {
-      "firstName": "seif",
-      "lastName": "samir",
-      "read": 1,
-      "friendID": 4
-    },
-    {
-      "firstName": "hazem",
-      "lastName": "adel",
-      "read": 0,
-      "friendID": 3
+      "error": "Player update failed"
     }
-  ]
-}
-```
-
-### Get roomID for chat
-
-GET `/api/chat/room/:friendID`
-
-Example
-
-```
-GET /api/chat/room/3
-Authorization: <token>
-```
-
-**Authorization header is required**
-
-Response Example
-
-```json
-{
-  "roomID": "2F3C1"
-}
-```
-
-### Get Chat Messages
-
-GET `/api/chat/:chatID`
-
-Example
-
-```
-GET /api/chat/1
-Authorization: <token>
-```
-
-**Authorization header is required**
-
-Response Example
-
-```json
-{
-  "messages": [
+    ```
+    - Code: 401
+    - Content:
+    ```json
     {
-      "message": "hello",
-      "playerID": "2",
-      "sendTime": "2024-04-30 00:49:25"
-    },
-    {
-      "message": "welcome",
-      "playerID": "3",
-      "sendTime": "2024-04-30 01:32:13"
+      "error": "Unauthorized"
     }
-  ]
-}
-```
+    ```
 
-### Start Chat session
+#### Get Games Info
 
-POST `/api/chat/start/:roomID`
+Retrieves information about the games played by the authenticated user.
 
-Example
+- URL: `/api/profile/games-info/:offset`
+- Method: `GET`
+- URL Params:
+  - `offset` - (int) - offset for the time zone
+- Headers:
+  - `Authorization` - (string) - authentication token
+- Example:
+  ```
+  GET /api/profile/games-info/2
+  Authorization: <authentication_token>
+  ```
+- Response:
+  - Success:
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "games": [
+        {
+          "Date": "2024-03-08",
+          "wins": 1,
+          "loses": 1
+        }
+      ]
+    }
+    ```
+  - Error:
+    - Code: 401
+    - Content:
+    ```json
+    {
+      "error": "Unauthorized"
+    }
+    ```
 
-```
-POST /api/chat/start/2F3C1
-Authorization: <token>
-```
+#### Get Friends
 
-**Authorization header is required**
+Retrieves the profiles of friends of the authenticated user.
 
-Response Example
+- URL: `/api/profile/friends`
+- Method: `GET`
+- Headers:
+  - `Authorization` - (string) - authentication token
+- Example:
+  ```
+  GET /api/profile/friends
+  Authorization: <authentication_token>
+  ```
+- Response:
+  - Success:
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "friends": [
+        {
+          "label": "EE"
+        }
+      ]
+    }
+    ```
+  - Error:
+    - Code: 401
+    - Content:
+    ```json
+    {
+      "error": "Unauthorized"
+    }
+    ```
 
-```json
-{
-  "message": "success"
-}
-```
+### Game
+
+#### Check Room Availability
+
+Checks if a room is available.
+
+- URL: `/api/game/check-room/:roomID`
+- Method: `GET`
+- URL Params:
+  - `roomID` - (string) - ID of the room to check
+- Headers:
+  - `Authorization` - (string) - authentication token
+- Example:
+  ```
+  GET /api/game/check-room/2D13G13
+  Authorization: <authentication_token>
+  ```
+- Response:
+  - Success:
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "message": "success"
+    }
+    ```
+  - Error:
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "error": "there is no room with this ID"
+    }
+    ```
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "error": "there is no place in the room"
+    }
+    ```
+    - Code: 401
+    - Content:
+    ```json
+    {
+      "error": "Unauthorized"
+    }
+    ```
+
+#### Create New Game
+
+Creates a new game.
+
+- URL: `/api/game/new/:type`
+- Method: `POST`
+- URL Params:
+  - `type` - (string) - type of the game
+- Headers:
+  - `Authorization` - (string) - authentication token
+- Example:
+  ```
+  POST /api/game/new/S
+  Authorization: <authentication_token>
+  ```
+- Response:
+  - Success:
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "roomID": "2S11G11"
+    }
+    ```
+  - Error:
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "error": "you are already in a game"
+    }
+    ```
+    - Code: 401
+    - Content:
+    ```json
+    {
+      "error": "Unauthorized"
+    }
+    ```
+
+#### Start Game in Room
+
+Starts a game in a specific room.
+
+- URL: `/api/game/start/:roomID`
+- Method: `POST`
+- URL Params:
+  - `roomID` - (string) - ID of the room to start the game in
+- Headers:
+  - `Authorization` - (string) - authentication token
+- Example:
+  ```
+  POST /api/game/start/2D13G13
+  Authorization: <authentication_token>
+  ```
+- Response:
+  - Success:
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "message": "success"
+    }
+    ```
+  - Error:
+  - Code: 200
+    - Content:
+    ```json
+    {
+      "error": "you are already in a game"
+    }
+    ```
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "error": "there is no room with this ID"
+    }
+    ```
+    - Code: 401
+    - Content:
+    ```json
+    {
+      "error": "Unauthorized"
+    }
+    ```
+
+### Chat
+
+#### Enable Chat Notifications
+
+Enables chat notifications for the authenticated user.
+
+- URL: `/api/chat/notifications`
+- Method: `POST`
+- Headers:
+  - `Authorization` - (string) - authentication token
+- Example:
+  ```
+  POST /api/chat/notifications
+  Authorization: <authentication_token>
+  ```
+- Response:
+  - Success:
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "message": "success"
+    }
+    ```
+  - Error:
+    - Code: 401
+    - Content:
+    ```json
+    {
+      "error": "Unauthorized"
+    }
+    ```
+
+#### Get Friends Chat
+
+Retrieves friends of the authenticated user.
+
+- URL: `/api/chat/friends`
+- Method: `GET`
+- Headers:
+  - `Authorization` - (string) - authentication token
+- Example:
+  ```
+  GET /api/chat/friends
+  Authorization: <authentication_token>
+  ```
+- Response:
+  - Success:
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "friends": [
+        {
+          "firstName": "example",
+          "lastName": "example",
+          "read": 1,
+          "friendID": 1
+        }
+      ]
+    }
+    ```
+  - Error:
+    - Code: 401
+    - Content:
+    ```json
+    {
+      "error": "Unauthorized"
+    }
+    ```
+
+#### Get Chat Room
+
+Retrieves the chat room ID for communication with a specific friend.
+
+- URL: `/api/chat/room/:friendID`
+- Method: `GET`
+- URL Params:
+  - `friendID` - (int) - ID of the friend
+- Headers:
+  - `Authorization` - (string) - authentication token
+- Example:
+  ```
+  GET /api/chat/room/3
+  Authorization: <authentication_token>
+  ```
+- Response:
+  - Success:
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "roomID": "2F3C1"
+    }
+    ```
+  - Error:
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "error": "there is no friend with this ID"
+    }
+    ```
+    - Code: 401
+    - Content:
+    ```json
+    {
+      "error": "Unauthorized"
+    }
+    ```
+
+#### Get Chat Messages
+
+Retrieves chat messages from a specific chat.
+
+- URL: `/api/chat/:chatID`
+- Method: `GET`
+- URL Params:
+  - `chatID` - (int) - ID of the chat
+- Headers:
+  - `Authorization` - (string) - authentication token
+- Example:
+  ```
+  GET /api/chat/1
+  Authorization: <authentication_token>
+  ```
+- Response:
+  - Success:
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "messages": [
+        {
+          "message": "hello",
+          "playerID": "2",
+          "sendTime": "2024-03-08 00:49:25"
+        }
+      ]
+    }
+    ```
+  - Error:
+  - Code: 200
+    - Content:
+    ```json
+    {
+      "error": "there is no chat with this ID"
+    }
+    ```
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "error": "you are not in this chat"
+    }
+    ```
+    - Code: 401
+    - Content:
+    ```json
+    {
+      "error": "Unauthorized"
+    }
+    ```
+
+#### Start Chat Session
+
+Initiates a chat session in a specific chat room.
+
+- URL: `/api/chat/start/:roomID`
+- Method: `POST`
+- URL Params:
+  - `roomID` - (string) - ID of the chat room
+- Headers:
+  - `Authorization` - (string) - authentication token
+- Example:
+  ```
+  POST /api/chat/start/2F3C1
+  Authorization: <authentication_token>
+  ```
+- Response:
+  - Success:
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "message": "success"
+    }
+    ```
+  - Error:
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "error": "there is no room with this ID"
+    }
+    ```
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "error": "you are not in this chat"
+    }
+    ```
+    - Code: 401
+    - Content:
+    ```json
+    {
+      "error": "Unauthorized"
+    }
+    ```
+
+### Search
+
+#### Search by Username
+
+Searches for users based on a query string.
+
+- URL: `/api/search/:query`
+- Method: `GET`
+- URL Params:
+  - `query` - (string) - query string to search for
+- Headers:
+  - `Authorization` - (string) - authentication token
+- Example:
+  ```
+  GET /api/search/a
+  Authorization: <authentication_token>
+  ```
+- Response:
+  - Success:
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "players": [
+        {
+          "firstName": "example",
+          "lastName": "example",
+          "username": "example",
+          "playerID": 3,
+          "isFriend": 1
+        }
+      ]
+    }
+    ```
+  - Error:
+    - Code: 401
+    - Content:
+    ```json
+    {
+      "error": "Unauthorized"
+    }
+    ```
+
+#### Add Friend
+
+Adds a user as a friend.
+
+- URL: `/api/add-friend/:friendID`
+- Method: `POST`
+- URL Params:
+  - `friendID` - (int) - ID of the friend to add
+- Headers:
+
+  - `Authorization` - (string) - authentication token
+
+- Example:
+  ```
+  POST /api/add-friend/3
+  Authorization: <authentication_token>
+  ```
+- Response:
+  - Success:
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "message": "success"
+    }
+    ```
+  - Error:
+  - Code: 200
+    - Content:
+    ```json
+    {
+      "error": "there is no user with this ID"
+    }
+    ```
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "error": "you can't add yourself as a friend"
+    }
+    ```
+    - Code: 200
+    - Content:
+    ```json
+    {
+      "error": "you are already friend with this user"
+    }
+    ```
+    - Code: 401
+    - Content:
+    ```json
+    {
+      "error": "Unauthorized"
+    }
+    ```
