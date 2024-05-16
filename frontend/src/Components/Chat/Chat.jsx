@@ -1,133 +1,29 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { FunctionContext } from '../../App';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeChat } from '../../State/chatSlice';
-import styles from './Styles/chat.module.css';
+import { FunctionContext } from '../../App';
 import { Avatar } from 'primereact/avatar';
 import { getLabel } from '../../Util/string';
 import MessageList from './MessageList';
+import styles from './Styles/chat.module.css';
 
 export const Chat = () => {
     const token = localStorage.getItem('token');
+    const dispatch = useDispatch();
     const showErrorMessage = useContext(FunctionContext);
     const chatDetails = useSelector(state => state.chat.activeChat);
-    const dispatch = useDispatch();
 
-    const [roomID, setRoomID] = useState('');
     const [messages, setMessages] = useState([]);
-
     const [sentMessage, setSentMessage] = useState('');
     const [receivedMessage, setReceivedMessage] = useState('');
 
     const [WS, setWS] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [waiting, setWaiting] = useState(false);
     const [flag, setFlag] = useState(false);
 
-    useEffect(() => {
-        return () => {
-            dispatch(changeChat(null));
-        }
-    }, []);
-
-    const resetConnection = () => {
-        setRoomID('');
-        setMessages([]);
-        setSentMessage('');
-        setReceivedMessage('');
-        setWS(null);
-        setLoading(true);
-        setWaiting(false);
-        setFlag(false);
+    const appendToMessages = (message) => {
+        setMessages((messages) => [...messages, message]);
     }
-
-    const fetchRoom = async () => {
-        try {
-            const response = await fetch(`http://localhost:4000/api/chat/room/${chatDetails.friendID}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': token
-                }
-            });
-            const responseJSON = await response.json();
-            if (responseJSON.error) {
-                showErrorMessage(responseJSON.error);
-                return;
-            }
-            setRoomID(responseJSON.roomID);
-        } catch ({ name, message }) {
-            showErrorMessage(message);
-        }
-    }
-
-    // get old messages from API
-    const fetchMessages = async () => {
-        try {
-            const chatID = roomID.split('C')[1];
-            const response = await fetch(`http://localhost:4000/api/chat/${chatID}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': token
-                }
-            });
-            const responseJSON = await response.json();
-            if (responseJSON.error) {
-                showErrorMessage(responseJSON.error);
-                return;
-            }
-            setMessages(responseJSON.messages);
-        } catch ({ name, message }) {
-            showErrorMessage(message);
-        }
-    }
-
-    // open socket connection
-    const connectRoom = async () => {
-        try {
-            const response = await fetch(`http://localhost:4000/api/chat/start/${roomID}`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': token
-                }
-            });
-            const responseJSON = await response.json();
-            if (responseJSON.error) {
-                showErrorMessage(responseJSON.error);
-                return;
-            }
-            setWaiting(true);
-        } catch ({ name, message }) {
-            showErrorMessage(message);
-        }
-    }
-
-    // get roomID from API
-    useEffect(() => {
-        if (chatDetails != null) {
-            resetConnection();
-            fetchRoom();
-        }
-        return () => {
-            closeSocket();
-        }
-    }, [chatDetails]);
-
-    useEffect(() => {
-        if (roomID) {
-            fetchMessages();
-            connectRoom();
-        }
-    }, [roomID]);
-
-    useEffect(() => {
-        if (waiting) {
-            createSocket();
-        }
-
-        return () => {
-            closeSocket();
-        }
-    }, [waiting])
 
     const updateWS = (ws) => {
         setWS(ws);
@@ -180,6 +76,113 @@ export const Chat = () => {
         toggleFlag();
     }
 
+    const resetConnection = () => {
+        setMessages([]);
+        setSentMessage('');
+        setReceivedMessage('');
+        setWS(null);
+        setLoading(true);
+        setFlag(false);
+    }
+
+    const fetchRoom = () => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const response = await fetch(`http://localhost:4000/api/chat/room/${chatDetails.friendID}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': token
+                    }
+                });
+                const responseJSON = await response.json();
+                if (responseJSON.error) {
+                    reject(responseJSON.error);
+                    showErrorMessage(responseJSON.error);
+                    return;
+                }
+                resolve(responseJSON.roomID);
+            } catch ({ name, message }) {
+                reject(message);
+            }
+        });
+
+    }
+
+    // get old messages from API
+    const fetchMessages = async (roomID) => {
+        try {
+            const chatID = roomID.split('C')[1];
+            const response = await fetch(`http://localhost:4000/api/chat/${chatID}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': token
+                }
+            });
+            const responseJSON = await response.json();
+            if (responseJSON.error) {
+                showErrorMessage(responseJSON.error);
+                return;
+            }
+            setMessages(responseJSON.messages);
+        } catch ({ name, message }) {
+            showErrorMessage(message);
+        }
+    }
+
+    // open socket connection
+    const connectRoom = (roomID) => {
+        return new Promise(async (resolve, reject) => {
+
+            try {
+                const response = await fetch(`http://localhost:4000/api/chat/start/${roomID}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': token
+                    }
+                });
+                const responseJSON = await response.json();
+                if (responseJSON.error) {
+                    reject(responseJSON.error);
+                    return;
+                }
+                resolve(true);
+            } catch ({ name, message }) {
+                reject(message);
+            }
+        });
+    }
+
+    useEffect(() => {
+        return () => {
+            dispatch(changeChat(null));
+        }
+    }, []);
+
+    // get roomID from API
+    useEffect(() => {
+        if (chatDetails == null) return;
+
+        resetConnection();
+        fetchRoom()
+            .then((roomID) => {
+                fetchMessages(roomID);
+                connectRoom(roomID)
+                    .then(() => {
+                        createSocket();
+                    })
+                    .catch((error) => {
+                        showErrorMessage(error);
+                    });
+            })
+            .catch((error) => {
+                showErrorMessage(error);
+            });
+
+        return () => {
+            closeSocket();
+        }
+    }, [chatDetails]);
+
     useEffect(() => {
         if (flag) {
             const parsedMessage = JSON.parse(receivedMessage);
@@ -191,17 +194,17 @@ export const Chat = () => {
         }
     }, [flag]);
 
-    const appendToMessages = (message) => {
-        setMessages((messages) => [...messages, message]);
-    }
 
     return (
-        <div className={styles.container} >
+        <div className={`${styles.container} ${chatDetails != null ? styles.up : ''}`} >
             {
                 chatDetails == null ? <p>Select a friend to chat with</p>
                     :
                     <>
                         <div className={styles.heading} >
+                            <button className={styles.back} onClick={() => dispatch(changeChat(null))}  >
+                                <box-icon name='arrow-back' size="2x" color="#B1B2FF"></box-icon>
+                            </button>
                             <Avatar label={getLabel(chatDetails.firstName, chatDetails.lastName)} size='large'
                                 shape='circle' className={styles.avatar}
                                 style={{ backgroundColor: chatDetails.color }} />

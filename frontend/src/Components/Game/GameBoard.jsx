@@ -107,7 +107,7 @@ export const GameBoard = () => {
   const [ws, updateWS] = useState(null);
 
   const navigateBackToGamePage = () => {
-    navigate('/game');
+    navigate('/game', { replace: true });
   }
 
   const socketOnMessage = (message) => {

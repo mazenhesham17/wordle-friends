@@ -7,6 +7,38 @@
   background-color: white;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+@media screen and (max-width: 480px) {
+  .container {
+    position: absolute;
+    margin: 0;
+    border-radius: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    transition: 0.3s ease-out;
+  }
+}
+
+.back {
+  display: none;
+  border: none;
+  background-color: unset;
+  margin-right: 10px;
+  cursor: pointer;
+}
+@media screen and (max-width: 480px) {
+  .back {
+    display: block;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .up {
+    display: block;
+    left: 0%;
+  }
+}
 
 .heading {
   display: flex;
@@ -36,11 +68,12 @@
   margin: 10px;
   width: -moz-fit-content;
   width: fit-content;
-  padding: 5px 20px;
+  padding: 0px 10px;
   color: white;
   background-color: #e7e7e7;
   border-radius: 10px;
   font-weight: 500;
+  font-size: 14px;
 }
 .body .message_conatiner {
   display: flex;
@@ -57,11 +90,26 @@
   font-size: 16px;
   font-weight: 500;
 }
+@media screen and (max-width: 768px) {
+  .body .message_conatiner .content {
+    font-size: 14px;
+  }
+}
 .body .message_conatiner .time {
   align-self: flex-end;
   margin: 0;
   font-size: 12px;
   font-weight: 500;
+}
+@media screen and (max-width: 768px) {
+  .body .message_conatiner .time {
+    font-size: 10px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .body .message_conatiner {
+    padding: 5px;
+  }
 }
 .body .message_conatiner:last-child {
   margin-bottom: 10px;

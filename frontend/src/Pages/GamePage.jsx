@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { chageTitle, changePage } from '../State/pageSlice';
@@ -12,7 +12,6 @@ export const GamePage = () => {
     const dispatch = useDispatch();
     const showErrorMessage = useContext(FunctionContext);
     const title = useSelector(state => state.page.title);
-    const [roomID, setRoomID] = useState('');
 
     useEffect(() => {
         dispatch(changePage('game'));
@@ -32,19 +31,12 @@ export const GamePage = () => {
                 showErrorMessage(responseJSON.error);
                 return;
             }
-            setRoomID(responseJSON.roomID);
+            navigate(`/game/${responseJSON.roomID}`);
         }
         catch ({ name, message }) {
             showErrorMessage(message);
         }
     }
-
-    useEffect(() => {
-        if (roomID) {
-            navigate(`/game/${roomID}`);
-        }
-    }, [roomID]);
-
 
     return (
         <div className={styles.main_container} >

@@ -3,6 +3,7 @@
 
     @media screen and (max-width: 768px) {
         flex-direction: column;
+        overflow-x: hidden;
         overflow-y: auto;
         width: calc(100% - 10px);
     }

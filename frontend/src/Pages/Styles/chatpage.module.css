@@ -1,0 +1,9 @@
+.row {
+  display: flex;
+}
+@media screen and (max-width: 480px) {
+  .row {
+    height: 100%;
+    position: relative;
+  }
+}/*# sourceMappingURL=chatpage.module.css.map */

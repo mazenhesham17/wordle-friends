@@ -1,21 +1,20 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { FunctionContext } from '../../App';
 import { useSelector, useDispatch } from 'react-redux';
+import { changeMessage } from '../../State/chatSlice';
+import { FunctionContext } from '../../App';
+import { getRandomColor } from '../../Util/random';
 import Card from './Card';
 import styles from './Styles/list.module.css';
-import { getRandomColor } from '../../Util/random';
-import { changeMessage } from '../../State/chatSlice';
 
 export const Friends = () => {
     const token = localStorage.getItem('token');
-    const showErrorMessage = useContext(FunctionContext);
     const dispatch = useDispatch();
-    const [friends, setFriends] = useState([]);
-    const [colors, setColors] = useState([]);
+    const showErrorMessage = useContext(FunctionContext);
     const newMessage = useSelector(state => state.chat.newMessage);
     const activeChat = useSelector(state => state.chat.activeChat);
+
+    const [friends, setFriends] = useState([]);
     const [flag, setFlag] = useState(false);
-    const [readStatus, setReadStatus] = useState([]);
 
     const fetchFriends = async () => {
         try {
@@ -30,50 +29,45 @@ export const Friends = () => {
                 showErrorMessage(responseJSON.error);
                 return;
             }
-            setFriends(responseJSON.friends);
-            setReadStatus(responseJSON.friends.map(friend => friend.read));
-            setColors(Array.from({ length: responseJSON.friends.length }, () => getRandomColor()))
+            setFriends(responseJSON.friends.map((friend) => {
+                return { ...friend, color: getRandomColor() };
+            }));
         } catch ({ name, message }) {
             showErrorMessage(message);
         }
     }
 
-    useEffect(() => {
-        fetchFriends();
-    }, []);
-
     const moveFriendToTop = (friendID) => {
         const friendIndex = friends.findIndex(friend => friend.friendID == friendID);
-        if (friendIndex > 0) {
-            const updatedFriends = [friends[friendIndex], ...friends.slice(0, friendIndex), ...friends.slice(friendIndex + 1)];
-            const updatedReadStatus = [readStatus[friendIndex], ...readStatus.slice(0, friendIndex), ...readStatus.slice(friendIndex + 1)];
-            const updatedColors = [colors[friendIndex], ...colors.slice(0, friendIndex), ...colors.slice(friendIndex + 1)];
-            setFriends(updatedFriends);
-            setReadStatus(updatedReadStatus);
-            setColors(updatedColors);
-        }
+        if (friendIndex <= 0) return;
+
+        const updatedFriends = [friends[friendIndex], ...friends.slice(0, friendIndex), ...friends.slice(friendIndex + 1)];
+        setFriends(updatedFriends);
     };
 
     const updateReadStatus = (friendID, status) => {
         const friendIndex = friends.findIndex(friend => friend.friendID == friendID);
-        if (friendIndex !== -1) {
-            const updatedReadStatus = [...readStatus];
-            updatedReadStatus[friendIndex] = status;
-            setReadStatus(updatedReadStatus);
-        }
+        if (friendIndex === -1) return;
+
+        const updatedFriends = [...friends];
+        updatedFriends[friendIndex].read = status;
+        setFriends(updatedFriends);
     };
 
     useEffect(() => {
-        if (newMessage != null) {
-            moveFriendToTop(newMessage);
-            setFlag(true);
+        fetchFriends();
+    }, []);
 
-        }
+    useEffect(() => {
+        if (newMessage == null) return;
 
+        moveFriendToTop(newMessage);
+        setFlag(true);
     }, [newMessage]);
 
     useEffect(() => {
         if (!flag) return;
+
         if (activeChat?.friendID != newMessage) {
             updateReadStatus(newMessage, 0);
         }
@@ -82,9 +76,9 @@ export const Friends = () => {
     }, [flag]);
 
     useEffect(() => {
-        if (activeChat != null) {
-            updateReadStatus(activeChat.friendID, 1);
-        }
+        if (activeChat == null) return;
+
+        updateReadStatus(activeChat.friendID, 1);
     }, [activeChat]);
 
     return (
@@ -98,7 +92,7 @@ export const Friends = () => {
                             <Card key={index}
                                 friendID={friend.friendID}
                                 firstName={friend.firstName} lastName={friend.lastName}
-                                read={readStatus[index]} color={colors[index]} />
+                                read={friend.read} color={friend.color} />
                         )
                     })
                 }

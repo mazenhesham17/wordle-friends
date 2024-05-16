@@ -9,15 +9,15 @@ export const HomePage = () => {
 
   useEffect(() => {
     if (!userType) {
-      navigate('/login');
+      navigate('/login', { replace: true });
     }
 
     if (userType === 'admin') {
-      navigate('/dashboard');
+      navigate('/dashboard', { replace: true });
     }
 
     if (userType === 'player') {
-      navigate('/profile');
+      navigate('/profile', { replace: true });
     }
   }, []);
 

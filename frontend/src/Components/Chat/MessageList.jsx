@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import styles from './Styles/chat.module.css';
-import Message from './Message';
 import { formatTime, getDateLabel, formatDateInClientTimeZone } from '../../Util/date';
+import Message from './Message';
+import styles from './Styles/chat.module.css';
 
 
 

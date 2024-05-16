@@ -1,9 +1,9 @@
 import React from 'react'
-import { Avatar } from 'primereact/avatar';
 import { useDispatch } from 'react-redux';
 import { changeChat } from '../../State/chatSlice';
-import styles from './Styles/list.module.css';
+import { Avatar } from 'primereact/avatar';
 import { getLabel } from '../../Util/string';
+import styles from './Styles/list.module.css';
 
 
 export const Card = (props) => {
