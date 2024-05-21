@@ -64,8 +64,8 @@ void ServerController::connectSocketAndLaunchSession(const std::string &roomID, 
 void ServerController::PostRegister(const httplib::Request &req, httplib::Response &res)
 {
     std::cout << "Register request of type POST received on thread : " << std::this_thread::get_id() << std::endl;
-
-    jsoncons::json body = jsoncons::json::parse(req.body);
+    nlohmann::json body = nlohmann::json::parse(req.body);
+    // jsoncons::json body = jsoncons::json::parse(req.body);
     User user = userController->createUser(body);
     Response response = userAPI->registerUser(user);
     res.set_content(responseController->getJson(response), "application/json");
@@ -75,9 +75,10 @@ void ServerController::PostLogin(const httplib::Request &req, httplib::Response 
 {
     std::cout << "Login request of type POST received on thread : " << std::this_thread::get_id() << std::endl;
 
-    jsoncons::json body = jsoncons::json::parse(req.body);
-    std::string identifier = body["identifier"].as<std::string>();
-    std::string password = body["password"].as<std::string>();
+    // jsoncons::json body = jsoncons::json::parse(req.body);
+    nlohmann::json body = nlohmann::json::parse(req.body);
+    std::string identifier = body["identifier"];
+    std::string password = body["password"];
     Response response = userAPI->login(identifier, password);
     res.set_content(responseController->getJson(response), "application/json");
 }
@@ -174,7 +175,7 @@ void ServerController::PostNewGame(const httplib::Request &req, httplib::Respons
         std::string wordle_url = std::getenv("WORDLE_URL");
         httplib::Client client(wordle_url, 5000);
         auto clientResponse = client.Get("/wordle");
-        std::string word = jsoncons::json::parse(clientResponse->body)["word"].as<std::string>();
+        std::string word = nlohmann::json::parse(clientResponse->body)["word"];
         Response response = playerAPI->newGame(word, playerID, gameType);
         res.set_content(responseController->getJson(response), "application/json");
     }
@@ -278,12 +279,12 @@ void ServerController::PutProfile(const httplib::Request &req, httplib::Response
     }
 
     int userID = tokenController->getUserID(token);
-    jsoncons::json body = jsoncons::json::parse(req.body);
+    nlohmann::json body = nlohmann::json::parse(req.body);
 
-    for (auto &element : body.object_range())
+    for (auto &element : body.items())
     {
         std::string key = element.key();
-        std::string value = element.value().as<std::string>();
+        std::string value = element.value();
         response = playerAPI->updatePlayer(userID, key, value);
         // there is a field that is not updated
         if (!responseController->isSuccess(response))

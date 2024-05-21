@@ -9,14 +9,14 @@ UserController *UserController::getInstance()
     return instance;
 }
 
-User UserController::createUser(const jsoncons::json &json)
+User UserController::createUser(const nlohmann::json &json)
 {
     User user;
-    user.setUsername(json["username"].as<std::string>());
-    user.setFirstName(json["firstName"].as<std::string>());
-    user.setLastName(json["lastName"].as<std::string>());
-    user.setEmail(json["email"].as<std::string>());
-    user.setPassword(json["password"].as<std::string>());
+    user.setUsername(json["username"]);
+    user.setFirstName(json["firstName"]);
+    user.setLastName(json["lastName"]);
+    user.setEmail(json["email"]);
+    user.setPassword(json["password"]);
     return user;
 }
 

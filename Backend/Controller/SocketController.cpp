@@ -23,8 +23,6 @@ void SocketController::connectSocket(tcp::socket &socket)
         std::string backend_url = std::getenv("BACKEND_URL");
         tcp::resolver resolver{ioc};
         tcp::endpoint endpoint = *resolver.resolve(backend_url, "8080").begin();
-        // auto const address = net::ip::make_address(backend_url);
-        // auto const port = static_cast<unsigned short>(8080);
         std::cout << "Connecting to " << endpoint << std::endl;
         tcp::acceptor acceptor{ioc, endpoint};
         acceptor.accept(socket);

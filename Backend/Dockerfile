@@ -7,31 +7,21 @@ RUN apt-get update && \
     gcc \
     g++ \
     cmake \
-    curl \
     git \
     sqlite3 \
     libsqlite3-dev \
     libssl-dev \
     libboost-all-dev
 
-# Install jsoncpp
-RUN git clone https://github.com/open-source-parsers/jsoncpp.git /tmp/jsoncpp && \
-    cd /tmp/jsoncpp && \
-    mkdir -p build/release && \
-    cd build/release && \
-    cmake -DCMAKE_BUILD_TYPE=release -DBUILD_SHARED_LIBS=ON -DARCHIVE_INSTALL_DIR=. -G "Unix Makefiles" ../.. && \
-    make && \
-    make install && \
-    rm -rf /tmp/jsoncpp
 
-# Install jsoncons
-RUN git clone https://github.com/danielaparker/jsoncons.git /tmp/jsoncons && \
-    cd /tmp/jsoncons && \
+# Install nlohmann json
+RUN git clone https://github.com/nlohmann/json.git /tmp/nlohmann-json && \
+    cd /tmp/nlohmann-json && \
     mkdir build && \
     cd build && \
     cmake .. && \
     make install && \
-    rm -rf /tmp/jsoncons
+    rm -rf /tmp/nlohmann-json
 
 # Install jwt-cpp
 RUN git clone https://github.com/Thalhammer/jwt-cpp.git /tmp/jwt-cpp && \
