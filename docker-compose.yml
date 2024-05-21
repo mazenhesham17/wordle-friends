@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  word:
+    build:
+      context: ./API
+    container_name: words
+    ports:
+      - "5000:5000"
+
+  backend:
+    build:
+      context: ./Backend
+    container_name: backend
+    ports:
+      - "4000:4000"
+      - "8080:8080"
+    environment:
+      - WORDLE_URL=words
+      - BACKEND_URL=backend
+    depends_on:
+      - word
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:4000
+      - REACT_APP_SOCKET_URL=ws://localhost:8080
+    depends_on:
+      - backend

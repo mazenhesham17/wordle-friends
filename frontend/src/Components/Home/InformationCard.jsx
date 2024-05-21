@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { reduxLogout } from '../../State/authSlice';
 import { FunctionContext } from '../../App';
+import { generateUrl } from '../../Util/urls';
 import { Avatar } from 'primereact/avatar';
 import styles from './Styles/informationcard.module.css';
 
@@ -23,7 +24,8 @@ export const InformationCard = () => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('http://localhost:4000/api/info', {
+            const url = generateUrl('info');
+            const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Authorization': token

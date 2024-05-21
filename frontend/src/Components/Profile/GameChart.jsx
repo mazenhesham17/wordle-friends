@@ -3,6 +3,7 @@ import { Chart } from 'primereact/chart';
 import { FunctionContext } from '../../App';
 import { lastNelements } from '../../Util/array';
 import { monthName } from '../../Util/date';
+import { generateUrl } from '../../Util/urls';
 import styles from './Styles/chart.module.css';
 
 export const GameChart = () => {
@@ -76,7 +77,8 @@ export const GameChart = () => {
         try {
             const now = new Date();
             const offset = - now.getTimezoneOffset() / 60;
-            const response = await fetch(`http://localhost:4000/api/profile/games-info/${offset}`, {
+            const url = generateUrl('profile', 'games-info', offset);
+            const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Authorization': token

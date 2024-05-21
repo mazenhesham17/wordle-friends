@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addUnseenChat, clear, changeMessage } from '../../State/chatSlice';
 import { Link } from 'react-router-dom';
 import { FunctionContext } from '../../App';
+import { generateSocketUrl, generateUrl } from '../../Util/urls';
 
 
 export const NotificationIcon = (props) => {
@@ -19,7 +20,8 @@ export const NotificationIcon = (props) => {
 
     const connectToServer = async () => {
         try {
-            const response = await fetch('http://localhost:4000/api/chat/notification', {
+            const url = generateUrl('chat', 'notification');
+            const response = await fetch(url, {
                 method: 'Post',
                 headers: {
                     'Authorization': token
@@ -38,7 +40,7 @@ export const NotificationIcon = (props) => {
 
 
     const createSocket = () => {
-        const webSocket = new WebSocket('ws://localhost:8080');
+        const webSocket = new WebSocket(generateSocketUrl());
         updateWS(webSocket);
         webSocket.onopen = () => {
             console.log('WebSocket Client Connected');

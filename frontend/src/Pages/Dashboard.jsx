@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useDispatch } from 'react-redux';
 import { chageTitle, changePage } from '../State/pageSlice';
 import { FunctionContext } from '../App';
+import { generateUrl } from '../Util/urls';
 import Card from '../Components/Dashboard/Card';
 import CustomChart from '../Components/Dashboard/CustomChart';
 import styles from './Styles/layout.module.css';
@@ -17,7 +18,8 @@ export const Dashboard = () => {
         try {
             const now = new Date();
             const offset = - now.getTimezoneOffset() / 60;
-            const response = await fetch(`http://localhost:4000/api/admin/dashboard/${offset}`, {
+            const url = generateUrl('admin', 'dashboard', offset);
+            const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Authorization': token

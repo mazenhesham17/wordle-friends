@@ -2,6 +2,7 @@ import React, { useContext, useRef } from 'react';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { FunctionContext } from '../../App';
+import { generateUrl } from '../../Util/urls';
 import InputField from './InputField';
 import styles from './Styles/form.module.css';
 
@@ -30,7 +31,8 @@ export const UpdateForm = (props) => {
 
     const submit = async (data) => {
         try {
-            const response = await fetch('http://localhost:4000/api/profile/personal-info', {
+            const url = generateUrl('profile', 'personal-info');
+            const response = await fetch(url, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

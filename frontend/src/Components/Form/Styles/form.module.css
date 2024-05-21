@@ -31,7 +31,7 @@
   padding: 10px;
   border: none;
   border-radius: 8px;
-  background-color: #AAC4FF;
+  background-color: #447dff;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
   color: white;
   font-size: 1.2rem;
@@ -39,7 +39,7 @@
   cursor: pointer;
 }
 .section button:hover {
-  background-color: #447dff;
+  background-color: #115aff;
 }
 @media screen and (max-width: 480px) {
   .section {

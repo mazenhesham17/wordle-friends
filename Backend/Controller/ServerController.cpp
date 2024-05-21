@@ -168,11 +168,22 @@ void ServerController::PostNewGame(const httplib::Request &req, httplib::Respons
     }
 
     auto gameType = req.path_params.at("type");
-    httplib::Client client("localhost", 5000);
-    auto clientResponse = client.Get("/wordle");
-    std::string word = jsoncons::json::parse(clientResponse->body)["word"].as<std::string>();
-    Response response = playerAPI->newGame(word, playerID, gameType);
-    res.set_content(responseController->getJson(response), "application/json");
+    
+    try
+    {
+        std::string wordle_url = std::getenv("WORDLE_URL");
+        httplib::Client client(wordle_url, 5000);
+        auto clientResponse = client.Get("/wordle");
+        std::string word = jsoncons::json::parse(clientResponse->body)["word"].as<std::string>();
+        Response response = playerAPI->newGame(word, playerID, gameType);
+        res.set_content(responseController->getJson(response), "application/json");
+    }
+    catch (std::exception &e)
+    {
+        Response response;
+        responseController->setFailure(response, "wordle service is down");
+        res.set_content(responseController->getJson(response), "application/json");
+    }
 }
 
 void ServerController::PostStartGame(const httplib::Request &req, httplib::Response &res)
@@ -563,5 +574,6 @@ void ServerController::start(int port)
     httplib::Server server;
     requests(server);
     std::cout << "Server is running on port " << port << " on thread : " << std::this_thread::get_id() << std::endl;
-    server.listen("localhost", port);
+    std::string backend_url = std::getenv("BACKEND_URL");
+    server.listen(backend_url, port);
 }

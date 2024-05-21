@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { reduxLogin } from '../../State/authSlice';
 import { FunctionContext } from '../../App';
 import { hashPassword } from '../../Util/encryption';
+import { generateUrl } from '../../Util/urls';
 import InputField from './InputField';
 import styles from './Styles/form.module.css';
 
@@ -37,7 +38,8 @@ export const RegistrationForm = () => {
     const submit = async (data) => {
         try {
             const hashedPassword = await hashPassword(data.password);
-            const response = await fetch('http://localhost:4000/api/register', {
+            const url = generateUrl('register');
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

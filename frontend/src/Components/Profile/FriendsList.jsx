@@ -3,6 +3,7 @@ import { Avatar } from 'primereact/avatar';
 import { AvatarGroup } from 'primereact/avatargroup';
 import { FunctionContext } from '../../App';
 import { getRandomColor } from '../../Util/random';
+import { generateUrl } from '../../Util/urls';
 import styles from './Styles/friendslist.module.css';
 
 
@@ -13,7 +14,8 @@ export const FriendsList = () => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('http://localhost:4000/api/profile/friends', {
+            const url = generateUrl('profile', 'friends');
+            const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Authorization': token

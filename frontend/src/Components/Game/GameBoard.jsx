@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { chageTitle } from '../../State/pageSlice';
 import { toggleClear } from '../../State/gameSlice';
 import { FunctionContext } from '../../App';
+import { generateUrl, generateSocketUrl } from '../../Util/urls';
 import Row from './Row';
 import Keyboard from './Keyboard';
 import OpponentCard from './OpponentCard';
@@ -134,7 +135,7 @@ export const GameBoard = () => {
   }
 
   const createSocket = () => {
-    const webSocket = new WebSocket('ws://localhost:8080');
+    const webSocket = new WebSocket(generateSocketUrl());
     updateWS(webSocket);
     webSocket.onopen = () => {
       const gameID = urlRoomID.split('G')[1];
@@ -156,7 +157,8 @@ export const GameBoard = () => {
   const startGame = () => {
     return new Promise(async (resolve, reject) => {
       try {
-        const response = await fetch(`http://localhost:4000/api/game/start/${urlRoomID}`, {
+        const url = generateUrl('game', 'start', urlRoomID);
+        const response = await fetch(url, {
           method: 'Post',
           headers: {
             'Authorization': token

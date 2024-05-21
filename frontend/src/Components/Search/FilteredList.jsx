@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { useSelector } from 'react-redux';
 import { FunctionContext } from '../../App';
 import { getRandomColor } from '../../Util/random';
+import { generateUrl } from '../../Util/urls';
 import Card from './Card';
 import styles from './Styles/card.module.css';
 
@@ -13,7 +14,8 @@ export const FilteredList = () => {
 
     const fetchPlayers = async () => {
         try {
-            const response = await fetch(`http://localhost:4000/api/search/${query}`, {
+            const url = generateUrl('search', query);
+            const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Authorization': token

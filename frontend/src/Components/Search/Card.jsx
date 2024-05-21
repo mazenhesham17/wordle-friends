@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import styles from './Styles/card.module.css';
 import { Avatar } from 'primereact/avatar';
 import { FunctionContext } from '../../App';
+import { generateUrl } from '../../Util/urls';
 
 export const Card = (props) => {
   const token = localStorage.getItem('token');
@@ -10,7 +11,8 @@ export const Card = (props) => {
 
   const addFriend = async () => {
     try {
-      const response = await fetch(`http://localhost:4000/api/add-friend/${props.playerID}`, {
+      const url = generateUrl('add-friend', props.playerID);
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Authorization': token

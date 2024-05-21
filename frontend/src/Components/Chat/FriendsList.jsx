@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { changeMessage } from '../../State/chatSlice';
 import { FunctionContext } from '../../App';
 import { getRandomColor } from '../../Util/random';
+import { generateUrl } from '../../Util/urls';
 import Card from './Card';
 import styles from './Styles/list.module.css';
 
@@ -18,7 +19,8 @@ export const Friends = () => {
 
     const fetchFriends = async () => {
         try {
-            const response = await fetch('http://localhost:4000/api/chat/friends', {
+            const url = generateUrl('chat', 'friends');
+            const response = await fetch(url, {
                 method: 'Get',
                 headers: {
                     'Authorization': token

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Avatar } from 'primereact/avatar';
 import { FunctionContext } from '../../App';
+import { generateUrl } from '../../Util/urls';
 import { Field } from './Field';
 import UpdateForm from '../Form/UpdateForm';
 import PasswordUpdate from '../Form/PasswordUpdate';
@@ -16,7 +17,8 @@ export const PersonalInfo = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('http://localhost:4000/api/profile/personal-info', {
+      const url = generateUrl('profile', 'personal-info');
+      const response = await fetch(url, {
         method: 'GET',
         headers: {
           'Authorization': token,

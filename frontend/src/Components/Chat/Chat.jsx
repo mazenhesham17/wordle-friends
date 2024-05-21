@@ -4,6 +4,7 @@ import { changeChat } from '../../State/chatSlice';
 import { FunctionContext } from '../../App';
 import { Avatar } from 'primereact/avatar';
 import { getLabel } from '../../Util/string';
+import { generateUrl, generateSocketUrl } from '../../Util/urls';
 import MessageList from './MessageList';
 import styles from './Styles/chat.module.css';
 
@@ -51,7 +52,7 @@ export const Chat = () => {
     }
 
     const createSocket = () => {
-        const webSocket = new WebSocket('ws://localhost:8080');
+        const webSocket = new WebSocket(generateSocketUrl());
         updateWS(webSocket);
         webSocket.onopen = () => {
             console.log('WebSocket Client Connected');
@@ -88,7 +89,8 @@ export const Chat = () => {
     const fetchRoom = () => {
         return new Promise(async (resolve, reject) => {
             try {
-                const response = await fetch(`http://localhost:4000/api/chat/room/${chatDetails.friendID}`, {
+                const url = generateUrl('chat', 'room', chatDetails.friendID);
+                const response = await fetch(url, {
                     method: 'GET',
                     headers: {
                         'Authorization': token
@@ -112,7 +114,8 @@ export const Chat = () => {
     const fetchMessages = async (roomID) => {
         try {
             const chatID = roomID.split('C')[1];
-            const response = await fetch(`http://localhost:4000/api/chat/${chatID}`, {
+            const url = generateUrl('chat', chatID);
+            const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Authorization': token
@@ -134,7 +137,8 @@ export const Chat = () => {
         return new Promise(async (resolve, reject) => {
 
             try {
-                const response = await fetch(`http://localhost:4000/api/chat/start/${roomID}`, {
+                const url = generateUrl('chat', 'start', roomID);
+                const response = await fetch(url, {
                     method: 'POST',
                     headers: {
                         'Authorization': token

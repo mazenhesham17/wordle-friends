@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { FunctionContext } from '../../App';
+import { generateUrl } from '../../Util/urls';
 import styles from './Styles/joinbar.module.css';
 
 export const JoinBar = () => {
@@ -15,7 +16,8 @@ export const JoinBar = () => {
 
     const checkRoomID = async () => {
         try {
-            const response = await fetch(`http://localhost:4000/api/game/check-room/${roomID}`, {
+            const url = generateUrl('game', 'check-room', roomID);
+            const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Authorization': token
