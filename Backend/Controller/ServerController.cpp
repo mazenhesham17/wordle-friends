@@ -561,6 +561,12 @@ void ServerController::start(int port)
     httplib::Server server;
     requests(server);
     std::cout << "Server is running on port " << port << " on thread : " << std::this_thread::get_id() << std::endl;
-    std::string backend_url = std::getenv("BACKEND_URL");
+    const char* envVar = std::getenv("BACKEND_URL");
+    std::string backend_url;
+    if (envVar == nullptr){
+        backend_url = "localhost";
+    }else{
+        backend_url = std::string(envVar);
+    }
     server.listen(backend_url, port);
 }
