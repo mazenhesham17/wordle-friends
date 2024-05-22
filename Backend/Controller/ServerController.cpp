@@ -564,7 +564,7 @@ void ServerController::start(int port)
     const char* envVar = std::getenv("BACKEND_URL");
     std::string backend_url;
     if (envVar == nullptr){
-        backend_url = "localhost";
+        backend_url = "0.0.0.0";
     }else{
         backend_url = std::string(envVar);
     }
