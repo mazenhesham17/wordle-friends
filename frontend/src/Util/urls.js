@@ -1,8 +1,7 @@
 function generateUrl() {
     let backendUrl = process.env.REACT_APP_BACKEND_URL;
     if (!backendUrl) {
-        // running in local enviroment
-        backendUrl = 'http://localhost:4000';
+        throw new Error('REACT_APP_BACKEND_URL is not defined');
     }
     let endpoint = `${backendUrl}/api`;
     for (let i = 0; i < arguments.length; i++) {
@@ -14,8 +13,7 @@ function generateUrl() {
 function generateSocketUrl() {
     let socket_url = process.env.REACT_APP_SOCKET_URL;
     if (!socket_url) {
-        // running in local enviroment
-        socket_url = 'ws://localhost:8080';
+        throw new Error('REACT_APP_SOCKET_URL is not defined');
     }
     return socket_url;
 }

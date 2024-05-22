@@ -1,13 +1,6 @@
 version: '3.8'
 
 services:
-  word:
-    build:
-      context: ./API
-    container_name: words
-    ports:
-      - "5000:5000"
-
   backend:
     build:
       context: ./Backend
@@ -16,10 +9,7 @@ services:
       - "4000:4000"
       - "8080:8080"
     environment:
-      - WORDLE_URL=words
       - BACKEND_URL=backend
-    depends_on:
-      - word
 
   frontend:
     build:

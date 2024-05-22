@@ -6,7 +6,17 @@ GameController *GameController::getInstance()
 {
     if (instance == nullptr)
     {
+        // Create an input filestream
+        std::ifstream jsonFile("words.json");
+        // Initialize the json object
+        nlohmann::json jsonData;
+        // Read the json file into the json object
+        jsonFile >> jsonData;
+        // Close the filestream
+        jsonFile.close();
+
         instance = new GameController();
+        instance->words = jsonData;
     }
     return instance;
 }
@@ -30,6 +40,11 @@ void GameController::joinGame(const int &gameId, const int &playerId)
 void GameController::startGame(const int &gameId)
 {
     dbStartGame(gameId);
+}
+
+std::string GameController::getRandomWord()
+{
+    return words[rand() % words.size()];
 }
 
 std::string GameController::submitGuess(const std::string &guess, const int &gameId)

@@ -56,5 +56,7 @@ EXPOSE 4000
 # Expose the port
 EXPOSE 8080
 
+# RUN touch debug.log && ls > debug.log
+
 # Run the backend
 CMD ["./build/Backend"]

@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <fstream>
+#include <nlohmann/json.hpp>
 #include "../Database/dml.h"
 #include "../Database/dql.h"
 
@@ -12,6 +14,8 @@ class GameController
     static GameController *instance;
 
     GameController(){};
+
+    std::vector<std::string> words;
 
 public:
     static GameController *getInstance();
@@ -23,6 +27,8 @@ public:
     void joinGame(const int &gameId, const int &playerId);
 
     void startGame(const int &gameId);
+
+    std::string getRandomWord();
 
     std::string submitGuess(const std::string &guess, const int &gameId);
 

@@ -65,7 +65,6 @@ void ServerController::PostRegister(const httplib::Request &req, httplib::Respon
 {
     std::cout << "Register request of type POST received on thread : " << std::this_thread::get_id() << std::endl;
     nlohmann::json body = nlohmann::json::parse(req.body);
-    // jsoncons::json body = jsoncons::json::parse(req.body);
     User user = userController->createUser(body);
     Response response = userAPI->registerUser(user);
     res.set_content(responseController->getJson(response), "application/json");
@@ -75,7 +74,6 @@ void ServerController::PostLogin(const httplib::Request &req, httplib::Response 
 {
     std::cout << "Login request of type POST received on thread : " << std::this_thread::get_id() << std::endl;
 
-    // jsoncons::json body = jsoncons::json::parse(req.body);
     nlohmann::json body = nlohmann::json::parse(req.body);
     std::string identifier = body["identifier"];
     std::string password = body["password"];
@@ -169,22 +167,10 @@ void ServerController::PostNewGame(const httplib::Request &req, httplib::Respons
     }
 
     auto gameType = req.path_params.at("type");
-    
-    try
-    {
-        std::string wordle_url = std::getenv("WORDLE_URL");
-        httplib::Client client(wordle_url, 5000);
-        auto clientResponse = client.Get("/wordle");
-        std::string word = nlohmann::json::parse(clientResponse->body)["word"];
-        Response response = playerAPI->newGame(word, playerID, gameType);
-        res.set_content(responseController->getJson(response), "application/json");
-    }
-    catch (std::exception &e)
-    {
-        Response response;
-        responseController->setFailure(response, "wordle service is down");
-        res.set_content(responseController->getJson(response), "application/json");
-    }
+
+    std::string word = gameController->getRandomWord();
+    Response response = playerAPI->newGame(word, playerID, gameType);
+    res.set_content(responseController->getJson(response), "application/json");
 }
 
 void ServerController::PostStartGame(const httplib::Request &req, httplib::Response &res)
